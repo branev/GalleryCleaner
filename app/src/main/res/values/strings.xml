@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">GalleryCleaner</string>
+    <string name="no_images_found">No images found</string>
+
+    <!-- Permissions -->
+    <string name="permission_denied">Permission denied. Please allow access to photos and videos.</string>
+
+    <!-- Filter chips -->
+    <string name="all_with_count">All (%1$d)</string>
+
+    <!-- Media type chips -->
+    <string name="photos">Photos</string>
+    <string name="videos">Videos</string>
+
+    <!-- Empty states -->
+    <string name="no_filters_selected">No categories selected</string>
+    <string name="select_categories_hint">Select Photos or Videos and a category to see your media</string>
+    <string name="no_matching_items">No items found</string>
+    <string name="adjust_filters_hint">Try adjusting your filters or date range</string>
+
+    <!-- Date range filter -->
+    <string name="select_date_range">Select date range</string>
+
+    <!-- Filter bottom sheet -->
+    <string name="filters">Filters</string>
+    <string name="reset">Reset</string>
+    <string name="date_range">Date Range</string>
+    <string name="sources">Sources</string>
+    <string name="sort_by">Sort By</string>
+
+    <!-- Navigation -->
+    <string name="press_back_again_to_exit">Press back again to exit</string>
+
+    <!-- Selection mode -->
+    <string name="select_all">Select All</string>
+    <string name="delete">Delete</string>
+    <string name="selected_count">%1$d selected</string>
+    <string name="selected_with_hidden">%1$d selected (%2$d hidden)</string>
+
+    <!-- Trash dialog -->
+    <string name="trash_confirmation_title">Move %1$d items to trash?</string>
+    <string name="trash_confirmation_message">Items will be permanently deleted after 30 days.</string>
+    <string name="trash_confirmation_message_with_hidden">This includes %1$d hidden items. Items will be permanently deleted after 30 days.</string>
+    <string name="cancel">Cancel</string>
+    <string name="move_to_trash">Move to Trash</string>
+    <string name="trash_success">%1$d items moved to trash</string>
+    <string name="trash_success_with_size">%1$d items (%2$s) moved to trash</string>
+    <string name="trash_failed">Failed to move items to trash</string>
+    <string name="trash_partial">Moved %1$d of %2$d items to trash</string>
+    <string name="undo">Undo</string>
+    <string name="restore_success">%1$d items restored</string>
+    <string name="restore_failed">Failed to restore items</string>
+
+    <!-- Accessibility -->
+    <string name="image_thumbnail">Image thumbnail</string>
+    <string name="selected">Selected</string>
+    <string name="hidden_by_filter">Hidden by current filter</string>
+    <string name="video_indicator">Video</string>
+
+    <!-- Media viewer -->
+    <string name="media_preview">Media preview</string>
+    <string name="play_pause">Play or pause video</string>
+
+    <!-- Continue reviewing -->
+    <string name="continue_reviewing">Continue reviewing</string>
+</resources>

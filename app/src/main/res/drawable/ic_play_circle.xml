@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Dark outline/shadow for visibility on light backgrounds -->
+    <path
+        android:fillColor="#66000000"
+        android:pathData="M12,1C5.93,1 1,5.93 1,12s4.93,11 11,11 11,-4.93 11,-11S18.07,1 12,1zM12,21c-4.97,0 -9,-4.03 -9,-9s4.03,-9 9,-9 9,4.03 9,9 -4.03,9 -9,9z"/>
+    <!-- White filled circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z"/>
+    <!-- Black play triangle -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M10,16.5v-9l6,4.5z"/>
+</vector>
