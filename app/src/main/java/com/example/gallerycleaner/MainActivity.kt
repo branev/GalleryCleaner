@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupMediaTypeChips()
         setupFilterButton()
-        setupEmptyStateClickHandler()
+        setupResetFiltersButton()
         setupSelectionToolbar()
         setupSelectionActionBar()
         setupContinueFab()
@@ -187,13 +187,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupEmptyStateClickHandler() {
-        binding.emptyStateContainer.setOnClickListener {
-            // Open filters if in NoFiltersSelected or NoMatchingItems state
-            val state = viewModel.uiState.value
-            if (state is GalleryUiState.NoFiltersSelected || state is GalleryUiState.NoMatchingItems) {
-                showFilterBottomSheet()
-            }
+    private fun setupResetFiltersButton() {
+        binding.btnResetFilters.setOnClickListener {
+            viewModel.resetFilters()
         }
     }
 
@@ -341,9 +337,10 @@ class MainActivity : AppCompatActivity() {
                 backCallback.isEnabled = false
 
                 // Show generic empty state
-                binding.emptyIcon.setImageResource(R.drawable.ic_filter_list)
+                binding.emptyIcon.setImageResource(R.drawable.ic_search_off)
                 binding.emptyTitle.text = state.message
                 binding.emptySubtitle.visibility = View.GONE
+                binding.btnResetFilters.visibility = View.GONE
             }
 
             is GalleryUiState.NoFiltersSelected -> {
@@ -357,10 +354,11 @@ class MainActivity : AppCompatActivity() {
                 backCallback.isEnabled = false
 
                 // Show "no filters selected" state
-                binding.emptyIcon.setImageResource(R.drawable.ic_filter_list)
+                binding.emptyIcon.setImageResource(R.drawable.ic_search_off)
                 binding.emptyTitle.text = getString(R.string.no_filters_selected)
                 binding.emptySubtitle.text = getString(R.string.select_categories_hint)
                 binding.emptySubtitle.visibility = View.VISIBLE
+                binding.btnResetFilters.visibility = View.VISIBLE
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
@@ -378,10 +376,11 @@ class MainActivity : AppCompatActivity() {
                 backCallback.isEnabled = false
 
                 // Show "no matching items" state
-                binding.emptyIcon.setImageResource(R.drawable.ic_filter_list)
+                binding.emptyIcon.setImageResource(R.drawable.ic_search_off)
                 binding.emptyTitle.text = getString(R.string.no_matching_items)
                 binding.emptySubtitle.text = getString(R.string.adjust_filters_hint)
                 binding.emptySubtitle.visibility = View.VISIBLE
+                binding.btnResetFilters.visibility = View.VISIBLE
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
@@ -577,9 +576,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(message: String) {
         binding.emptyStateContainer.visibility = View.VISIBLE
-        binding.emptyIcon.setImageResource(R.drawable.ic_filter_list)
+        binding.emptyIcon.setImageResource(R.drawable.ic_search_off)
         binding.emptyTitle.text = message
         binding.emptySubtitle.visibility = View.GONE
+        binding.btnResetFilters.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 

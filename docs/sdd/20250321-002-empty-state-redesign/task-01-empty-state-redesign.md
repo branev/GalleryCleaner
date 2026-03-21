@@ -275,13 +275,15 @@ Test each empty state:
 | `app/src/main/java/.../MainActivity.kt` | Updated rendering, added Reset button handler, removed container click |
 | `app/src/main/java/.../GalleryViewModel.kt` | Added `resetFilters()` method |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Empty state icon appears inside a gray circle (96dp)
-- [ ] Icon is `search_off` (48dp, gray), no opacity reduction
-- [ ] Title is 22sp bold
-- [ ] Subtitle is 17sp gray with max width ~240dp
-- [ ] "Reset Filters" pill button appears for NoFiltersSelected and NoMatchingItems
-- [ ] "Reset Filters" button does NOT appear for the generic Empty state
-- [ ] Tapping "Reset Filters" restores all filter defaults and shows items
-- [ ] Build succeeds, all tests pass
+- [x] Empty state icon appears inside a gray circle (96dp)
+- [x] Icon is `search_off` (48dp, gray), no opacity reduction
+- [x] Title is 22sp bold
+- [x] Subtitle is 17sp gray with max width ~240dp
+- [x] "Reset Filters" pill button appears for NoFiltersSelected and NoMatchingItems
+- [x] "Reset Filters" button does NOT appear for the generic Empty state
+- [x] Tapping "Reset Filters" restores all filter defaults and shows items
+- [x] Build succeeds, all tests pass

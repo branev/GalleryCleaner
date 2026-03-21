@@ -16,7 +16,8 @@
     <string name="no_filters_selected">No categories selected</string>
     <string name="select_categories_hint">Select Photos or Videos and a category to see your media</string>
     <string name="no_matching_items">No items found</string>
-    <string name="adjust_filters_hint">Try adjusting your filters or date range</string>
+    <string name="adjust_filters_hint">Try adjusting your filters or date range to see more photos</string>
+    <string name="reset_filters">Reset Filters</string>
 
     <!-- Date range filter -->
     <string name="select_date_range">Select date range</string>

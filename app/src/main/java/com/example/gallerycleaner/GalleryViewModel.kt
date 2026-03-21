@@ -247,6 +247,13 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
         filterPreferences.saveSortOption(sortOption)
     }
 
+    fun resetFilters() {
+        filterPreferences.saveSelectedSources(SourceType.values().toSet())
+        filterPreferences.saveSelectedMediaTypes(MediaType.values().toSet())
+        filterPreferences.saveDateRange(DateRange.DEFAULT)
+        filterPreferences.saveSortOption(SortOption.DATE_DESC)
+    }
+
     fun enterSelectionMode(initialItem: Uri) {
         _isSelectionMode.value = true
         _selectedItems.value = setOf(initialItem)
