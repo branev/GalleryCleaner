@@ -338,6 +338,10 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
             MediaStore.MediaColumns.SIZE
         )
 
+        if (mediaType == MediaType.VIDEO) {
+            projection += MediaStore.Video.VideoColumns.DURATION
+        }
+
         if (Build.VERSION.SDK_INT >= 29) {
             projection += MediaStore.MediaColumns.RELATIVE_PATH
         } else {
@@ -363,6 +367,10 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
             val dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
             val sizeCol = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE)
 
+            val durationCol = if (mediaType == MediaType.VIDEO) {
+                cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION)
+            } else -1
+
             val pathCol = if (Build.VERSION.SDK_INT >= 29) {
                 cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH)
             } else {
@@ -377,6 +385,7 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
                 val path = if (pathCol >= 0) cursor.getString(pathCol) else null
                 val dateAdded = cursor.getLong(dateAddedCol)
                 val size = cursor.getLong(sizeCol)
+                val duration = if (durationCol >= 0) cursor.getLong(durationCol) else 0L
 
                 val uri = ContentUris.withAppendedId(collection, id)
                 val source = SourceDetector.detect(path, bucket)
@@ -389,7 +398,8 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
                     source = source,
                     mediaType = mediaType,
                     dateAdded = dateAdded,
-                    size = size
+                    size = size,
+                    duration = duration
                 )
             }
         }

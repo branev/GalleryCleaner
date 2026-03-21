@@ -228,12 +228,14 @@ If tests create `MediaItem` instances, they may fail because of the new `duratio
 | `app/src/main/res/layout/item_image.xml` | Replaced `videoIndicator` with `videoDurationBadge` container |
 | `app/src/main/java/.../ImageAdapter.kt` | Format and display duration, updated view references |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Video items show a dark badge at the top-left with "▶ 0:45" style text
-- [ ] Photo items do NOT show the video badge
-- [ ] Duration is formatted as `M:SS` (e.g., "0:45", "1:30", "12:05")
-- [ ] The play icon is a small white triangle (not the old circle icon)
-- [ ] The badge background is semi-transparent dark with rounded corners
-- [ ] Existing tests still pass
-- [ ] Build succeeds
+- [x] Video items show a dark badge at the top-left with "▶ 0:45" style text
+- [x] Photo items do NOT show the video badge
+- [x] Duration is formatted as `M:SS` (e.g., "0:45", "1:30", "12:05")
+- [x] The play icon is a small white triangle (not the old circle icon)
+- [x] The badge background is semi-transparent dark with rounded corners
+- [x] Existing tests still pass
+- [x] Build succeeds

@@ -15,7 +15,8 @@ data class MediaItem(
     val source: SourceType,
     val mediaType: MediaType,
     val dateAdded: Long = 0L, // Unix timestamp in seconds
-    val size: Long = 0L // File size in bytes
+    val size: Long = 0L, // File size in bytes
+    val duration: Long = 0L // Video duration in milliseconds, 0 for photos
 )
 
 enum class SourceType(val label: String) {

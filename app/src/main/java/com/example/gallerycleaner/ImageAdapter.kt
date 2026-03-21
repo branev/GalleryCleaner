@@ -107,11 +107,12 @@ class ImageAdapter(
             }
             binding.sourceBadge.text = label
 
-            // Show video indicator for videos
-            binding.videoIndicator.visibility = if (item.mediaType == MediaType.VIDEO) {
-                View.VISIBLE
+            // Show video duration badge for videos
+            if (item.mediaType == MediaType.VIDEO) {
+                binding.videoDurationBadge.visibility = View.VISIBLE
+                binding.videoDuration.text = formatDuration(item.duration)
             } else {
-                View.GONE
+                binding.videoDurationBadge.visibility = View.GONE
             }
 
             updateSelectionVisuals(item)
@@ -198,5 +199,12 @@ class ImageAdapter(
         private const val PAYLOAD_SELECTION_MODE = "selection_mode"
         private const val PAYLOAD_SELECTION_STATE = "selection_state"
         private const val PAYLOAD_VIEWED_STATE = "viewed_state"
+
+        fun formatDuration(durationMs: Long): String {
+            val totalSeconds = durationMs / 1000
+            val minutes = totalSeconds / 60
+            val seconds = totalSeconds % 60
+            return "%d:%02d".format(minutes, seconds)
+        }
     }
 }
