@@ -208,36 +208,8 @@ class MainActivity : AppCompatActivity() {
         selectedDateRange: DateRange,
         selectedSortOption: SortOption
     ) {
-        val summaryParts = mutableListOf<String>()
-
-        // Date range (if not default)
-        if (selectedDateRange.preset != DateRangePreset.LAST_30_DAYS) {
-            summaryParts.add(selectedDateRange.preset.label)
-        }
-
-        // Sources (if not all selected)
-        val availableSources = sourceCounts.keys
-        if (availableSources.isNotEmpty() && !selectedSources.containsAll(availableSources)) {
-            val selectedCount = selectedSources.intersect(availableSources).size
-            val sourceText = when {
-                selectedCount == 1 -> selectedSources.first { it in availableSources }.label
-                selectedCount > 1 -> "$selectedCount sources"
-                else -> null
-            }
-            sourceText?.let { summaryParts.add(it) }
-        }
-
-        // Sort (if not default)
-        if (selectedSortOption != SortOption.DATE_DESC) {
-            summaryParts.add(selectedSortOption.label)
-        }
-
-        if (summaryParts.isEmpty()) {
-            binding.filterSummary.visibility = View.GONE
-        } else {
-            binding.filterSummary.text = summaryParts.joinToString(" • ")
-            binding.filterSummary.visibility = View.VISIBLE
-        }
+        // Filter summary hidden per new design — filters visible in bottom sheet only
+        binding.filterSummary.visibility = View.GONE
     }
 
     private fun setupSelectionToolbar() {

@@ -28,7 +28,7 @@
         android:paddingHorizontal="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:elevation="2dp"
+        android:elevation="0dp"
         android:background="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/selectionToolbar"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +127,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:padding="8dp"
+        android:padding="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="@integer/grid_span_count"
         app:layout_constraintTop_toBottomOf="@id/filterLoadingIndicator"
@@ -181,15 +181,19 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Continue FAB (scroll to first unviewed item) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!-- Continue Extended FAB (scroll to first unviewed item) -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:contentDescription="@string/continue_reviewing"
+        android:text="@string/continue_reviewing"
+        android:textColor="@android:color/white"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_arrow_downward"
+        app:backgroundTint="@color/fab_continue_bg"
+        app:icon="@drawable/ic_arrow_downward"
+        app:iconTint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/selectionActionBar"
         app:layout_constraintEnd_toEndOf="parent" />
 

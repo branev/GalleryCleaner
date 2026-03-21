@@ -193,13 +193,23 @@ Common issues:
 | `app/src/main/res/values/colors.xml` | Added `fab_continue_bg` color |
 | `app/src/main/java/.../MainActivity.kt` | Updated FAB type reference (if needed) |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Grid items have no outer padding — the grid starts at the screen edge
-- [ ] Grid items have ~1dp gaps between them
-- [ ] Grid item thumbnails have 4dp rounded corners
-- [ ] Continue FAB shows "Continue" text next to the arrow icon
-- [ ] Continue FAB has a teal background with white text/icon
-- [ ] Continue FAB still scrolls to the first unviewed item when tapped
-- [ ] Continue FAB still hides/shows at the correct times
-- [ ] Build succeeds, all tests pass
+- [x] Grid items have no outer padding — the grid starts at the screen edge
+- [x] Grid items have ~1dp gaps between them
+- [x] Grid item thumbnails have 4dp rounded corners
+- [x] Continue FAB shows "Continue" text next to the arrow icon
+- [x] Continue FAB has a teal background with white text/icon
+- [x] Continue FAB still scrolls to the first unviewed item when tapped
+- [x] Continue FAB still hides/shows at the correct times
+- [x] No divider line between header and grid
+- [x] Filter summary text (e.g., "7 days") hidden per new design
+- [x] Build succeeds, all tests pass
+
+## Additional Changes (during review)
+
+- Used `ShapeableImageView` instead of `clipToOutline` for reliable corner rounding
+- Removed topBar elevation (no divider/shadow between header and grid per design)
+- Hidden filter summary text — filter details only visible in bottom sheet now

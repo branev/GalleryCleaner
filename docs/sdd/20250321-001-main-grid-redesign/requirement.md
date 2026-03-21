@@ -94,16 +94,19 @@ Tasks can be done in any order. Tasks 02 and 03 both modify `item_image.xml` and
 
 ### 4. Grid Styling Changes
 
-**Current:** 2dp margin on each item, 8dp padding on RecyclerView, no item rounding.
+**Current:** 2dp margin on each item, 8dp padding on RecyclerView, no item rounding, filter summary text visible, divider line between header and grid.
 
 **New:**
 - **Item gap**: 2px (keep as 1dp, which is effectively the 2px from the design on most screens)
-- **Item corners**: Small rounded corners (~4dp radius) on each grid cell using `clipToOutline` with a rounded background or `ShapeableImageView`
+- **Item corners**: Small rounded corners (~4dp radius) on each grid cell using `ShapeableImageView`
 - **RecyclerView padding**: Remove the 8dp padding (grid goes edge-to-edge in the design, items touch screen edges)
+- **No divider**: Remove elevation/shadow between header and grid
+- **No filter summary**: Hide the "7 days" / filter summary text — filters only visible in bottom sheet
 
 **Files affected:**
-- `item_image.xml` — reduce margin to 1dp, add corner rounding to the root or imageView
-- `activity_main.xml` — remove or reduce RecyclerView padding
+- `item_image.xml` — reduce margin to 1dp, use ShapeableImageView for corner rounding
+- `activity_main.xml` — remove RecyclerView padding, remove topBar elevation
+- `MainActivity.kt` — hide filter summary permanently
 
 ### 5. Viewed Items Opacity
 

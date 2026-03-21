@@ -63,4 +63,7 @@
     <color name="badge_unviewed_text">#4B5E59</color>
     <color name="badge_viewed_bg">#D9FFFFFF</color>
     <color name="badge_viewed_text">#1F2937</color>
+
+    <!-- Continue FAB (SDD-20250321-001) -->
+    <color name="fab_continue_bg">#057A70</color>
 </resources>

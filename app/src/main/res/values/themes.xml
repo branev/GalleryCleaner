@@ -43,6 +43,11 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <!-- Grid item rounded corners -->
+    <style name="RoundedImageCorners" parent="">
+        <item name="cornerSize">4dp</item>
+    </style>
+
     <!-- Fullscreen media viewer theme -->
     <style name="Theme.GalleryCleaner.Viewer" parent="Theme.GalleryCleaner">
         <item name="android:windowFullscreen">true</item>
