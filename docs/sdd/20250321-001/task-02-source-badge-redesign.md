@@ -19,7 +19,7 @@ You will:
 - Margin: 8dp from edges
 
 **After (unviewed items):**
-- Background: `#166A62` (dark teal), fully rounded pill
+- Background: `#C9E5E4` (dark teal), fully rounded pill
 - Text: white, 11sp
 - Margin: 4dp from edges
 
@@ -36,7 +36,7 @@ Open `app/src/main/res/values/colors.xml` and add (if not already added by Task 
 
 ```xml
 <!-- Badge colors (SDD-20250321-001) -->
-<color name="badge_unviewed_bg">#166A62</color>
+<color name="badge_unviewed_bg">#C9E5E4</color>
 <color name="badge_unviewed_text">#FFFFFF</color>
 <color name="badge_viewed_bg">#D9FFFFFF</color>
 <color name="badge_viewed_text">#1F2937</color>
@@ -159,12 +159,19 @@ Tests should pass — the adapter tests don't verify visual styling.
 | `app/src/main/res/layout/item_image.xml` | Updated `sourceBadge` margin, padding, text size, background |
 | `app/src/main/java/.../ImageAdapter.kt` | `updateViewedVisuals()` now swaps badge background and text color |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Unviewed items show a dark teal pill badge with white text
-- [ ] Viewed (scrolled-past) items show a white/transparent pill badge with dark gray text
-- [ ] Badge is closer to the corner than before (4dp margin)
-- [ ] Badge text is slightly smaller than before (11sp)
-- [ ] Badge is a rounded pill shape, not a rounded rectangle
-- [ ] Entering selection mode still hides the badge
-- [ ] Build succeeds, all tests pass
+- [x] Unviewed items show a light teal pill badge with dark text
+- [x] Viewed (scrolled-past) items show a white/transparent pill badge with dark gray text
+- [x] Badge is closer to the corner than before (4dp margin)
+- [x] Badge text is slightly smaller than before (11sp)
+- [x] Badge is a rounded pill shape, not a rounded rectangle
+- [x] Entering selection mode still hides the badge
+- [x] Build succeeds, all tests pass
+
+## Changes from Original Spec
+
+- Badge unviewed background changed from `#C9E5E4` to `#C9E5E4` (lighter teal per design)
+- Badge unviewed text changed from white to `#4B5E59` (dark gray-green) for contrast on light bg

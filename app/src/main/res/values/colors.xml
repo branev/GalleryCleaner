@@ -57,4 +57,10 @@
     <color name="chip_selected_text">#00796B</color>
     <color name="chip_unselected_border">#D1D5DB</color>
     <color name="chip_unselected_text">#4B5563</color>
+
+    <!-- Badge colors (SDD-20250321-001) -->
+    <color name="badge_unviewed_bg">#C9E5E4</color>
+    <color name="badge_unviewed_text">#4B5E59</color>
+    <color name="badge_viewed_bg">#D9FFFFFF</color>
+    <color name="badge_viewed_text">#1F2937</color>
 </resources>

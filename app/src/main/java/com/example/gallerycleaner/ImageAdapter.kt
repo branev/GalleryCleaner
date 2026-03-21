@@ -121,7 +121,20 @@ class ImageAdapter(
         fun updateViewedVisuals(item: MediaItem) {
             val isViewed = item.uri in viewedItems
             // Reduce opacity for viewed items (only when not in selection mode)
-            binding.root.alpha = if (isViewed && !isSelectionMode) 0.5f else 1.0f
+            binding.root.alpha = if (isViewed && !isSelectionMode) 0.6f else 1.0f
+
+            // Update badge colors based on viewed state
+            if (isViewed && !isSelectionMode) {
+                binding.sourceBadge.setBackgroundResource(R.drawable.badge_bg_viewed)
+                binding.sourceBadge.setTextColor(
+                    binding.root.context.getColor(R.color.badge_viewed_text)
+                )
+            } else {
+                binding.sourceBadge.setBackgroundResource(R.drawable.badge_bg_unviewed)
+                binding.sourceBadge.setTextColor(
+                    binding.root.context.getColor(R.color.badge_unviewed_text)
+                )
+            }
         }
 
         fun updateSelectionVisuals(item: MediaItem) {

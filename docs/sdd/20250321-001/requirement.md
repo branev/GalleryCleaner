@@ -53,7 +53,7 @@ Tasks can be done in any order. Tasks 02 and 03 both modify `item_image.xml` and
 #### Badge Color Rules (based on viewed state, not source):
 | State | Background | Text Color |
 |-------|-----------|------------|
-| **Unviewed** (fresh) | Dark teal `#166A62` | White |
+| **Unviewed** (fresh) | Dark teal `#C9E5E4` | White |
 | **Viewed** (scrolled past) | Semi-transparent white `#D9FFFFFF` (85% white) | Dark gray `#1F2937` |
 
 #### Badge Layout Changes:
