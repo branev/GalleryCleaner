@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gallery Cleaner - Empty State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-[#F5F5F7] h-screen w-full flex flex-col m-0 p-0 antialiased overflow-hidden">
+<!-- BEGIN: StatusBar -->
+<header class="w-full h-12 flex justify-between items-center px-6 pt-2 shrink-0" data-purpose="status-bar">
+<div class="text-black font-semibold text-[15px] tracking-tight">
+      9:41
+    </div>
+<div class="flex items-center gap-1.5 text-black">
+</div>
+</header>
+<!-- END: StatusBar -->
+<!-- BEGIN: AppHeader -->
+<section class="px-6 pt-8 pb-4 shrink-0" data-purpose="app-header">
+<h1 class="text-[34px] font-bold text-black tracking-tight leading-tight">GalleryCleaner</h1>
+</section>
+<!-- END: AppHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col justify-center items-center px-8 pb-24" data-purpose="empty-state-content">
+<!-- Empty State Graphic -->
+<div class="mb-6 w-24 h-24 bg-[#E5E5EA] rounded-full flex justify-center items-center" data-purpose="empty-state-icon">
+<span class="material-symbols-outlined text-[48px] text-[#8E8E93]">
+        search_off
+      </span>
+</div>
+<!-- Text Content -->
+<div class="text-center mb-8">
+<h2 class="text-[22px] font-bold text-black mb-2 tracking-tight">No items found</h2>
+<p class="text-[17px] text-[#8E8E93] leading-[1.3] max-w-[240px] mx-auto">
+        Try adjusting your filters or date range to see more photos
+      </p>
+</div>
+<!-- Tonal Action Button -->
+<button class="bg-[#008080]/10 hover:bg-[#008080]/20 text-[#008080] font-semibold py-3 px-8 rounded-full transition-colors active:scale-95 duration-200">
+      Reset Filters
+    </button>
+</main>
+<!-- END: MainContent -->
+</body></html>
