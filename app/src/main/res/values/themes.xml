@@ -48,6 +48,22 @@
         <item name="cornerSize">4dp</item>
     </style>
 
+    <!-- Pill-shaped filter chips -->
+    <style name="PillFilterChip" parent="Widget.Material3.Chip.Filter">
+        <item name="shapeAppearanceOverlay">@style/PillShape</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipBackgroundColor">@color/chip_bg_color</item>
+        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+
+    <style name="PillShape" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <!-- Fullscreen media viewer theme -->
     <style name="Theme.GalleryCleaner.Viewer" parent="Theme.GalleryCleaner">
         <item name="android:windowFullscreen">true</item>

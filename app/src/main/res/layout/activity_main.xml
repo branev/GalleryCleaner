@@ -56,11 +56,13 @@
                 android:id="@+id/btnFilters"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
                 android:text="@string/filters"
-                android:textColor="@color/filter_btn_text"
-                app:backgroundTint="@color/filter_btn_bg"
-                app:cornerRadius="18dp"
+                android:textSize="14sp"
+                android:textColor="@color/badge_unviewed_text"
+                android:gravity="center"
+                app:backgroundTint="@color/badge_unviewed_bg"
+                app:cornerRadius="20dp"
                 app:icon="@null" />
 
         </LinearLayout>
@@ -74,22 +76,22 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipPhotos"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/PillFilterChip"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="@string/photos"
-                android:textAlignment="center"
-                app:checkedIconVisible="false"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:checked="true" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipVideos"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/PillFilterChip"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="@string/videos"
-                android:textAlignment="center"
-                app:checkedIconVisible="false"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:checked="true" />
 
         </com.google.android.material.chip.ChipGroup>
