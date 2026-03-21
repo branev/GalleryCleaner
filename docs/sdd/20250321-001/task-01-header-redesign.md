@@ -172,12 +172,21 @@ Tests should pass since no logic changed — this is purely a layout change.
 | `app/src/main/res/values/colors.xml` | Added 7 new color resources |
 | `app/src/main/res/layout/activity_main.xml` | Restructured `topBar` to two-row vertical layout with title |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] App title "Gallery Cleaner" is visible in dark green at the top
-- [ ] "Filters" button appears as a teal pill to the right of the title
-- [ ] Photos/Videos chips appear on a second row below the title
-- [ ] A subtle shadow separates the header from the grid content
-- [ ] Tapping Filters still opens the bottom sheet
-- [ ] Tapping Photos/Videos chips still toggles filtering
-- [ ] Build succeeds, all tests pass
+- [x] App title "Gallery Cleaner" is visible in dark green at the top
+- [x] "Filters" button appears as a teal pill to the right of the title
+- [x] Photos/Videos chips appear on a second row below the title
+- [x] A subtle shadow separates the header from the grid content
+- [x] Tapping Filters still opens the bottom sheet
+- [x] Tapping Photos/Videos chips still toggles filtering
+- [x] Build succeeds, all tests pass
+
+## Additional Changes (during review)
+
+- Fixed `app_name` string from "GalleryCleaner" to "Gallery Cleaner"
+- Changed background/surface colors from `#FAFDFD` to `#FFFFFF` (pure white)
+- Added white status bar with dark icons (`windowLightStatusBar`)
+- Removed checkmark icon from filter chips (`checkedIconVisible=false`) for centered text

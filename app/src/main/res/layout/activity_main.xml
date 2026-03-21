@@ -19,55 +19,80 @@
         app:navigationIconTint="?attr/colorOnPrimary"
         app:titleTextColor="?attr/colorOnPrimary" />
 
-    <!-- Top Bar: Media Type Chips + Filter Button -->
+    <!-- Top Bar: Title + Filters + Media Type Chips -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="8dp"
-        android:paddingVertical="8dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:elevation="2dp"
+        android:background="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/selectionToolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Media Type Chips (Photos/Videos) - height matches button -->
+        <!-- Row 1: Title + Filters button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/appTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_name"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_title_green" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilters"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/filters"
+                android:textColor="@color/filter_btn_text"
+                app:backgroundTint="@color/filter_btn_bg"
+                app:cornerRadius="18dp"
+                app:icon="@null" />
+
+        </LinearLayout>
+
+        <!-- Row 2: Media Type Chips -->
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/mediaTypeChipGroup"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             app:singleSelection="false">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipPhotos"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:text="@string/photos"
+                android:textAlignment="center"
+                app:checkedIconVisible="false"
                 android:checked="true" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipVideos"
                 style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:text="@string/videos"
+                android:textAlignment="center"
+                app:checkedIconVisible="false"
                 android:checked="true" />
 
         </com.google.android.material.chip.ChipGroup>
-
-        <!-- Filter Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFilters"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/filters"
-            app:icon="@drawable/ic_filter_list"
-            app:iconGravity="start" />
 
     </LinearLayout>
 

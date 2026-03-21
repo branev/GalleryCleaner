@@ -35,9 +35,9 @@
     <color name="md_theme_onErrorContainer">#410002</color>
 
     <!-- Background & Surface -->
-    <color name="md_theme_background">#FAFDFD</color>
+    <color name="md_theme_background">#FFFFFF</color>
     <color name="md_theme_onBackground">#191C1D</color>
-    <color name="md_theme_surface">#FAFDFD</color>
+    <color name="md_theme_surface">#FFFFFF</color>
     <color name="md_theme_onSurface">#191C1D</color>
     <color name="md_theme_surfaceVariant">#DBE4E6</color>
     <color name="md_theme_onSurfaceVariant">#3F484A</color>
@@ -48,4 +48,13 @@
 
     <!-- Media Viewer -->
     <color name="viewer_toolbar_bg">#99000000</color>
+
+    <!-- Header & Badge colors (SDD-20250321-001) -->
+    <color name="header_title_green">#1B5E20</color>
+    <color name="filter_btn_bg">#E0F2F1</color>
+    <color name="filter_btn_text">#00796B</color>
+    <color name="chip_selected_bg">#E0F2F1</color>
+    <color name="chip_selected_text">#00796B</color>
+    <color name="chip_unselected_border">#D1D5DB</color>
+    <color name="chip_unselected_text">#4B5563</color>
 </resources>

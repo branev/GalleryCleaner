@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GalleryCleaner</string>
+    <string name="app_name">Gallery Cleaner</string>
     <string name="no_images_found">No images found</string>
 
     <!-- Permissions -->

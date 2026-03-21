@@ -37,6 +37,10 @@
         <!-- Outline -->
         <item name="colorOutline">@color/md_theme_outline</item>
         <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <!-- Fullscreen media viewer theme -->
