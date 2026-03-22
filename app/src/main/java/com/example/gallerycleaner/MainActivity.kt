@@ -82,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Track previous UI state type to detect state changes (for hint dismissal)
+    private var previousStateType: String? = null
+
     // Track previous filter state to detect filter changes
     private var previousMediaTypes: Set<MediaType>? = null
     private var previousSources: Set<SourceType>? = null
@@ -137,7 +140,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         hintPreferences = HintPreferences(this)
-        hintManager = HintManager(hintPreferences, binding.root)
+        hintManager = HintManager(
+            hintPreferences,
+            binding.hintCard,
+            binding.hintText,
+            binding.btnGotIt
+        )
 
         setupRecyclerView()
         setupMediaTypeChips()
@@ -241,8 +249,7 @@ class MainActivity : AppCompatActivity() {
                     // Show fast scroll hint on first scroll
                     hintManager.showHint(
                         HintPreferences.HINT_FAST_SCROLL,
-                        getString(R.string.hint_fast_scroll),
-                        binding.fastScrollTrack
+                        getString(R.string.hint_fast_scroll)
                     )
                 }
                 // Update FAB enabled state based on scroll position
@@ -396,8 +403,7 @@ class MainActivity : AppCompatActivity() {
                         binding.fabContinue.visibility = View.VISIBLE
                         hintManager.showHint(
                             HintPreferences.HINT_CONTINUE_FAB,
-                            getString(R.string.hint_continue_fab),
-                            binding.fabContinue
+                            getString(R.string.hint_continue_fab)
                         )
                     } else {
                         binding.fabContinue.visibility = View.GONE
@@ -422,8 +428,7 @@ class MainActivity : AppCompatActivity() {
                         binding.reviewProgressBar.setProgressCompat(viewedCount, true)
                         hintManager.showHint(
                             HintPreferences.HINT_PROGRESS_BAR,
-                            getString(R.string.hint_progress_bar),
-                            binding.reviewProgressBar
+                            getString(R.string.hint_progress_bar)
                         )
                     } else {
                         binding.reviewProgressBar.visibility = View.GONE
@@ -462,7 +467,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderState(state: GalleryUiState) {
-        hintManager.dismiss()
+        // Only dismiss hints when the state TYPE changes (e.g., Normal → Selection)
+        // Not on Normal → Normal updates (which happen frequently from filter/scroll events)
+        val currentStateType = state::class.simpleName
+        if (previousStateType != null && previousStateType != currentStateType) {
+            hintManager.dismiss()
+        }
+        previousStateType = currentStateType
 
         when (state) {
             is GalleryUiState.Loading -> {
@@ -580,13 +591,11 @@ class MainActivity : AppCompatActivity() {
                 // Show filters hint on first load with items
                 hintManager.showHint(
                     HintPreferences.HINT_FILTERS,
-                    getString(R.string.hint_filters),
-                    binding.btnFilters
+                    getString(R.string.hint_filters)
                 )
                 hintManager.showHint(
                     HintPreferences.HINT_PINCH_ZOOM,
-                    getString(R.string.hint_pinch_zoom),
-                    binding.recyclerView
+                    getString(R.string.hint_pinch_zoom)
                 )
             }
 
@@ -624,19 +633,10 @@ class MainActivity : AppCompatActivity() {
         if (state is GalleryUiState.Selection) {
             viewModel.toggleItemSelection(item.uri)
         } else {
-            // Show hint before opening viewer (if not yet shown)
-            val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
-            val position = adapter.currentList.indexOfFirst { it.uri == item.uri }
-            if (position >= 0) {
-                val viewHolder = binding.recyclerView.findViewHolderForAdapterPosition(position)
-                viewHolder?.itemView?.let { anchorView ->
-                    hintManager.showHint(
-                        HintPreferences.HINT_LONG_PRESS,
-                        getString(R.string.hint_long_press),
-                        anchorView
-                    )
-                }
-            }
+            hintManager.showHint(
+                HintPreferences.HINT_LONG_PRESS,
+                getString(R.string.hint_long_press)
+            )
             openMediaViewer(item)
         }
     }
@@ -664,8 +664,7 @@ class MainActivity : AppCompatActivity() {
 
             hintManager.showHint(
                 HintPreferences.HINT_DRAG_SELECT,
-                getString(R.string.hint_drag_select),
-                binding.recyclerView
+                getString(R.string.hint_drag_select)
             )
         }
     }
@@ -802,8 +801,7 @@ class MainActivity : AppCompatActivity() {
 
         hintManager.showHint(
             HintPreferences.HINT_TRASH_UNDO,
-            getString(R.string.hint_trash_undo),
-            binding.root
+            getString(R.string.hint_trash_undo)
         )
 
         // Dismiss overlay on tap or OK button
