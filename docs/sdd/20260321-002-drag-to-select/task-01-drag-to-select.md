@@ -278,14 +278,18 @@ The top selection toolbar ("X selected" bar) was removed — it pushed the grid 
 ### Touch intercept
 The `DragSelectTouchListener` only intercepts `ACTION_MOVE` during an active drag. All other events (`ACTION_DOWN`, `ACTION_UP`, `ACTION_CANCEL`) pass through to the RecyclerView so normal scrolling and tap behavior are unaffected.
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Long-press + drag selects multiple items in one gesture
-- [ ] Auto-scrolls when dragging near top/bottom edges
-- [ ] Dragging back deselects items outside the current range
-- [ ] Previously tapped items stay selected during drag
-- [ ] Tap-to-toggle still works in selection mode
-- [ ] Normal scrolling works when not in selection mode (no shiver/jitter)
-- [ ] X button in bottom action bar exits selection mode
-- [ ] All existing selection features (Select All, back to exit, hidden count) still work
-- [ ] Build succeeds, all tests pass
+- [x] Long-press + drag selects multiple items in one gesture
+- [x] Auto-scrolls when dragging near top/bottom edges
+- [x] Dragging back deselects items outside the current range
+- [x] Previously tapped items stay selected during drag
+- [x] Tap-to-toggle still works in selection mode
+- [x] Normal scrolling works when not in selection mode (no shiver/jitter)
+- [x] X button in bottom action bar exits selection mode
+- [x] Re-drag in selection mode without long-press (horizontal swipe)
+- [x] Vertical swipe in selection mode scrolls normally
+- [x] All existing selection features (Select All, back to exit, hidden count) still work
+- [x] Build succeeds, all tests pass

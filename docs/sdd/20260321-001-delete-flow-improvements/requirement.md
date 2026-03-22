@@ -1,5 +1,7 @@
 # SDD-20260321-001: Delete Flow Improvements
 
+## Status: COMPLETE
+
 ## Summary
 
 Streamline and enhance the deletion UX: remove the redundant custom confirmation dialog, show a celebratory overlay after successful deletion with item count and space saved, show live file size in the selection bar, and extend the undo snackbar duration.

@@ -1,5 +1,7 @@
 # SDD-20260321-002: Drag-to-Select
 
+## Status: COMPLETE
+
 ## Summary
 
 Add drag-to-select functionality so users can select multiple grid items in one gesture. After long-pressing to enter selection mode, dragging the finger across items selects/deselects them continuously — essential for a bulk cleanup app.

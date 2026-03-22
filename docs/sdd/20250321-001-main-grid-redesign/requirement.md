@@ -1,5 +1,7 @@
 # SDD-20250321-001: Gallery Grid Visual Redesign
 
+## Status: COMPLETE
+
 ## Summary
 
 Update the gallery grid item layout, header, video indicators, source badges, and Continue FAB to match the new Stitch-generated design. This is a visual refresh of the main gallery screen — no changes to business logic, state management, or navigation.
