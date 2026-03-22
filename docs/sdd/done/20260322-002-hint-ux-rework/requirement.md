@@ -1,5 +1,7 @@
 # SDD-20260322-002: Hint UX Rework
 
+## Status: COMPLETE
+
 ## Summary
 
 Rework the contextual hint display from small dark PopupWindows to full-width bottom cards with a "Got it" dismiss button. Keeps the existing queuing system (max 2 per session, priority order) but fixes the visual presentation.
@@ -91,12 +93,13 @@ Remove old PopupWindow code that is no longer needed:
 
 ## Acceptance Criteria
 
-- [ ] Hints appear as a full-width card at the bottom of the screen
-- [ ] Only one hint card visible at a time (never two)
-- [ ] "Got it" button dismisses the card (no tap-outside dismiss)
-- [ ] Next queued hint appears 1 second after "Got it"
-- [ ] Max 2 hints per session
-- [ ] Slide-up/down animation
-- [ ] Card is readable and clearly a tip (not an error)
-- [ ] Existing hint triggers (all 8) still work
-- [ ] Build succeeds, all tests pass
+- [x] Hints appear as a full-width card at the bottom of the screen
+- [x] Only one hint card visible at a time (never two)
+- [x] "Got it" button dismisses the card (no tap-outside dismiss)
+- [x] Next queued hint appears 1 second after "Got it"
+- [x] Max 3 hints per session (bumped from 2 for faster onboarding)
+- [x] Slide-up/down animation
+- [x] Card is readable and clearly a tip (lightbulb icon, "Got it" button)
+- [x] Existing hint triggers (all 8) still work
+- [x] Old PopupWindow code and drawable removed
+- [x] Build succeeds, all tests pass

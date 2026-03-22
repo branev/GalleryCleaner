@@ -14,6 +14,7 @@
 | 20260321-007 | Review progress bar | 1/1 | Thin teal bar, updates on scroll/delete/undo |
 | 20260321-008 | Contextual hints & help | 3/3 | 8 hints, help button, tips sheet, priority queue |
 | 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
+| 20260322-002 | Hint UX rework | 1/1 | Bottom card with Got it, 3/session, slide animation |
 
 ## Pending (`todo/`)
 
