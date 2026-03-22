@@ -73,6 +73,13 @@ class DragSelectTouchListener(
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        // Cancel any drag if a second finger touches down (pinch gesture)
+        if (e.actionMasked == MotionEvent.ACTION_POINTER_DOWN) {
+            pendingDragPosition = RecyclerView.NO_POSITION
+            if (isActive) stopDragSelection()
+            return false
+        }
+
         if (isActive) {
             when (e.actionMasked) {
                 MotionEvent.ACTION_MOVE -> {
@@ -90,13 +97,6 @@ class DragSelectTouchListener(
             return false
         }
 
-        // Cancel pending drag if a second finger touches down (pinch gesture)
-        if (e.actionMasked == MotionEvent.ACTION_POINTER_DOWN) {
-            pendingDragPosition = RecyclerView.NO_POSITION
-            if (isActive) stopDragSelection()
-            return false
-        }
-
         if (inSelectionMode && !isPinching) {
             when (e.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -110,8 +110,8 @@ class DragSelectTouchListener(
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (pendingDragPosition != RecyclerView.NO_POSITION) {
-                        val dx = Math.abs(e.x - downX)
-                        val dy = Math.abs(e.y - downY)
+                        val dx = kotlin.math.abs(e.x - downX)
+                        val dy = kotlin.math.abs(e.y - downY)
                         val distance = dx * dx + dy * dy
                         if (distance > touchSlopPx * touchSlopPx) {
                             if (dx > dy) {

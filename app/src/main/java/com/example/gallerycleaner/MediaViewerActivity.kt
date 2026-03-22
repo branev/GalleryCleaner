@@ -3,11 +3,15 @@ package com.example.gallerycleaner
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.format.Formatter
 import android.view.View
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.gallerycleaner.databinding.ActivityMediaViewerBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MediaViewerActivity : AppCompatActivity() {
 
@@ -60,11 +64,11 @@ class MediaViewerActivity : AppCompatActivity() {
 
         val parts = mutableListOf<String>()
         if (dateAdded > 0) {
-            val date = java.util.Date(dateAdded * 1000L)
-            parts.add(java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.getDefault()).format(date))
+            val date = Date(dateAdded * 1000L)
+            parts.add(SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(date))
         }
         if (size > 0) {
-            parts.add(android.text.format.Formatter.formatFileSize(this, size))
+            parts.add(Formatter.formatFileSize(this, size))
         }
         if (parts.isNotEmpty()) {
             binding.viewerSubtitle.text = parts.joinToString(" • ")

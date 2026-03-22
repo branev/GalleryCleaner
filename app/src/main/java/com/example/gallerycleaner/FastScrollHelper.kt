@@ -21,6 +21,7 @@ class FastScrollHelper(
 ) {
     private var isDragging = false
     private val hideRunnable = Runnable { hide() }
+    private var scrollListener: RecyclerView.OnScrollListener? = null
 
     companion object {
         private const val SHOW_DURATION_MS = 1500L
@@ -29,7 +30,7 @@ class FastScrollHelper(
 
     @SuppressLint("ClickableViewAccessibility")
     fun attach() {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
                 if (!isDragging && dy != 0) {
                     updateThumbPosition()
@@ -37,7 +38,8 @@ class FastScrollHelper(
                     scheduleHide()
                 }
             }
-        })
+        }
+        recyclerView.addOnScrollListener(scrollListener!!)
 
         thumb.setOnTouchListener { _, event ->
             handleThumbTouch(event)
@@ -48,6 +50,15 @@ class FastScrollHelper(
             handleThumbTouch(event)
             true
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun detach() {
+        scrollListener?.let { recyclerView.removeOnScrollListener(it) }
+        scrollListener = null
+        thumb.setOnTouchListener(null)
+        track.setOnTouchListener(null)
+        thumb.handler?.removeCallbacks(hideRunnable)
     }
 
     private fun handleThumbTouch(event: MotionEvent) {

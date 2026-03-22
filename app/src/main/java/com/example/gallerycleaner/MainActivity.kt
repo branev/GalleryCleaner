@@ -1,14 +1,19 @@
 package com.example.gallerycleaner
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.format.Formatter
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
@@ -16,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -26,6 +32,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -169,6 +179,8 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dragSelectListener.detachFromRecyclerView()
+        fastScrollHelper.detach()
+        hintManager.dismiss()
         binding.deleteSuccessOverlay.animate().cancel()
         binding.successCheckmark.animate().cancel()
         successSnackbar?.dismiss()
@@ -468,7 +480,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateFiltersButtonAppearance(isActive: Boolean) {
         val bgColor = if (isActive) R.color.filter_btn_active_bg else R.color.badge_unviewed_bg
         val textColor = if (isActive) R.color.filter_btn_active_text else R.color.badge_unviewed_text
-        binding.btnFilters.backgroundTintList = android.content.res.ColorStateList.valueOf(getColor(bgColor))
+        binding.btnFilters.backgroundTintList = ColorStateList.valueOf(getColor(bgColor))
         binding.btnFilters.setTextColor(getColor(textColor))
         binding.filterActiveDot.visibility = if (isActive) View.VISIBLE else View.GONE
     }
@@ -628,7 +640,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Show selection count + size in the bottom bar
                 val selectedCount = state.selectedItems.size
-                val sizeText = android.text.format.Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
+                val sizeText = Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
                 val countText = if (state.hiddenSelectedCount > 0) {
                     getString(R.string.selected_with_hidden, selectedCount, state.hiddenSelectedCount)
                 } else {
@@ -747,7 +759,7 @@ class MainActivity : AppCompatActivity() {
 
             if (deletedCount == uris.size) {
                 viewModel.removeDeletedItems(uris)
-                showSnackbar(getString(R.string.trash_success_with_size, deletedCount, android.text.format.Formatter.formatFileSize(this, totalSize)))
+                showSnackbar(getString(R.string.trash_success_with_size, deletedCount, Formatter.formatFileSize(this, totalSize)))
             } else if (deletedCount > 0) {
                 viewModel.removeDeletedItems(uris)
                 showSnackbar(getString(R.string.trash_partial, deletedCount, uris.size))
@@ -779,8 +791,8 @@ class MainActivity : AppCompatActivity() {
         binding.deleteSuccessOverlay.bringToFront()
         // Darken status bar to match overlay
         window.statusBarColor = getColor(R.color.overlay_bg)
-        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = false
         binding.successTitle.text = getString(R.string.delete_success_title, count)
 
         // Animate: fade in overlay, scale up checkmark
@@ -795,12 +807,12 @@ class MainActivity : AppCompatActivity() {
         binding.successCheckmark.animate()
             .scaleX(1f).scaleY(1f)
             .setDuration(400)
-            .setInterpolator(android.view.animation.OvershootInterpolator())
+            .setInterpolator(OvershootInterpolator())
             .start()
 
         // Show snackbar with 8-second custom duration
         val message = getString(R.string.space_saved,
-            android.text.format.Formatter.formatFileSize(this, totalSize))
+            Formatter.formatFileSize(this, totalSize))
         val snackbar = Snackbar.make(binding.root, message, 8000)
             .setAction(getString(R.string.undo)) {
                 dismissSuccessOverlay()
@@ -835,8 +847,8 @@ class MainActivity : AppCompatActivity() {
     private fun dismissSuccessOverlay() {
         // Restore status bar
         window.statusBarColor = getColor(android.R.color.white)
-        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
 
         // Cancel any running animations before dismissing
         binding.deleteSuccessOverlay.animate().cancel()
@@ -845,8 +857,8 @@ class MainActivity : AppCompatActivity() {
         binding.deleteSuccessOverlay.animate()
             .alpha(0f)
             .setDuration(200)
-            .setListener(object : android.animation.AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: android.animation.Animator) {
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
                     binding.deleteSuccessOverlay.visibility = View.GONE
                     binding.deleteSuccessOverlay.animate().setListener(null)
                 }
@@ -871,22 +883,22 @@ class MainActivity : AppCompatActivity() {
         if (position !in items.indices) return ""
 
         val timestamp = items[position].dateAdded
-        val itemDate = java.util.Date(timestamp * 1000L)
-        val now = java.util.Calendar.getInstance()
-        val itemCal = java.util.Calendar.getInstance().apply { time = itemDate }
+        val itemDate = Date(timestamp * 1000L)
+        val now = Calendar.getInstance()
+        val itemCal = Calendar.getInstance().apply { time = itemDate }
 
         return when {
-            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) &&
-            now.get(java.util.Calendar.DAY_OF_YEAR) == itemCal.get(java.util.Calendar.DAY_OF_YEAR) -> "Today"
+            now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) &&
+            now.get(Calendar.DAY_OF_YEAR) == itemCal.get(Calendar.DAY_OF_YEAR) -> "Today"
 
-            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) &&
-            now.get(java.util.Calendar.DAY_OF_YEAR) - itemCal.get(java.util.Calendar.DAY_OF_YEAR) == 1 -> "Yesterday"
+            now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) &&
+            now.get(Calendar.DAY_OF_YEAR) - itemCal.get(Calendar.DAY_OF_YEAR) == 1 -> "Yesterday"
 
-            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) ->
-                java.text.SimpleDateFormat("MMM d", java.util.Locale.getDefault()).format(itemDate)
+            now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) ->
+                SimpleDateFormat("MMM d", Locale.getDefault()).format(itemDate)
 
             else ->
-                java.text.SimpleDateFormat("MMM yyyy", java.util.Locale.getDefault()).format(itemDate)
+                SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(itemDate)
         }
     }
 

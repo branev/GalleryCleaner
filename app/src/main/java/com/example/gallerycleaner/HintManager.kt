@@ -18,6 +18,7 @@ class HintManager(
     private var isPending = false // A hint is scheduled but not yet visible
     private val queue = mutableListOf<PendingHint>()
     private var hintsShownThisSession = 0
+    private var pendingRunnable: Runnable? = null
 
     companion object {
         private const val MAX_HINTS_PER_SESSION = 3
@@ -55,12 +56,15 @@ class HintManager(
 
         // Schedule with delay
         isPending = true
-        hintCard.postDelayed({
+        val runnable = Runnable {
             isPending = false
+            pendingRunnable = null
             if (!prefs.isHintShown(hintId)) {
                 displayCard(hintId, message)
             }
-        }, SHOW_DELAY_MS)
+        }
+        pendingRunnable = runnable
+        hintCard.postDelayed(runnable, SHOW_DELAY_MS)
     }
 
     private fun displayCard(hintId: String, message: String) {
@@ -99,15 +103,20 @@ class HintManager(
         queue.remove(next)
 
         isPending = true
-        hintCard.postDelayed({
+        val runnable = Runnable {
             isPending = false
+            pendingRunnable = null
             if (!prefs.isHintShown(next.hintId)) {
                 displayCard(next.hintId, next.message)
             }
-        }, NEXT_HINT_DELAY_MS)
+        }
+        pendingRunnable = runnable
+        hintCard.postDelayed(runnable, NEXT_HINT_DELAY_MS)
     }
 
     fun dismiss() {
+        pendingRunnable?.let { hintCard.removeCallbacks(it) }
+        pendingRunnable = null
         if (isShowing) {
             hintCard.animate().cancel()
             hintCard.visibility = View.GONE
