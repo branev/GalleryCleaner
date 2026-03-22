@@ -23,8 +23,9 @@ Attach a `ScaleGestureDetector` to the RecyclerView to detect pinch gestures.
 #### Gesture behavior:
 - Pinch-in (scale factor < 1.0) → increase column count (more, smaller)
 - Pinch-out (scale factor > 1.0) → decrease column count (fewer, larger)
-- Threshold: only change when scale factor crosses 0.8 or 1.2 to avoid accidental changes
-- One step per pinch gesture (don't jump from 2 to 5 in one pinch)
+- Threshold: only change when cumulative scale factor crosses 0.8 or 1.2 to avoid accidental changes
+- Continuous: multiple column changes allowed in a single pinch gesture as long as fingers stay down (e.g., can go from 2 to 5 in one smooth pinch-in)
+- Bidirectional: user can reverse direction mid-pinch (zoom in then back out without lifting fingers)
 
 ### 2. GridLayoutManager Span Update
 
