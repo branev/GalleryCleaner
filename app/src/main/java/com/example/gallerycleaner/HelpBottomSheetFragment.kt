@@ -1,5 +1,6 @@
 package com.example.gallerycleaner
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,7 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
 
             val icon = ImageView(requireContext()).apply {
                 setImageResource(iconRes)
+                setColorFilter(requireContext().getColor(R.color.fast_scroll_tooltip_bg))
                 layoutParams = LinearLayout.LayoutParams(dp(24), dp(24)).apply {
                     marginEnd = dp(16)
                 }
@@ -65,6 +67,10 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupResetButton() {
+        binding.btnOkHelp.setOnClickListener {
+            dismiss()
+        }
+        binding.btnResetTips.paintFlags = binding.btnResetTips.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.btnResetTips.setOnClickListener {
             HintPreferences(requireContext()).resetAllHints()
             Snackbar.make(requireView(), getString(R.string.hints_reset_confirmation), Snackbar.LENGTH_SHORT).show()

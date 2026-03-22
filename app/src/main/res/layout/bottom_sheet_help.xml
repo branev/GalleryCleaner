@@ -33,20 +33,30 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp" />
 
-    <!-- Reset Tips button -->
+    <!-- OK button -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnResetTips"
-        style="@style/Widget.Material3.Button.TextButton"
+        android:id="@+id/btnOkHelp"
+        style="@style/Widget.Material3.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
-        android:text="@string/reset_tips"
-        android:textColor="@color/empty_state_reset_btn_text"
+        android:text="@string/overlay_ok"
         android:textStyle="bold"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="12dp"
-        app:backgroundTint="@color/empty_state_reset_btn_bg"
+        android:paddingHorizontal="48dp"
+        app:backgroundTint="@color/fast_scroll_tooltip_bg"
         app:cornerRadius="999dp" />
+
+    <!-- Reset hints text link -->
+    <TextView
+        android:id="@+id/btnResetTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:text="@string/reset_tips"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:padding="8dp" />
 
 </LinearLayout>
