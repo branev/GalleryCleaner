@@ -30,6 +30,8 @@ Progress = (viewed items count / total filtered items count) × 100
 #### Update triggers:
 - When `viewedItems` StateFlow emits (items marked as viewed on scroll)
 - When filtered items list changes (filter change may change total)
+- **When items are deleted** — total count decreases, so progress percentage jumps up immediately (e.g., reviewed 50 of 100 = 50%, delete 20 → reviewed 50 of 80 = 62.5%). Both the progress bar and the total item count update instantly. This gives immediate positive feedback after deletion.
+- **When deletion is undone** — items are restored, total count increases back, progress percentage recalculates downward. Both progress bar and total count revert accordingly.
 
 ### 3. Progress Text (Optional)
 
