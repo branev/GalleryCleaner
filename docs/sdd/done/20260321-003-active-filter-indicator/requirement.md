@@ -1,5 +1,7 @@
 # SDD-20260321-003: Active Filter Indicator
 
+## Status: COMPLETE
+
 ## Summary
 
 Add a visual indicator on the "Filters" button when any filters differ from their defaults, so users know filters are active and may be hiding items.

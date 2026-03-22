@@ -140,11 +140,16 @@ observeActiveFilters()  // Add this line
 | `app/src/main/java/.../GalleryViewModel.kt` | Added `hasActiveFilters` derived StateFlow |
 | `app/src/main/java/.../MainActivity.kt` | Added `observeActiveFilters()`, `updateFiltersButtonAppearance()` |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Filters button changes to darker teal + white text when any filter is non-default
-- [ ] Filters button reverts to light teal + dark text when all filters are at defaults
-- [ ] Resetting via bottom sheet Reset button clears the indicator
-- [ ] Resetting via empty state Reset Filters button clears the indicator
-- [ ] Indicator updates immediately when filters change (no delay)
-- [ ] Build succeeds, all tests pass
+- [x] Filters button changes to darker teal + white text when any filter is non-default
+- [x] Filters button reverts to light teal + dark text when all filters are at defaults
+- [x] Red dot badge appears on button when filters active
+- [x] Reset button grayed out in bottom sheet when filters are at defaults
+- [x] Resetting via bottom sheet Reset button clears the indicator
+- [x] Resetting via empty state Reset Filters button clears the indicator
+- [x] Indicator updates immediately when filters change (no delay)
+- [x] Delete overlay covers status bar
+- [x] Build succeeds, all tests pass
