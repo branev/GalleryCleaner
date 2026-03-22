@@ -6,9 +6,11 @@ A native Android gallery app that helps you clean up your photo library by organ
 
 - **Organizes media by source** — Automatically categorizes photos and videos by where they came from (WhatsApp, Camera, Screenshots, Telegram, Instagram, Viber, and more)
 - **Drag-to-select** — Long-press to start selecting, then drag across items to select many at once. Swipe horizontally to select, vertically to scroll
-- **Smart filtering** — Filter by media type (photos/videos), date range, source, and sort order
+- **Pinch-to-zoom** — Pinch the grid to change between 2 and 5 columns. Preference persists across restarts
+- **Smart filtering** — Filter by media type (photos/videos), date range, source, and sort order. The Filters button shows a visual indicator when filters are active
+- **Fast scroller** — Drag the right edge to quickly navigate large libraries. A date tooltip shows where you are
 - **Bulk deletion with undo** — Delete selected items with a single tap. A celebration overlay shows how much space you freed, with an 8-second undo window
-- **Progress tracking** — Items you've scrolled past are dimmed so you know what you've already reviewed. A Continue button jumps to where you left off
+- **Review progress** — A thin progress bar tracks how much of your library you've reviewed. Updates instantly on delete and undo
 - **Video duration badges** — Videos show their duration directly on the thumbnail
 
 ## Screenshots
