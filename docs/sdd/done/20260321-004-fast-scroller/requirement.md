@@ -1,5 +1,7 @@
 # SDD-20260321-004: Fast Scroller with Date Tooltip
 
+## Status: COMPLETE
+
 ## Summary
 
 Add a draggable fast-scroll thumb on the right edge of the RecyclerView that shows a floating date label as the user drags, enabling quick navigation through large photo libraries.

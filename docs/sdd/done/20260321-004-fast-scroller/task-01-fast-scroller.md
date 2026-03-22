@@ -370,13 +370,16 @@ private fun formatDateForPosition(position: Int): String {
 | `app/src/main/java/.../FastScrollHelper.kt` | **New file** — scroll/drag/tooltip logic |
 | `app/src/main/java/.../MainActivity.kt` | Wired FastScrollHelper, added date formatting |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] A scroll thumb appears on the right edge when scrolling
-- [ ] The thumb can be grabbed and dragged to fast-scroll through the list
-- [ ] A date tooltip appears while dragging showing the date at the current position
-- [ ] The thumb auto-hides after 1.5 seconds of inactivity
-- [ ] Dates are formatted appropriately ("Today", "Yesterday", "Mar 15", "Mar 2025")
-- [ ] Fast scroll does NOT interfere with drag-to-select
-- [ ] Fast scroll works in both Normal and Selection modes (scroll only, no selecting)
-- [ ] Build succeeds, all tests pass
+- [x] A scroll thumb appears on the right edge when scrolling
+- [x] The thumb can be grabbed and dragged to fast-scroll through the list
+- [x] A date tooltip appears while dragging showing the date at the current position
+- [x] The thumb auto-hides after 1.5 seconds of inactivity
+- [x] Dates are formatted appropriately ("Today", "Yesterday", "Mar 15", "Mar 2025")
+- [x] Fast scroll does NOT interfere with drag-to-select
+- [x] Fast scroll works in both Normal and Selection modes (scroll only, no selecting)
+- [x] Transparent track (no visible gray bar)
+- [x] Build succeeds, all tests pass

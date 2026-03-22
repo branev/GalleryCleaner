@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     // Selection state before the drag started (so dragging back deselects correctly)
     private var preDragSelection: Set<Uri> = emptySet()
 
+    private lateinit var fastScrollHelper: FastScrollHelper
+
     private val dragSelectListener = DragSelectTouchListener(
         onDragRangeChanged = { rangeStart, rangeEnd ->
             val items = adapter.currentList
@@ -162,6 +164,15 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
         dragSelectListener.attachToRecyclerView(binding.recyclerView)
+
+        fastScrollHelper = FastScrollHelper(
+            recyclerView = binding.recyclerView,
+            track = binding.fastScrollTrack,
+            thumb = binding.fastScrollThumb,
+            tooltip = binding.fastScrollTooltip,
+            getDateAtPosition = { position -> formatDateForPosition(position) }
+        )
+        fastScrollHelper.attach()
 
         // Track items that scroll off the top as "viewed" and update FAB state
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -686,6 +697,30 @@ class MainActivity : AppCompatActivity() {
             .start()
 
         successSnackbar = null
+    }
+
+    private fun formatDateForPosition(position: Int): String {
+        val items = adapter.currentList
+        if (position !in items.indices) return ""
+
+        val timestamp = items[position].dateAdded
+        val itemDate = java.util.Date(timestamp * 1000L)
+        val now = java.util.Calendar.getInstance()
+        val itemCal = java.util.Calendar.getInstance().apply { time = itemDate }
+
+        return when {
+            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) &&
+            now.get(java.util.Calendar.DAY_OF_YEAR) == itemCal.get(java.util.Calendar.DAY_OF_YEAR) -> "Today"
+
+            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) &&
+            now.get(java.util.Calendar.DAY_OF_YEAR) - itemCal.get(java.util.Calendar.DAY_OF_YEAR) == 1 -> "Yesterday"
+
+            now.get(java.util.Calendar.YEAR) == itemCal.get(java.util.Calendar.YEAR) ->
+                java.text.SimpleDateFormat("MMM d", java.util.Locale.getDefault()).format(itemDate)
+
+            else ->
+                java.text.SimpleDateFormat("MMM yyyy", java.util.Locale.getDefault()).format(itemDate)
+        }
     }
 
     private fun showSnackbar(message: String) {

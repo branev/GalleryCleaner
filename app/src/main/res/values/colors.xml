@@ -78,6 +78,11 @@
     <color name="filter_btn_active_bg">#008080</color>
     <color name="filter_btn_active_text">#FFFFFF</color>
 
+    <!-- Fast scroller (SDD-20260321-004) -->
+    <color name="fast_scroll_track">#00000000</color>
+    <color name="fast_scroll_thumb">#CC008080</color>
+    <color name="fast_scroll_tooltip_bg">#008080</color>
+
     <!-- Delete success overlay (SDD-20260321-001) -->
     <color name="overlay_bg">#99000000</color>
     <color name="success_checkmark">#34D399</color>
