@@ -7,6 +7,9 @@ import android.text.format.Formatter
 import android.view.View
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import coil.load
 import com.example.gallerycleaner.databinding.ActivityMediaViewerBinding
 import java.text.SimpleDateFormat
@@ -29,8 +32,19 @@ class MediaViewerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMediaViewerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Push top info bar below status bar / camera cutout
+        val originalPaddingTop = binding.topInfoBar.paddingTop
+        ViewCompat.setOnApplyWindowInsetsListener(binding.topInfoBar) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            val topInset = maxOf(systemBars.top, cutout.top)
+            view.setPadding(view.paddingLeft, originalPaddingTop + topInset, view.paddingRight, view.paddingBottom)
+            insets
+        }
 
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_URI, Uri::class.java)

@@ -152,18 +152,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Handle edge-to-edge insets — pad top bar and bottom elements
+        // Handle edge-to-edge insets — pad top bar below status bar/cutout,
+        // and bottom elements above navigation bar
         val topBarOriginalPaddingTop = binding.topBar.paddingTop
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            val topInset = maxOf(systemBars.top, cutout.top)
+            val bottomInset = systemBars.bottom
+
+            // Top bar: push below status bar + cutout
             binding.topBar.setPadding(
-                binding.topBar.paddingLeft, topBarOriginalPaddingTop + systemBars.top,
+                binding.topBar.paddingLeft, topBarOriginalPaddingTop + topInset,
                 binding.topBar.paddingRight, binding.topBar.paddingBottom
             )
-            val bottomInset = systemBars.bottom
-            binding.selectionActionBar.setPadding(0, 0, 0, bottomInset)
-            binding.hintCard.translationY = -bottomInset.toFloat()
-            binding.fabContinue.translationY = -bottomInset.toFloat()
+
+            // Bottom elements: push above navigation bar
+            val bottomBarLp = binding.selectionActionBar.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            bottomBarLp.bottomMargin = 16.dp() + bottomInset
+            binding.selectionActionBar.layoutParams = bottomBarLp
+
+            val hintLp = binding.hintCard.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            hintLp.bottomMargin = 16.dp() + bottomInset
+            binding.hintCard.layoutParams = hintLp
+
+            val fabLp = binding.fabContinue.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            fabLp.bottomMargin = 24.dp() + bottomInset
+            binding.fabContinue.layoutParams = fabLp
+
             insets
         }
 
@@ -919,6 +935,8 @@ class MainActivity : AppCompatActivity() {
                 SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(itemDate)
         }
     }
+
+    private fun Int.dp(): Int = (this * resources.displayMetrics.density).toInt()
 
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
