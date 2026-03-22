@@ -602,8 +602,11 @@ class MainActivity : AppCompatActivity() {
         successSnackbar = snackbar
         snackbar.show()
 
-        // Dismiss overlay on tap
+        // Dismiss overlay on tap or OK button
         binding.deleteSuccessOverlay.setOnClickListener {
+            snackbar.dismiss()
+        }
+        binding.btnOverlayOk.setOnClickListener {
             snackbar.dismiss()
         }
     }

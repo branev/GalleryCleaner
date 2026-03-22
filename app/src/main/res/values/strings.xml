@@ -68,4 +68,5 @@
     <!-- Delete success overlay (SDD-20260321-001) -->
     <string name="delete_success_title">Done! %1$d items deleted</string>
     <string name="space_saved">%1$s of space saved</string>
+    <string name="overlay_ok">OK</string>
 </resources>

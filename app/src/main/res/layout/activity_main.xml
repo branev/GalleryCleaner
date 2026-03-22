@@ -325,6 +325,19 @@
                 android:textStyle="bold"
                 android:gravity="center" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOverlayOk"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/overlay_ok"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="48dp"
+                app:backgroundTint="@color/md_theme_primary"
+                app:cornerRadius="999dp" />
+
         </LinearLayout>
 
     </FrameLayout>
