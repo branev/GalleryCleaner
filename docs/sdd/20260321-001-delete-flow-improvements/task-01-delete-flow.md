@@ -262,14 +262,16 @@ private fun dismissSuccessOverlay() {
 | `app/src/main/res/layout/activity_main.xml` | Added overlay FrameLayout, replaced spacer with size TextView |
 | `app/src/main/java/.../MainActivity.kt` | Removed dialog for API 30+, added overlay, size display, 8s snackbar |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] No custom dialog on Android 11+ (system dialog only)
-- [ ] Custom dialog still appears on pre-Android 11
-- [ ] Selection bar shows live file size (e.g., "1.2 GB")
-- [ ] After delete: overlay fades in with animated checkmark + "Done! X items deleted"
-- [ ] Snackbar shows "X.X MB of space saved" with Undo button
-- [ ] Snackbar stays for 8 seconds
-- [ ] Tapping Undo dismisses overlay and restores items
-- [ ] Tapping overlay dismisses everything
-- [ ] Build succeeds, all tests pass
+- [x] No custom dialog on Android 11+ (system dialog only)
+- [x] Custom dialog still appears on pre-Android 11
+- [x] Selection bar shows live file size (e.g., "1.2 GB")
+- [x] After delete: overlay fades in with animated checkmark + "Done! X items deleted"
+- [x] Snackbar shows "X.X MB of space saved" with Undo button
+- [x] Snackbar stays for 8 seconds
+- [x] Tapping Undo dismisses overlay and restores items
+- [x] Tapping overlay dismisses everything
+- [x] Build succeeds, all tests pass

@@ -439,6 +439,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 binding.selectionToolbar.title = title
 
+                // Show total size of selected items
+                binding.selectionSize.text = android.text.format.Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
+
                 adapter.submitList(state.items)
                 adapter.updateSelectionState(state.selectedItems, true)
                 updateMediaTypeChips(state.selectedMediaTypes)
@@ -478,11 +481,16 @@ class MainActivity : AppCompatActivity() {
         val selectedItems = viewModel.getSelectedItems()
         if (selectedItems.isEmpty()) return
 
-        val state = viewModel.uiState.value
-        val hiddenCount = if (state is GalleryUiState.Selection) state.hiddenSelectedCount else 0
-
-        showTrashConfirmationDialog(selectedItems.size, hiddenCount) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ — skip custom dialog, system trash dialog provides confirmation
             performTrash(selectedItems)
+        } else {
+            // Pre-Android 11 — keep confirmation since delete is irreversible
+            val state = viewModel.uiState.value
+            val hiddenCount = if (state is GalleryUiState.Selection) state.hiddenSelectedCount else 0
+            showTrashConfirmationDialog(selectedItems.size, hiddenCount) {
+                performTrash(selectedItems)
+            }
         }
     }
 
@@ -552,13 +560,71 @@ class MainActivity : AppCompatActivity() {
         // Pre-Android 11 doesn't have system trash, so no restore is possible
     }
 
+    private var successSnackbar: Snackbar? = null
+
     private fun showTrashSuccessSnackbar(count: Int, totalSize: Long, trashedUris: Set<Uri>) {
-        val message = getString(R.string.trash_success_with_size, count, formatFileSize(totalSize))
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+        // Show success overlay
+        binding.deleteSuccessOverlay.visibility = View.VISIBLE
+        binding.successTitle.text = getString(R.string.delete_success_title, count)
+
+        // Animate: fade in overlay, scale up checkmark
+        binding.deleteSuccessOverlay.alpha = 0f
+        binding.deleteSuccessOverlay.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
+        binding.successCheckmark.scaleX = 0f
+        binding.successCheckmark.scaleY = 0f
+        binding.successCheckmark.animate()
+            .scaleX(1f).scaleY(1f)
+            .setDuration(400)
+            .setInterpolator(android.view.animation.OvershootInterpolator())
+            .start()
+
+        // Show snackbar with 8-second custom duration
+        val message = getString(R.string.space_saved,
+            android.text.format.Formatter.formatFileSize(this, totalSize))
+        val snackbar = Snackbar.make(binding.root, message, 8000)
             .setAction(getString(R.string.undo)) {
+                dismissSuccessOverlay()
                 performRestore(trashedUris)
             }
-            .show()
+
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                if (event != DISMISS_EVENT_ACTION) {
+                    dismissSuccessOverlay()
+                }
+            }
+        })
+
+        successSnackbar = snackbar
+        snackbar.show()
+
+        // Dismiss overlay on tap
+        binding.deleteSuccessOverlay.setOnClickListener {
+            snackbar.dismiss()
+        }
+    }
+
+    private fun dismissSuccessOverlay() {
+        // Cancel any running animations before dismissing
+        binding.deleteSuccessOverlay.animate().cancel()
+        binding.successCheckmark.animate().cancel()
+
+        binding.deleteSuccessOverlay.animate()
+            .alpha(0f)
+            .setDuration(200)
+            .setListener(object : android.animation.AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    binding.deleteSuccessOverlay.visibility = View.GONE
+                    binding.deleteSuccessOverlay.animate().setListener(null)
+                }
+            })
+            .start()
+
+        successSnackbar = null
     }
 
     private fun formatFileSize(bytes: Long): String {
