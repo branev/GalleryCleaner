@@ -189,7 +189,16 @@ class MainActivity : AppCompatActivity() {
             track = binding.fastScrollTrack,
             thumb = binding.fastScrollThumb,
             tooltip = binding.fastScrollTooltip,
-            getDateAtPosition = { position -> formatDateForPosition(position) }
+            getDateAtPosition = { position -> formatDateForPosition(position) },
+            onFastScrollPositionChanged = { position ->
+                // Mark all items above the fast-scroll position as viewed
+                val items = adapter.currentList
+                if (position > 0 && items.isNotEmpty()) {
+                    val urisToMark = (0 until position.coerceAtMost(items.size))
+                        .map { items[it].uri }
+                    viewModel.markItemsAsViewed(urisToMark)
+                }
+            }
         )
         fastScrollHelper.attach()
 
@@ -270,8 +279,16 @@ class MainActivity : AppCompatActivity() {
 
         // Mark items that have scrolled off the top (position 0 to first visible - 1)
         val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+        val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+
         if (firstVisiblePosition > 0) {
             val urisToMark = (0 until firstVisiblePosition).map { items[it].uri }
+            viewModel.markItemsAsViewed(urisToMark)
+        }
+
+        // If we've reached the bottom, also mark all visible items as viewed
+        if (lastVisiblePosition >= items.size - 1 && items.isNotEmpty()) {
+            val urisToMark = items.map { it.uri }
             viewModel.markItemsAsViewed(urisToMark)
         }
     }

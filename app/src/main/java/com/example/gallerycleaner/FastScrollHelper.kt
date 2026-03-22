@@ -16,7 +16,8 @@ class FastScrollHelper(
     private val track: View,
     private val thumb: View,
     private val tooltip: TextView,
-    private val getDateAtPosition: (Int) -> String
+    private val getDateAtPosition: (Int) -> String,
+    private val onFastScrollPositionChanged: (Int) -> Unit = {}
 ) {
     private var isDragging = false
     private val hideRunnable = Runnable { hide() }
@@ -90,6 +91,9 @@ class FastScrollHelper(
         updateThumbPositionFromProportion(proportion)
 
         tooltip.text = getDateAtPosition(targetPosition)
+
+        // Notify that items up to this position have been scrolled past
+        onFastScrollPositionChanged(targetPosition)
     }
 
     fun updateThumbPosition() {
