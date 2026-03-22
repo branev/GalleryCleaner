@@ -141,14 +141,16 @@ You do NOT need to add it to `Normal` or `Selection` — the `observeViewedItems
 | `app/src/main/res/layout/activity_main.xml` | Added `reviewProgressBar`, updated RecyclerView + fast scroll constraints |
 | `app/src/main/java/.../MainActivity.kt` | Progress calculation in `observeViewedItems()`, hidden in non-grid states |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] A thin teal progress bar appears below the header when items have been viewed
-- [ ] Progress updates as the user scrolls through items
-- [ ] Progress jumps up immediately after deletion (fewer total items)
-- [ ] Progress drops back after undo (items restored)
-- [ ] Progress bar is hidden when 0 items viewed
-- [ ] Progress bar is hidden in Loading, Empty, NoFiltersSelected, NoMatchingItems states
-- [ ] Progress bar stays visible in both Normal and Selection modes
-- [ ] The bar is subtle (3dp, no text)
-- [ ] Build succeeds, all tests pass
+- [x] A thin teal progress bar appears below the header when items have been viewed
+- [x] Progress updates as the user scrolls through items
+- [x] Progress jumps up immediately after deletion (fewer total items)
+- [x] Progress drops back after undo (items restored)
+- [x] Progress bar is hidden when 0 items viewed
+- [x] Progress bar is hidden in Loading, Empty, NoFiltersSelected, NoMatchingItems states
+- [x] Progress bar stays visible in both Normal and Selection modes
+- [x] The bar is subtle (3dp, no text)
+- [x] Build succeeds, all tests pass

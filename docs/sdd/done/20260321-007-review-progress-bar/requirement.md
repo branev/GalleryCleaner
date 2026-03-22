@@ -1,5 +1,7 @@
 # SDD-20260321-007: Review Progress Bar
 
+## Status: COMPLETE
+
 ## Summary
 
 Add a thin progress bar at the top of the grid (below the header) showing what percentage of items the user has scrolled past ("reviewed"). Provides a sense of progress when cleaning a large library.

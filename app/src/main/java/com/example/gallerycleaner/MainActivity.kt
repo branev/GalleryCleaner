@@ -380,6 +380,21 @@ class MainActivity : AppCompatActivity() {
                         val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
                         layoutManager?.let { updateContinueFabState(it) }
                     }
+
+                    // Update review progress bar
+                    val totalItems = items.size
+                    val viewedCount = if (totalItems > 0) {
+                        items.count { it.uri in viewedItems }
+                    } else 0
+
+                    if (totalItems > 0 && viewedCount > 0 &&
+                        (uiState is GalleryUiState.Normal || uiState is GalleryUiState.Selection)) {
+                        binding.reviewProgressBar.visibility = View.VISIBLE
+                        binding.reviewProgressBar.max = totalItems
+                        binding.reviewProgressBar.setProgressCompat(viewedCount, true)
+                    } else {
+                        binding.reviewProgressBar.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -419,6 +434,7 @@ class MainActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.filterLoadingIndicator.visibility = View.GONE
                 binding.filterSummary.visibility = View.GONE
+                binding.reviewProgressBar.visibility = View.GONE
                 binding.emptyStateContainer.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.GONE
@@ -431,6 +447,7 @@ class MainActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 binding.filterLoadingIndicator.visibility = View.GONE
                 binding.filterSummary.visibility = View.GONE
+                binding.reviewProgressBar.visibility = View.GONE
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.GONE
@@ -448,6 +465,7 @@ class MainActivity : AppCompatActivity() {
             is GalleryUiState.NoFiltersSelected -> {
                 binding.progressBar.visibility = View.GONE
                 binding.filterLoadingIndicator.visibility = View.GONE
+                binding.reviewProgressBar.visibility = View.GONE
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.VISIBLE
@@ -470,6 +488,7 @@ class MainActivity : AppCompatActivity() {
             is GalleryUiState.NoMatchingItems -> {
                 binding.progressBar.visibility = View.GONE
                 binding.filterLoadingIndicator.visibility = View.GONE
+                binding.reviewProgressBar.visibility = View.GONE
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.VISIBLE
