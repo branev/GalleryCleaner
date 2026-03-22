@@ -60,8 +60,9 @@
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:layout_gravity="top|end"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:elevation="1dp"
                     android:background="@drawable/filter_active_dot"
                     android:visibility="gone" />
 

@@ -45,23 +45,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun setupResetButton() {
         binding.btnReset.setOnClickListener {
-            // Reset to defaults
-            viewModel.setDateRangePreset(DateRangePreset.LAST_30_DAYS)
-            viewModel.setSortOption(SortOption.DATE_DESC)
-            // Select all available sources
-            val state = viewModel.uiState.value
-            val allSourceCounts = when (state) {
-                is GalleryUiState.Normal -> state.allSourceCounts
-                is GalleryUiState.Selection -> state.allSourceCounts
-                is GalleryUiState.NoFiltersSelected -> state.allSourceCounts
-                is GalleryUiState.NoMatchingItems -> state.allSourceCounts
-                else -> emptyMap()
-            }
-            allSourceCounts.keys.forEach { source ->
-                if (source !in viewModel.selectedSources.value) {
-                    viewModel.toggleSourceFilter(source)
-                }
-            }
+            viewModel.resetFilters()
             // Refresh chips
             setupDateRangeChips()
             setupSourceChips()
