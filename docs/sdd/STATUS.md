@@ -1,6 +1,6 @@
 # SDD Status Tracker
 
-## Completed
+## Completed (`done/`)
 
 | SDD | Feature | Tasks | Completed |
 |-----|---------|-------|-----------|
@@ -8,8 +8,9 @@
 | 20250321-002 | Empty state redesign | 1/1 | Circular icon, larger text, Reset Filters button |
 | 20260321-001 | Delete flow improvements | 1/1 | No custom dialog, success overlay, 8s undo, live size |
 | 20260321-002 | Drag-to-select | 1/1 | Range selection, auto-scroll, re-drag, scroll vs drag |
+| 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
 
-## Pending
+## Pending (`todo/`)
 
 | SDD | Feature | Priority | Dependencies | Notes |
 |-----|---------|----------|-------------|-------|
@@ -19,12 +20,6 @@
 | 20260321-006 | Pinch-to-zoom grid | Medium | None | 2-5 column pinch gesture |
 | 20260321-007 | Review progress bar | Low | None | Experimental — thin bar showing % reviewed |
 | 20260321-008 | Contextual hints | Low | 002 (drag) | Tooltips + help button + tips sheet |
-
-## Other
-
-| SDD | Feature | Tasks | Completed |
-|-----|---------|-------|-----------|
-| 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
 
 ## Other
 
