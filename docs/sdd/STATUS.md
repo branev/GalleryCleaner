@@ -22,12 +22,17 @@
 
 ## Other
 
+| SDD | Feature | Tasks | Completed |
+|-----|---------|-------|-----------|
+| 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
+
+## Other
+
 | Item | Type | Status |
 |------|------|--------|
 | Inter font | Enhancement | Complete |
 | AGP upgrade | Tooling | Complete |
 | Kotlin 2.2.20 | Tooling | Complete |
-| Code review fixes (7 items) | Cleanup | Complete |
 | Date section headers | Idea | Backlog (docs/ideas.md) |
 | Trash access | Idea | Backlog (docs/ideas.md) |
 | "Left off here" divider | Idea | Backlog (docs/ideas.md) |
