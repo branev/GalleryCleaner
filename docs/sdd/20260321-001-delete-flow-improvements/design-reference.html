@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gallery Cleaner - Success Overlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            app: {
+              bg: '#000000',
+              text: '#FFFFFF',
+              muted: '#A1A1AA',
+              surface: '#1C1C1E',
+              accent: '#2DD4BF', // Teal-400
+              pillBg: '#18181B', // Zinc-900
+              pillActive: '#115E59', // Teal-800
+              overlay: 'rgba(0, 0, 0, 0.85)',
+              success: '#34D399', // Emerald-400
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-app-bg text-app-text min-h-screen flex flex-col antialiased relative overflow-hidden">
+<!-- BEGIN: Main Content (Dimmed in background) -->
+<main class="flex-1 flex flex-col w-full max-w-md mx-auto relative pt-12 px-4 select-none pointer-events-none" data-purpose="background-content">
+<!-- BEGIN: Header -->
+<header class="flex items-center justify-between mb-6" data-purpose="app-header">
+<h1 class="text-3xl font-bold tracking-tight">Gallery Cleaner</h1>
+<button class="flex items-center gap-2 bg-app-surface px-4 py-2 rounded-full text-sm font-medium text-app-accent">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+        Filters
+      </button>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Media Type Toggles -->
+<section class="flex gap-3 mb-8" data-purpose="media-toggles">
+<button class="bg-app-pillActive text-app-accent px-6 py-2 rounded-full text-sm font-semibold tracking-wide">
+        Photos
+      </button>
+<button class="bg-app-pillBg text-app-muted px-6 py-2 rounded-full text-sm font-semibold tracking-wide">
+        Videos
+      </button>
+</section>
+<!-- END: Media Type Toggles -->
+<!-- BEGIN: Grid Content -->
+<section class="grid grid-cols-3 gap-3" data-purpose="folders-grid">
+<div class="aspect-square bg-[#2A312A] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="WhatsApp" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB61926ayhksaGyNYT7gflLCeUKMWT5agpMaRtgaPK0KW96CNIhFQn0ridcuhDw0s257BkdNf-PaccowAoo9Cc2NmNpOYqNh5PjTOvvJ5MU1-y74lfTt6CX9eD0Zxe_eoTsArgu0sOdFALaHIJoh4Bkjq4bucxqpqY5htjbWdMkLmOOlfmPBWRwYQf5Z7AnFG3JzY7klNzrAzZ8qZosiP9yWUllCDz72F2832e8Pijgg2wUOSDxmVoszJTarCxm90GLPqW6Pa9nAcg"/>
+<span class="relative z-20 text-xs font-semibold pb-1">WhatsApp</span>
+</div>
+<div class="aspect-square bg-[#2D2D2D] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Camera" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj3LVOjdSuCinAep8FFGV8_7iW7GNzJWOE8gtvxu2ggyBwbyQudLb8geQt5-wElYnKIMjg2Q82jzrwNLu5X-QNp1IY8dTtd37qUbzG4F6pmAsnVnmftmKvnahE79KUAp90jo__PcHqwMPlkQJav6iEJ18pM5ytMxzQrEHrQdOnnQ5Q_3ZX2-yDJ77gAMrfgeAj_DhzW-sVCcstMG7xN9hXRi98s1k5CUACw8eD5EsN-apWRd2ixbEmdd27J8SOxoNsZ5r9GRb8ii0"/>
+<span class="relative z-20 text-xs font-semibold pb-1">Camera</span>
+</div>
+<div class="aspect-square bg-[#2D3748] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Screenshots" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUMG672hWow1HMk2WCjrfEe2qknsk4KYEs_HQhlOs8hMk6T1BCKrHyBu_r5QojCBckRB5omU_XG2NQzZtWIdwWyvSf8Flr9YnI9BwsMltOZMypcchPlYf93AV2XTRdBh6FYLByL2SAmnDK14sWIzj8FBlj3UBPac4Tiapzy6Q3igTCVTOeK6x-kTjkDGG8OEtu8W7_xja1agrBbaYVKzu94dCiwdY_lE1KfdDYqO_kncO_nrIcLUTG5PhnuetEF-1bK3JBA-UUiEg"/>
+<span class="relative z-20 text-xs font-semibold pb-1">Screenshots</span>
+</div>
+<div class="aspect-square bg-[#4A3131] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Instagram" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf7faAu3fQiG_2NL5vlhJGtvhxwUbWoLES6UFgCCRodb0X4uBlGwzfhoB1-KRUITEBlwsewj00x0GHBeG4MINcu5YQ6o7o0ivWr9nP40yUGX7MbCz31F9jsUV0wxkkAfNG14kbFm3ljbNBrQLCGYd-TVoHMexouxhA_rfBHehsVVkoFX8miTK4LjCjSBTKlOpA8N2GN3PPGZBMwZVnEecgzawATBdxEeG39NkjXzNuhq8wYeJvrNqZYNMrkLHqqhJf-eCnmn4Ivxw"/>
+<span class="relative z-20 text-xs font-semibold pb-1">Instagram</span>
+</div>
+<div class="aspect-square bg-[#3A3331] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Downloads" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr5wP0OAkjIWgumCMITjqol07QsjDtrmffvJ0wZDiA7SeDEzawQLQDfs20PwHDmvT3_C_8zDTtnSn8B_WCgQqouA5tSpYoSNspTNLl0T_fXbmYHcgXP9sjnaXr5ZssqTLE48-e8JcO_sqvu1pXTUbzN01Za6ao5buDuGqJcuCEMeYiMEVheLiWVSaT3m-zcu_Hql2F8RChiMJc2KrPV85mxp9FSrX8mH4TscYZWz9_GZp-N7ZBOoCpWrDPFUxr3PTXDUoEBuhAYJw"/>
+<span class="relative z-20 text-xs font-semibold pb-1">Downloads</span>
+</div>
+<div class="aspect-square bg-[#5C3D2E] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Viber" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClkqp2QKSvL_ef36G-Mx5tmUnh5i4Mu7HJNyqwJi3NsFTbBgDiTsQXllhUV_cLDhyi5vvl_WYybFplAIjtjZRyR4B4ziIt1PsEw2CnemIcw8xOIebczK9h_eRvwatWZJtE_7EtGoDKeMcAkUI8w2yGHNtTv93ITdO5xAxZRZHgNf4l1e4065rP67Gt6wAsORc6zJav-u-3kRzkxX1w0evvn0FMcE9lGG1RSo3JT3aMsbqLuzcM_84BHQtH74oaDcVRMbsAwWAd1io"/>
+<span class="relative z-20 text-xs font-semibold pb-1">Viber</span>
+</div>
+<div class="aspect-square bg-[#2D2D2D] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Similar 1" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD0uzIzINyZX3NC3CKTfaK7kTyHoOwc89EZrThpFGSm079TUDl1hC01jcK-xji438CLUhdQHZd_nex47ZOio6uYSeZWmA3c9ecmxeYlMHxSS5-3jnQkeiQQPrA34fVL9mfdmZngfki4Dww-yflSHU-SMk2zUYun1fdaqMVBFGhFC-qWL1OotlTl-URv1KvweF0HaxaAQr8lI7YVgYzHRPf6hHjcIxNn7zyHEbMHFLGjD8R-opEa4l5aY2i17VbcTKRl5EIiRse4f0"/>
+<span class="relative z-20 text-lg font-bold pb-1 text-black bg-white/20 w-full text-center">50%</span>
+</div>
+<div class="aspect-square bg-[#2D2D2D] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Similar 2" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuw8EMKEaQhkBaGW-U7Cme3C-2Ca9WijTpto65p2nv86KQbCvfJmUuDaNr3eybfTzcXVJX7VEMrNQol1VRbE56h3zzlPEijAzTWW0oo0-PFybGpelfTmAF7XMjQK70ASz8GGvJ85OB2fFdSOcvyHhifIhUuseIo4Hp8zUccoUBAg95Feg83OMY474J3lSEXTVKmVbycz2A1h_grRj7O2TFI5QPXGO7pfGpNNE4xnekdO76l2MBtfjsnoQ7qYnPQ6cKO9uwKuxLk_c"/>
+<span class="relative z-20 text-lg font-bold pb-1 text-black bg-white/20 w-full text-center">50%</span>
+</div>
+<div class="aspect-square bg-[#2D2D2D] rounded-2xl p-2 relative flex flex-col items-center justify-end overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+<img alt="Similar 3" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF0iEtVjkXRWWmU93bw19CCJv_nnMbqWNDybJLCLDaVGHQVFd6ItehukXeP40-mnIrJRXVdBbRfowQJ8fue0aTXpil3atGrTkJcv__y6jW7dpf-Af_xtExqK0tKZ_MGwhuMO1lD9R2qwdAFmBrR5o7W3FHYdPf3T2O111E5I7mIKwd_18bkBdt7QEUJLESA0M9Voxt70yIvgSh8TXzD_3gVnyHoHWcxpe-NInRFlokK14XUFOHILnzywy-36W9o2yQ0Q5RUIcmp8Y"/>
+<span class="relative z-20 text-lg font-bold pb-1 text-black bg-white/20 w-full text-center">50%</span>
+</div>
+</section>
+<!-- END: Grid Content -->
+</main>
+<!-- END: Main Content -->
+<!-- BEGIN: Success Overlay -->
+<div class="absolute inset-0 flex flex-col items-center justify-center z-40 bg-black/60 backdrop-blur-[2px]" data-purpose="success-message">
+<div class="flex flex-col items-center transform -translate-y-12">
+<!-- Custom animated-looking checkmark -->
+<div class="relative w-48 h-48 mb-4 flex items-center justify-center">
+<!-- Abstract swoosh lines -->
+<div class="absolute w-24 h-2 bg-[#1A4D4A] rounded-full rotate-45 translate-x-12 translate-y-6"></div>
+<div class="absolute w-12 h-2 bg-[#1A4D4A] rounded-full -rotate-45 -translate-x-12 -translate-y-2"></div>
+<div class="absolute w-6 h-6 bg-app-success rounded-full translate-x-16 -translate-y-12 opacity-80"></div>
+<div class="absolute w-3 h-3 bg-app-success rounded-full translate-x-20 -translate-y-4 opacity-60"></div>
+<!-- Large Checkmark -->
+<svg class="w-40 h-40 text-app-success relative z-10 drop-shadow-lg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="20 6 9 17 4 12"></polyline>
+</svg>
+</div>
+<h2 class="text-3xl sm:text-[32px] font-extrabold text-white text-center leading-tight drop-shadow-md whitespace-nowrap">Done! 128 items deleted</h2>
+</div>
+</div>
+<!-- END: Success Overlay -->
+<!-- BEGIN: Bottom Snackbar -->
+<div class="absolute bottom-0 left-0 right-0 p-4 z-50 flex justify-center w-full max-w-md mx-auto" data-purpose="bottom-snackbar">
+<div class="bg-[#2C2C2E] w-full rounded-full flex items-center justify-between p-2 pl-6 shadow-2xl">
+<span class="text-white text-[15px] font-medium tracking-wide">1.0 MB of space saved</span>
+<button class="bg-app-accent hover:bg-teal-300 text-teal-950 font-bold py-3 px-8 rounded-full text-[15px] transition-colors">
+        Undo
+      </button>
+</div>
+</div>
+<!-- END: Bottom Snackbar -->
+</body></html>
