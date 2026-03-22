@@ -5,6 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import com.example.gallerycleaner.databinding.BottomSheetFiltersBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -36,6 +40,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
         setupDateRangeChips()
         setupSourceChips()
         setupSortChips()
+        observeActiveFilters()
     }
 
     private fun setupResetButton() {
@@ -61,6 +66,17 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
             setupDateRangeChips()
             setupSourceChips()
             setupSortChips()
+        }
+    }
+
+    private fun observeActiveFilters() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.hasActiveFilters.collect { isActive ->
+                    binding.btnReset.isEnabled = isActive
+                    binding.btnReset.alpha = if (isActive) 1.0f else 0.4f
+                }
+            }
         }
     }
 
