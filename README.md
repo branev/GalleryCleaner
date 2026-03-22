@@ -1,15 +1,15 @@
-# GalleryCleaner
+# Gallery Cleaner
 
-A simple Android gallery app to help clean up your photo library by organizing media by source and enabling bulk deletion.
+A native Android gallery app that helps you clean up your photo library by organizing media by source and enabling fast bulk deletion.
 
 ## What it does
 
-- **Organizes media by source** - Automatically categorizes your photos and videos by where they came from (WhatsApp, Camera, Screenshots, Telegram, Instagram, etc.)
-- **Bulk selection and deletion** - Long-press to select multiple items, then delete them all at once
-- **Smart filtering** - Filter by media type (photos/videos), date range, and source
-- **Sorting options** - Sort by date, name, or file size
-- **Progress tracking** - Keeps track of which items you've scrolled past so you can pick up where you left off
-- **Size info on delete** - Shows total size of deleted items so you know how much space you freed
+- **Organizes media by source** — Automatically categorizes photos and videos by where they came from (WhatsApp, Camera, Screenshots, Telegram, Instagram, Viber, and more)
+- **Drag-to-select** — Long-press to start selecting, then drag across items to select many at once. Swipe horizontally to select, vertically to scroll
+- **Smart filtering** — Filter by media type (photos/videos), date range, source, and sort order
+- **Bulk deletion with undo** — Delete selected items with a single tap. A celebration overlay shows how much space you freed, with an 8-second undo window
+- **Progress tracking** — Items you've scrolled past are dimmed so you know what you've already reviewed. A Continue button jumps to where you left off
+- **Video duration badges** — Videos show their duration directly on the thumbnail
 
 ## Screenshots
 
@@ -17,11 +17,12 @@ A simple Android gallery app to help clean up your photo library by organizing m
 
 ## Tech Stack
 
-- Kotlin
+- Kotlin 2.2
 - Android Views with ViewBinding
 - MVVM architecture with ViewModel + StateFlow
 - Material Design 3
 - Coil for image loading
+- Inter font (SIL Open Font License)
 
 ## Building
 
@@ -50,7 +51,7 @@ This is a hobbyist project built with [Claude Code](https://claude.ai/claude-cod
 ## License
 
 ```
-Copyright 2024 Branimir Parashkevov
+Copyright 2024-2026 Branimir Parashkevov
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
