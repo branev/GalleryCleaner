@@ -51,19 +51,13 @@ fun getDateAtPosition(position: Int): String {
 
 ### 4. Implementation Approach
 
-#### Option A: RecyclerView FastScroller (built-in)
-Android's `RecyclerView` has built-in fast scroll support via `fastScrollEnabled="true"` in XML, but it doesn't support a date tooltip out of the box.
+#### Decision: Custom implementation
 
-#### Option B: Custom implementation
-- Add a custom `View` overlaid on the RecyclerView (thumb + tooltip)
-- Listen to RecyclerView scroll events to position the thumb
-- Listen to touch events on the thumb to enable dragging
-- On drag, compute target scroll position and call `scrollToPosition()`
+Custom views overlaid on the RecyclerView (~150 lines). No external library — keeps us in control and avoids dependency risk from unmaintained libraries. Follows the same pattern as `DragSelectTouchListener` already in the codebase.
 
-#### Option C: Library
-Libraries like `RecyclerView-FastScroller` or `FastScrollRecyclerView` provide fast scroll with section indicators. Evaluate for compatibility.
-
-**Recommended: Option B or C** — the built-in fast scroller is too limited for the date tooltip requirement.
+**Rejected alternatives:**
+- Built-in `fastScrollEnabled` — no date tooltip support
+- External libraries (`RecyclerView-FastScroller`, `FastScrollRecyclerView`) — most are unmaintained or incompatible with newer RecyclerView versions
 
 ---
 
@@ -84,6 +78,15 @@ Libraries like `RecyclerView-FastScroller` or `FastScrollRecyclerView` provide f
 - [ ] The thumb auto-hides after inactivity
 - [ ] Dates are formatted appropriately ("Today", "Yesterday", "Mar 2026")
 - [ ] Build succeeds, all tests pass
+
+## Interaction with Drag-to-Select (SDD-002)
+
+The fast scroller and drag-to-select both handle touch events on/near the RecyclerView. They must not conflict:
+
+- **Fast scroller touch zone**: a narrow strip (~24dp wide) on the right edge of the screen. Touches in this zone are handled by the fast scroller, NOT by drag-to-select.
+- **Drag-to-select touch zone**: the rest of the RecyclerView area. Horizontal swipes start drag-select as before.
+- **In selection mode**: the fast scroller should still work — the user may want to scroll to distant items to select them. The fast scroller does NOT select items, only scrolls.
+- **Implementation**: the fast scroller intercepts touches in its zone before they reach the RecyclerView/DragSelectTouchListener. Since it's an overlay View on top of the RecyclerView, its touch events are consumed first.
 
 ## Out of Scope
 
