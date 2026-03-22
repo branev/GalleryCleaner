@@ -21,7 +21,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -152,13 +154,16 @@ class MainActivity : AppCompatActivity() {
 
         // Handle edge-to-edge insets — pad top bar and bottom elements
         val topBarOriginalPaddingTop = binding.topBar.paddingTop
-        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.topBar.setPadding(
                 binding.topBar.paddingLeft, topBarOriginalPaddingTop + systemBars.top,
                 binding.topBar.paddingRight, binding.topBar.paddingBottom
             )
-            binding.selectionActionBar.setPadding(0, 0, 0, systemBars.bottom)
+            val bottomInset = systemBars.bottom
+            binding.selectionActionBar.setPadding(0, 0, 0, bottomInset)
+            binding.hintCard.translationY = -bottomInset.toFloat()
+            binding.fabContinue.translationY = -bottomInset.toFloat()
             insets
         }
 
