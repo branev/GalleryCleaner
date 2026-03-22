@@ -82,6 +82,13 @@ Update `HintManager` to:
 | `HintManager.kt` | Major — replace PopupWindow with card show/hide |
 | `drawable/ic_lightbulb.xml` | **New file** — lightbulb icon for hint card |
 
+### Cleanup:
+
+Remove old PopupWindow code that is no longer needed:
+- `HintManager.kt` — remove all PopupWindow logic (`displayTooltip()`, `currentPopup`, `PopupWindow` imports)
+- `drawable/hint_tooltip_bg.xml` — delete (was PopupWindow background, card uses its own styling)
+- `rootView.setOnClickListener` tap-to-dismiss logic — remove entirely
+
 ## Acceptance Criteria
 
 - [ ] Hints appear as a full-width card at the bottom of the screen
