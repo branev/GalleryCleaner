@@ -40,14 +40,20 @@ class MainActivity : AppCompatActivity() {
     // Selection state before the drag started (so dragging back deselects correctly)
     private var preDragSelection: Set<Uri> = emptySet()
 
-    private val dragSelectListener = DragSelectTouchListener { rangeStart, rangeEnd ->
-        val items = adapter.currentList
-        val dragUris = (rangeStart..rangeEnd)
-            .filter { it in items.indices }
-            .map { items[it].uri }
-            .toSet()
-        viewModel.setDragSelection(dragUris, preDragSelection)
-    }
+    private val dragSelectListener = DragSelectTouchListener(
+        onDragRangeChanged = { rangeStart, rangeEnd ->
+            val items = adapter.currentList
+            val dragUris = (rangeStart..rangeEnd)
+                .filter { it in items.indices }
+                .map { items[it].uri }
+                .toSet()
+            viewModel.setDragSelection(dragUris, preDragSelection)
+        },
+        onDragStarted = {
+            // Snapshot current selection before this drag modifies it
+            preDragSelection = viewModel.getSelectedItems()
+        }
+    )
 
     private val backCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -408,6 +414,7 @@ class MainActivity : AppCompatActivity() {
                 binding.topBar.visibility = View.VISIBLE
                 binding.selectionToolbar.visibility = View.GONE
                 binding.selectionActionBar.visibility = View.GONE
+                dragSelectListener.inSelectionMode = false
 
                 // Check if filters changed - show loading and scroll to top if so
                 val filtersChanged = previousMediaTypes != state.selectedMediaTypes ||
@@ -443,6 +450,7 @@ class MainActivity : AppCompatActivity() {
                 binding.topBar.visibility = View.VISIBLE
                 binding.selectionToolbar.visibility = View.GONE
                 binding.selectionActionBar.visibility = View.VISIBLE
+                dragSelectListener.inSelectionMode = true
 
                 // Show selection count + size in the bottom bar
                 val selectedCount = state.selectedItems.size
