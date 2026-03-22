@@ -134,7 +134,6 @@ class MainActivity : AppCompatActivity() {
         setupMediaTypeChips()
         setupFilterButton()
         setupResetFiltersButton()
-        setupSelectionToolbar()
         setupSelectionActionBar()
         setupContinueFab()
         setupBackHandler()
@@ -146,6 +145,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestReadPermission()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dragSelectListener.detachFromRecyclerView()
+        binding.deleteSuccessOverlay.animate().cancel()
+        binding.successCheckmark.animate().cancel()
+        successSnackbar?.dismiss()
+        successSnackbar = null
     }
 
     private fun setupRecyclerView() {
@@ -225,12 +233,6 @@ class MainActivity : AppCompatActivity() {
     ) {
         // Filter summary hidden per new design — filters visible in bottom sheet only
         binding.filterSummary.visibility = View.GONE
-    }
-
-    private fun setupSelectionToolbar() {
-        binding.selectionToolbar.setNavigationOnClickListener {
-            viewModel.exitSelectionMode()
-        }
     }
 
     private fun setupSelectionActionBar() {
@@ -340,7 +342,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.GONE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.GONE
                 backCallback.isEnabled = false
             }
@@ -352,7 +354,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.GONE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.GONE
                 backCallback.isEnabled = false
 
@@ -369,7 +371,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.VISIBLE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.GONE
                 backCallback.isEnabled = false
 
@@ -391,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.topBar.visibility = View.VISIBLE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.GONE
                 backCallback.isEnabled = false
 
@@ -412,7 +414,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.GONE
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.topBar.visibility = View.VISIBLE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.GONE
                 dragSelectListener.inSelectionMode = false
 
@@ -448,7 +450,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.GONE
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.topBar.visibility = View.VISIBLE
-                binding.selectionToolbar.visibility = View.GONE
+
                 binding.selectionActionBar.visibility = View.VISIBLE
                 dragSelectListener.inSelectionMode = true
 
@@ -460,7 +462,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     getString(R.string.selected_count, selectedCount)
                 }
-                binding.selectionSize.text = "$countText · $sizeText"
+                binding.selectionSize.text = getString(R.string.selection_count_size, countText, sizeText)
 
                 adapter.submitList(state.items)
                 adapter.updateSelectionState(state.selectedItems, true)
@@ -493,15 +495,12 @@ class MainActivity : AppCompatActivity() {
     private fun handleItemLongClick(item: MediaItem) {
         val state = viewModel.uiState.value
         if (state !is GalleryUiState.Selection) {
-            // Capture selection before entering mode (empty for fresh drag)
-            preDragSelection = emptySet()
             viewModel.enterSelectionMode(item.uri)
+            // Snapshot the selection (contains the initial item) for drag range math
+            preDragSelection = viewModel.getSelectedItems()
 
-            // Start drag-select so user can keep finger down and drag
             val position = adapter.currentList.indexOfFirst { it.uri == item.uri }
             if (position >= 0) {
-                // The initial item is now selected — capture it as pre-drag
-                preDragSelection = setOf(item.uri)
                 dragSelectListener.startDragSelection(position)
             }
         }
@@ -566,7 +565,7 @@ class MainActivity : AppCompatActivity() {
 
             if (deletedCount == uris.size) {
                 viewModel.removeDeletedItems(uris)
-                showSnackbar(getString(R.string.trash_success_with_size, deletedCount, formatFileSize(totalSize)))
+                showSnackbar(getString(R.string.trash_success_with_size, deletedCount, android.text.format.Formatter.formatFileSize(this, totalSize)))
             } else if (deletedCount > 0) {
                 viewModel.removeDeletedItems(uris)
                 showSnackbar(getString(R.string.trash_partial, deletedCount, uris.size))
@@ -658,15 +657,6 @@ class MainActivity : AppCompatActivity() {
             .start()
 
         successSnackbar = null
-    }
-
-    private fun formatFileSize(bytes: Long): String {
-        return when {
-            bytes >= 1_073_741_824 -> String.format("%.1f GB", bytes / 1_073_741_824.0)
-            bytes >= 1_048_576 -> String.format("%.1f MB", bytes / 1_048_576.0)
-            bytes >= 1024 -> String.format("%.1f KB", bytes / 1024.0)
-            else -> "$bytes B"
-        }
     }
 
     private fun showSnackbar(message: String) {

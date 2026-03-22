@@ -3,17 +3,18 @@ package com.example.gallerycleaner
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.ref.WeakReference
 
 /**
  * Handles drag-to-select on a RecyclerView grid.
  *
  * Two activation modes:
  * 1. External: call startDragSelection() from long-press handler (initial entry)
- * 2. Auto: when inSelectionMode is true, any touch-and-drag automatically starts
- *    a new drag gesture (allows multiple drag passes without long-pressing again)
+ * 2. Auto: when inSelectionMode is true, any horizontal touch-and-drag automatically
+ *    starts a new drag gesture (allows multiple drag passes without long-pressing again)
  *
  * Reports the full selected range (start to current position) on each move.
- * Auto-scrolls when finger is near top/bottom edges.
+ * Auto-scrolls when finger is near top/bottom edges, updating selection during scroll.
  */
 class DragSelectTouchListener(
     private val onDragRangeChanged: (startPosition: Int, endPosition: Int) -> Unit,
@@ -32,8 +33,12 @@ class DragSelectTouchListener(
     private var downY = 0f
     private var touchSlopPx = 0
 
+    // Last known touch coordinates for selection updates during auto-scroll
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
+
     // Auto-scroll
-    private var recyclerView: RecyclerView? = null
+    private var recyclerViewRef: WeakReference<RecyclerView>? = null
     private val autoScrollRunnable = Runnable { autoScroll() }
     private var autoScrollVelocity = 0
 
@@ -46,16 +51,20 @@ class DragSelectTouchListener(
     }
 
     fun attachToRecyclerView(rv: RecyclerView) {
-        recyclerView = rv
+        recyclerViewRef = WeakReference(rv)
         edgeThresholdPx = (EDGE_THRESHOLD_DP * rv.resources.displayMetrics.density).toInt()
         touchSlopPx = ViewConfiguration.get(rv.context).scaledTouchSlop
         rv.addOnItemTouchListener(this)
     }
 
-    /**
-     * Call this to start a drag-select gesture from the given adapter position.
-     * Used for the initial long-press entry into selection mode.
-     */
+    fun detachFromRecyclerView() {
+        val rv = recyclerViewRef?.get()
+        rv?.removeCallbacks(autoScrollRunnable)
+        rv?.removeOnItemTouchListener(this)
+        recyclerViewRef = null
+        stopDragSelection()
+    }
+
     fun startDragSelection(position: Int) {
         isActive = true
         startPosition = position
@@ -63,11 +72,12 @@ class DragSelectTouchListener(
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-        // Handle active drag
         if (isActive) {
             when (e.actionMasked) {
                 MotionEvent.ACTION_MOVE -> {
-                    updateSelection(rv, e)
+                    lastTouchX = e.x
+                    lastTouchY = e.y
+                    updateSelection(rv, e.x, e.y)
                     handleAutoScroll(rv, e)
                     return true
                 }
@@ -79,7 +89,6 @@ class DragSelectTouchListener(
             return false
         }
 
-        // Auto-start drag when already in selection mode
         if (inSelectionMode) {
             when (e.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -98,15 +107,15 @@ class DragSelectTouchListener(
                         val distance = dx * dx + dy * dy
                         if (distance > touchSlopPx * touchSlopPx) {
                             if (dx > dy) {
-                                // Horizontal-dominant movement — start drag-select
                                 onDragStarted()
                                 startDragSelection(pendingDragPosition)
                                 pendingDragPosition = RecyclerView.NO_POSITION
-                                updateSelection(rv, e)
+                                lastTouchX = e.x
+                                lastTouchY = e.y
+                                updateSelection(rv, e.x, e.y)
                                 handleAutoScroll(rv, e)
                                 return true
                             } else {
-                                // Vertical-dominant movement — let RecyclerView scroll
                                 pendingDragPosition = RecyclerView.NO_POSITION
                                 return false
                             }
@@ -127,7 +136,9 @@ class DragSelectTouchListener(
     override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
         when (e.actionMasked) {
             MotionEvent.ACTION_MOVE -> {
-                updateSelection(rv, e)
+                lastTouchX = e.x
+                lastTouchY = e.y
+                updateSelection(rv, e.x, e.y)
                 handleAutoScroll(rv, e)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
@@ -143,8 +154,8 @@ class DragSelectTouchListener(
         }
     }
 
-    private fun updateSelection(rv: RecyclerView, e: MotionEvent) {
-        val child = rv.findChildViewUnder(e.x, e.y) ?: return
+    private fun updateSelection(rv: RecyclerView, x: Float, y: Float) {
+        val child = rv.findChildViewUnder(x, y) ?: return
         val position = rv.getChildAdapterPosition(child)
         if (position == RecyclerView.NO_POSITION || position == lastPosition) return
 
@@ -180,10 +191,12 @@ class DragSelectTouchListener(
     }
 
     private fun autoScroll() {
-        val rv = recyclerView ?: return
+        val rv = recyclerViewRef?.get() ?: return
         if (!isActive || autoScrollVelocity == 0) return
 
         rv.scrollBy(0, autoScrollVelocity)
+        // Update selection at last known touch position after scroll
+        updateSelection(rv, lastTouchX, lastTouchY)
         rv.postOnAnimation(autoScrollRunnable)
     }
 
@@ -192,6 +205,6 @@ class DragSelectTouchListener(
         startPosition = RecyclerView.NO_POSITION
         lastPosition = RecyclerView.NO_POSITION
         autoScrollVelocity = 0
-        recyclerView?.removeCallbacks(autoScrollRunnable)
+        recyclerViewRef?.get()?.removeCallbacks(autoScrollRunnable)
     }
 }

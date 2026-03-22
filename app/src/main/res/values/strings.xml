@@ -70,4 +70,5 @@
     <string name="space_saved">%1$s of space saved</string>
     <string name="overlay_ok">OK</string>
     <string name="exit_selection">Exit selection</string>
+    <string name="selection_count_size">%1$s · %2$s</string>
 </resources>
