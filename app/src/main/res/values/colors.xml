@@ -74,6 +74,10 @@
     <color name="empty_state_reset_btn_bg">#1A008080</color>
     <color name="empty_state_reset_btn_text">#008080</color>
 
+    <!-- Active filter indicator (SDD-20260321-003) -->
+    <color name="filter_btn_active_bg">#008080</color>
+    <color name="filter_btn_active_text">#FFFFFF</color>
+
     <!-- Delete success overlay (SDD-20260321-001) -->
     <color name="overlay_bg">#99000000</color>
     <color name="success_checkmark">#34D399</color>

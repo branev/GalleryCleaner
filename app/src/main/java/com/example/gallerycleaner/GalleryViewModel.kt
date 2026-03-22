@@ -69,6 +69,21 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
     val selectedDateRange: StateFlow<DateRange> = filterPreferences.selectedDateRange
     val selectedSortOption: StateFlow<SortOption> = filterPreferences.selectedSortOption
 
+    // Derived: true when any filter differs from defaults
+    val hasActiveFilters: StateFlow<Boolean> = combine(
+        selectedSources,
+        selectedMediaTypes,
+        selectedDateRange,
+        selectedSortOption
+    ) { sources, mediaTypes, dateRange, sortOption ->
+        val allSourcesSelected = sources.size == SourceType.values().size
+        val allMediaTypesSelected = mediaTypes.size == MediaType.values().size
+        val defaultDateRange = dateRange.preset == DateRangePreset.LAST_30_DAYS
+        val defaultSort = sortOption == SortOption.DATE_DESC
+
+        !allSourcesSelected || !allMediaTypesSelected || !defaultDateRange || !defaultSort
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     // Stage 1: Combine loading-related flows
     private val loadingState: StateFlow<LoadingState> = combine(
         _isLoading,

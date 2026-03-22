@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         setupBackHandler()
         observeUiState()
         observeViewedItems()
+        observeActiveFilters()
 
         if (hasReadPermission()) {
             viewModel.loadMedia()
@@ -321,6 +322,24 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun observeActiveFilters() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.hasActiveFilters.collect { isActive ->
+                    updateFiltersButtonAppearance(isActive)
+                }
+            }
+        }
+    }
+
+    private fun updateFiltersButtonAppearance(isActive: Boolean) {
+        val bgColor = if (isActive) R.color.filter_btn_active_bg else R.color.badge_unviewed_bg
+        val textColor = if (isActive) R.color.filter_btn_active_text else R.color.badge_unviewed_text
+        binding.btnFilters.backgroundTintList = android.content.res.ColorStateList.valueOf(getColor(bgColor))
+        binding.btnFilters.setTextColor(getColor(textColor))
+        binding.filterActiveDot.visibility = if (isActive) View.VISIBLE else View.GONE
     }
 
     private fun observeUiState() {

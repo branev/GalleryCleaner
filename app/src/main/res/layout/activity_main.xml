@@ -38,18 +38,34 @@
                 android:textStyle="bold"
                 android:textColor="@color/header_title_green" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFilters"
-                style="@style/Widget.Material3.Button.TextButton"
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/filters"
-                android:textSize="14sp"
-                android:textColor="@color/badge_unviewed_text"
-                android:gravity="center"
-                app:backgroundTint="@color/badge_unviewed_bg"
-                app:cornerRadius="20dp"
-                app:icon="@null" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilters"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/filters"
+                    android:textSize="14sp"
+                    android:textColor="@color/badge_unviewed_text"
+                    android:gravity="center"
+                    app:backgroundTint="@color/badge_unviewed_bg"
+                    app:cornerRadius="20dp"
+                    app:icon="@null" />
+
+                <View
+                    android:id="@+id/filterActiveDot"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/filter_active_dot"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
