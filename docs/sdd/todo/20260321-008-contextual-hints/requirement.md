@@ -18,9 +18,12 @@ One-time tooltips triggered by specific user actions. Each hint is shown once, t
 |----|---------|---------|--------|
 | `hint_filters` | First time gallery loads with items | "Filter by source, date range, or type" | Filters button |
 | `hint_long_press` | First tap on an image in Normal mode | "Long-press to select items for deletion" | The tapped image |
-| `hint_drag_select` | First time selection mode is entered (after SDD-002) | "Drag across items to select more" | RecyclerView area |
+| `hint_drag_select` | First time selection mode is entered | "Swipe horizontally across items to select more" | RecyclerView area |
+| `hint_pinch_zoom` | First time gallery loads with items (after hint_filters) | "Pinch to zoom the grid in or out" | RecyclerView center |
+| `hint_fast_scroll` | First scroll in gallery | "Drag the right edge to scroll quickly" | Fast scroll thumb area |
 | `hint_trash_undo` | First successful delete | "Items go to trash for 30 days — you can undo" | Snackbar area |
 | `hint_continue_fab` | First time Continue FAB appears | "Tap to jump to where you left off" | Continue FAB |
+| `hint_progress_bar` | First time progress bar appears | "This bar shows how much you've reviewed" | Progress bar |
 
 #### Tooltip appearance:
 - **Style**: Material `Tooltip` or a custom small bubble (rounded rectangle, dark background `#2C2C2E`, white text, 13sp)
@@ -31,8 +34,22 @@ One-time tooltips triggered by specific user actions. Each hint is shown once, t
 
 #### Timing:
 - Show with a 500ms delay after the trigger event (don't interrupt the action itself)
-- Only one hint visible at a time — queue if multiple triggers happen simultaneously
 - Don't show hints during selection mode (except `hint_drag_select`)
+
+#### Queuing & Priority:
+- **One hint visible at a time** — if multiple hints trigger simultaneously, they queue
+- **Priority order** (highest first):
+  1. `hint_long_press` — core interaction, must learn first
+  2. `hint_filters` — important for finding content
+  3. `hint_drag_select` — only relevant once user knows long-press
+  4. `hint_pinch_zoom` — nice-to-know
+  5. `hint_fast_scroll` — nice-to-know
+  6. `hint_continue_fab` — contextual, shows when FAB appears
+  7. `hint_progress_bar` — contextual, shows when bar appears
+  8. `hint_trash_undo` — contextual, shows after first delete
+- **Max 2 hints per session** — after showing 2 hints, remaining queued hints are saved for the next app open. Prevents tooltip fatigue
+- **Dismiss → next** — when user taps to dismiss a hint, the next queued hint shows after 500ms delay
+- **Session tracking** — use an in-memory counter (not persisted) that resets each time the app starts
 
 ### 2. Hint Preferences
 
@@ -59,8 +76,8 @@ class HintPreferences(context: Context) {
 A small `?` icon button in the title row of the header (between the title and the Filters button).
 
 #### Specification:
-- **Icon**: Material `ic_help_outline` (24dp)
-- **Size**: 40dp touch target
+- **Icon**: Material Symbols `help_outline` (circled "?" — the standard Material Design help icon, widely recognized across Android/iOS/web)
+- **Size**: 40dp touch target, 24dp icon
 - **Color**: same as Filters button text (`@color/badge_unviewed_text`)
 - **Position**: to the left of the Filters button, with 8dp gap
 - **Action**: opens a Help bottom sheet
@@ -75,21 +92,27 @@ A simple bottom sheet listing the app's key features/tips with a "Reset tips" bu
               Tips & Shortcuts
               ─────────────────
 
-  📱  Long-press an image to start selecting
+  touch_app       Long-press an image to start selecting
 
-  👆  Drag across images to select multiple
+  swipe           Swipe horizontally across items to select multiple
 
-  🔍  Use Filters to narrow by source or date
+  pinch_zoom_in   Pinch to zoom the grid in or out (2–5 columns)
 
-  ⬇️  Tap Continue to jump to unreviewed items
+  filter_list     Use Filters to narrow by source, date, or type
 
-  🗑️  Deleted items stay in trash for 30 days
+  scroll          Drag the right edge to scroll quickly through your library
+
+  arrow_downward  Tap Continue to jump to unreviewed items
+
+  delete          Deleted items stay in trash for 30 days
+
+  undo            Tap Undo after deleting to restore items
 
 
               [ Reset Tips ]
 ```
 
-> **Note:** Use actual Material icons, not emoji. The emoji above is for illustration only.
+> **Note:** Icon names above are Material Symbols identifiers. Use vector drawables from Material Symbols (not emoji).
 
 #### Specification:
 - **Style**: standard Material bottom sheet with drag handle
@@ -132,5 +155,8 @@ A simple bottom sheet listing the app's key features/tips with a "Reset tips" bu
 
 ## Dependencies
 
-- SDD-002 (drag-to-select) should be implemented first, as `hint_drag_select` references that feature
-- Other hints can be implemented independently
+All referenced features are now implemented:
+- SDD-002 (drag-to-select) — COMPLETE
+- SDD-004 (fast scroller) — COMPLETE
+- SDD-006 (pinch-to-zoom) — COMPLETE
+- SDD-007 (review progress bar) — COMPLETE
