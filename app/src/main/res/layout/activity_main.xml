@@ -38,6 +38,15 @@
                 android:textStyle="bold"
                 android:textColor="@color/header_title_green" />
 
+            <ImageButton
+                android:id="@+id/btnHelp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_help_outline"
+                android:contentDescription="@string/tips_and_shortcuts" />
+
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

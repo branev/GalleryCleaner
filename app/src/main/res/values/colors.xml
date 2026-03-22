@@ -86,4 +86,7 @@
     <!-- Delete success overlay (SDD-20260321-001) -->
     <color name="overlay_bg">#99000000</color>
     <color name="success_checkmark">#34D399</color>
+
+    <!-- Hint tooltip (SDD-20260321-008) -->
+    <color name="hint_tooltip_bg">#2C2C2E</color>
 </resources>

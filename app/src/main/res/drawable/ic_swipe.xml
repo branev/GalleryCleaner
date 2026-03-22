@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/fast_scroll_tooltip_bg"
+        android:pathData="M19.75,6.07L17.75,4.32L14.25,8.32V4H12.75V8.32L9.25,4.32L7.25,6.07L12,11.57L16.75,6.07ZM4.25,17.93L6.25,19.68L9.75,15.68V20H11.25V15.68L14.75,19.68L16.75,17.93L12,12.43L7.25,17.93Z" />
+</vector>

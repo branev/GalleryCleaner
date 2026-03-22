@@ -71,4 +71,27 @@
     <string name="overlay_ok">OK</string>
     <string name="exit_selection">Exit selection</string>
     <string name="selection_count_size">%1$s · %2$s</string>
+
+    <!-- Contextual hints (SDD-20260321-008) -->
+    <string name="hint_long_press">Long-press to select items for deletion</string>
+    <string name="hint_filters">Filter by source, date range, or type</string>
+    <string name="hint_drag_select">Swipe horizontally across items to select more</string>
+    <string name="hint_pinch_zoom">Pinch to zoom the grid in or out</string>
+    <string name="hint_fast_scroll">Drag the right edge to scroll quickly</string>
+    <string name="hint_continue_fab">Tap to jump to where you left off</string>
+    <string name="hint_progress_bar">This bar shows how much you\'ve reviewed</string>
+    <string name="hint_trash_undo">Items go to trash for 30 days — you can undo</string>
+    <string name="hints_reset_confirmation">Tips will appear again as you use the app</string>
+
+    <!-- Help bottom sheet (SDD-20260321-008) -->
+    <string name="tips_and_shortcuts">Tips &amp; Shortcuts</string>
+    <string name="tip_long_press">Long-press an image to start selecting</string>
+    <string name="tip_drag_select">Swipe horizontally across items to select multiple</string>
+    <string name="tip_pinch_zoom">Pinch to zoom the grid in or out (2–5 columns)</string>
+    <string name="tip_filters">Use Filters to narrow by source, date, or type</string>
+    <string name="tip_fast_scroll">Drag the right edge to scroll quickly through your library</string>
+    <string name="tip_continue">Tap Continue to jump to unreviewed items</string>
+    <string name="tip_trash">Deleted items stay in trash for 30 days</string>
+    <string name="tip_undo">Tap Undo after deleting to restore items</string>
+    <string name="reset_tips">Reset Tips</string>
 </resources>

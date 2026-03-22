@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
     // Selection state before the drag started (so dragging back deselects correctly)
     private var preDragSelection: Set<Uri> = emptySet()
 
+    private lateinit var hintPreferences: HintPreferences
+    private lateinit var hintManager: HintManager
+
     private lateinit var fastScrollHelper: FastScrollHelper
     private lateinit var scaleGestureDetector: android.view.ScaleGestureDetector
 
@@ -133,12 +136,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        hintPreferences = HintPreferences(this)
+        hintManager = HintManager(hintPreferences, binding.root)
+
         setupRecyclerView()
         setupMediaTypeChips()
         setupFilterButton()
         setupResetFiltersButton()
         setupSelectionActionBar()
         setupContinueFab()
+        setupHelpButton()
         setupBackHandler()
         observeUiState()
         observeViewedItems()
@@ -231,6 +238,12 @@ class MainActivity : AppCompatActivity() {
                 // Only mark items when scrolling down (items going off the top)
                 if (dy > 0) {
                     markItemsAboveViewportAsViewed(layoutManager)
+                    // Show fast scroll hint on first scroll
+                    hintManager.showHint(
+                        HintPreferences.HINT_FAST_SCROLL,
+                        getString(R.string.hint_fast_scroll),
+                        binding.fastScrollTrack
+                    )
                 }
                 // Update FAB enabled state based on scroll position
                 updateContinueFabState(layoutManager)
@@ -316,6 +329,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupHelpButton() {
+        binding.btnHelp.setOnClickListener {
+            HelpBottomSheetFragment.newInstance().show(supportFragmentManager, HelpBottomSheetFragment.TAG)
+        }
+    }
+
     private fun scrollToFirstUnviewed() {
         val state = viewModel.uiState.value
         val items = when (state) {
@@ -373,7 +392,16 @@ class MainActivity : AppCompatActivity() {
                     val showFab = hasViewedItems && hasUnviewedItems &&
                             (uiState is GalleryUiState.Normal || uiState is GalleryUiState.Selection)
 
-                    binding.fabContinue.visibility = if (showFab) View.VISIBLE else View.GONE
+                    if (showFab) {
+                        binding.fabContinue.visibility = View.VISIBLE
+                        hintManager.showHint(
+                            HintPreferences.HINT_CONTINUE_FAB,
+                            getString(R.string.hint_continue_fab),
+                            binding.fabContinue
+                        )
+                    } else {
+                        binding.fabContinue.visibility = View.GONE
+                    }
 
                     // Update FAB enabled state when visibility changes
                     if (showFab) {
@@ -392,6 +420,11 @@ class MainActivity : AppCompatActivity() {
                         binding.reviewProgressBar.visibility = View.VISIBLE
                         binding.reviewProgressBar.max = totalItems
                         binding.reviewProgressBar.setProgressCompat(viewedCount, true)
+                        hintManager.showHint(
+                            HintPreferences.HINT_PROGRESS_BAR,
+                            getString(R.string.hint_progress_bar),
+                            binding.reviewProgressBar
+                        )
                     } else {
                         binding.reviewProgressBar.visibility = View.GONE
                     }
@@ -429,6 +462,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderState(state: GalleryUiState) {
+        hintManager.dismiss()
+
         when (state) {
             is GalleryUiState.Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
@@ -541,6 +576,18 @@ class MainActivity : AppCompatActivity() {
                 updateMediaTypeChips(state.selectedMediaTypes)
                 updateFilterSummary(state.selectedSources, state.sourceCounts, state.selectedDateRange, state.selectedSortOption)
                 backCallback.isEnabled = false
+
+                // Show filters hint on first load with items
+                hintManager.showHint(
+                    HintPreferences.HINT_FILTERS,
+                    getString(R.string.hint_filters),
+                    binding.btnFilters
+                )
+                hintManager.showHint(
+                    HintPreferences.HINT_PINCH_ZOOM,
+                    getString(R.string.hint_pinch_zoom),
+                    binding.recyclerView
+                )
             }
 
             is GalleryUiState.Selection -> {
@@ -577,7 +624,19 @@ class MainActivity : AppCompatActivity() {
         if (state is GalleryUiState.Selection) {
             viewModel.toggleItemSelection(item.uri)
         } else {
-            // Normal mode: open media viewer
+            // Show hint before opening viewer (if not yet shown)
+            val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
+            val position = adapter.currentList.indexOfFirst { it.uri == item.uri }
+            if (position >= 0) {
+                val viewHolder = binding.recyclerView.findViewHolderForAdapterPosition(position)
+                viewHolder?.itemView?.let { anchorView ->
+                    hintManager.showHint(
+                        HintPreferences.HINT_LONG_PRESS,
+                        getString(R.string.hint_long_press),
+                        anchorView
+                    )
+                }
+            }
             openMediaViewer(item)
         }
     }
@@ -602,6 +661,12 @@ class MainActivity : AppCompatActivity() {
             if (position >= 0) {
                 dragSelectListener.startDragSelection(position)
             }
+
+            hintManager.showHint(
+                HintPreferences.HINT_DRAG_SELECT,
+                getString(R.string.hint_drag_select),
+                binding.recyclerView
+            )
         }
     }
 
@@ -734,6 +799,12 @@ class MainActivity : AppCompatActivity() {
 
         successSnackbar = snackbar
         snackbar.show()
+
+        hintManager.showHint(
+            HintPreferences.HINT_TRASH_UNDO,
+            getString(R.string.hint_trash_undo),
+            binding.root
+        )
 
         // Dismiss overlay on tap or OK button
         binding.deleteSuccessOverlay.setOnClickListener {
