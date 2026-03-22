@@ -663,6 +663,8 @@ class MainActivity : AppCompatActivity() {
             putExtra(MediaViewerActivity.EXTRA_URI, item.uri)
             putExtra(MediaViewerActivity.EXTRA_MEDIA_TYPE, item.mediaType.ordinal)
             putExtra(MediaViewerActivity.EXTRA_DISPLAY_NAME, item.displayName)
+            putExtra(MediaViewerActivity.EXTRA_DATE_ADDED, item.dateAdded)
+            putExtra(MediaViewerActivity.EXTRA_SIZE, item.size)
         }
         startActivity(intent)
     }

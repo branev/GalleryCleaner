@@ -19,6 +19,8 @@ class MediaViewerActivity : AppCompatActivity() {
         const val EXTRA_URI = "extra_uri"
         const val EXTRA_MEDIA_TYPE = "extra_media_type"
         const val EXTRA_DISPLAY_NAME = "extra_display_name"
+        const val EXTRA_DATE_ADDED = "extra_date_added"
+        const val EXTRA_SIZE = "extra_size"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,8 @@ class MediaViewerActivity : AppCompatActivity() {
         }
         val mediaTypeOrdinal = intent.getIntExtra(EXTRA_MEDIA_TYPE, 0)
         val displayName = intent.getStringExtra(EXTRA_DISPLAY_NAME) ?: ""
+        val dateAdded = intent.getLongExtra(EXTRA_DATE_ADDED, 0L)
+        val size = intent.getLongExtra(EXTRA_SIZE, 0L)
 
         if (uri == null) {
             finish()
@@ -42,7 +46,7 @@ class MediaViewerActivity : AppCompatActivity() {
 
         isVideo = mediaTypeOrdinal == MediaType.VIDEO.ordinal
 
-        setupToolbar(displayName)
+        setupToolbar(displayName, dateAdded, size)
 
         if (isVideo) {
             setupVideoPlayer(uri)
@@ -51,9 +55,22 @@ class MediaViewerActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupToolbar(displayName: String) {
-        binding.toolbar.title = displayName
-        binding.toolbar.setNavigationOnClickListener {
+    private fun setupToolbar(displayName: String, dateAdded: Long, size: Long) {
+        binding.viewerTitle.text = displayName
+
+        val parts = mutableListOf<String>()
+        if (dateAdded > 0) {
+            val date = java.util.Date(dateAdded * 1000L)
+            parts.add(java.text.SimpleDateFormat("MMM d, yyyy", java.util.Locale.getDefault()).format(date))
+        }
+        if (size > 0) {
+            parts.add(android.text.format.Formatter.formatFileSize(this, size))
+        }
+        if (parts.isNotEmpty()) {
+            binding.viewerSubtitle.text = parts.joinToString(" • ")
+        }
+
+        binding.btnClose.setOnClickListener {
             finish()
         }
     }
@@ -170,10 +187,10 @@ class MediaViewerActivity : AppCompatActivity() {
     }
 
     private fun toggleToolbar() {
-        if (binding.toolbar.visibility == View.VISIBLE) {
-            binding.toolbar.visibility = View.GONE
+        if (binding.topInfoBar.visibility == View.VISIBLE) {
+            binding.topInfoBar.visibility = View.GONE
         } else {
-            binding.toolbar.visibility = View.VISIBLE
+            binding.topInfoBar.visibility = View.VISIBLE
         }
     }
 
