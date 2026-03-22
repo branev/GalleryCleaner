@@ -300,12 +300,13 @@
 
     </LinearLayout>
 
-    <!-- Delete Success Overlay -->
+    <!-- Delete Success Overlay (elevation ensures it renders above all other views) -->
     <FrameLayout
         android:id="@+id/deleteSuccessOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/overlay_bg"
+        android:elevation="10dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"

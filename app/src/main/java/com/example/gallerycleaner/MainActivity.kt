@@ -613,6 +613,11 @@ class MainActivity : AppCompatActivity() {
     private fun showTrashSuccessSnackbar(count: Int, totalSize: Long, trashedUris: Set<Uri>) {
         // Show success overlay
         binding.deleteSuccessOverlay.visibility = View.VISIBLE
+        binding.deleteSuccessOverlay.bringToFront()
+        // Darken status bar to match overlay
+        window.statusBarColor = getColor(R.color.overlay_bg)
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and
+            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
         binding.successTitle.text = getString(R.string.delete_success_title, count)
 
         // Animate: fade in overlay, scale up checkmark
@@ -660,6 +665,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dismissSuccessOverlay() {
+        // Restore status bar
+        window.statusBarColor = getColor(android.R.color.white)
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
+            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
         // Cancel any running animations before dismissing
         binding.deleteSuccessOverlay.animate().cancel()
         binding.successCheckmark.animate().cancel()
