@@ -33,9 +33,10 @@ If no suitable library exists, implement via:
 - User can lift finger, then start a new drag from any selected/unselected item to continue selecting
 
 #### Selection behavior during drag:
-- Dragging over an unselected item → selects it
-- Dragging over an already-selected item → keeps it selected (no toggle during drag)
-- Range-based: select all items between drag start and current drag position (not just items directly touched)
+- Range-based: the full range from drag start to current position is selected
+- Dragging back **shrinks** the range and deselects items that fall outside it
+- Items selected before the drag (via previous taps) are preserved via a `preDragSelection` snapshot
+- This matches the behavior of Google Photos and Samsung Gallery
 
 #### Edge scrolling:
 - When dragging near the top/bottom edge of the RecyclerView, auto-scroll to reveal more items
@@ -48,11 +49,19 @@ If no suitable library exists, implement via:
 - Use the existing `PAYLOAD_SELECTION_STATE` partial bind for efficient updates
 - Optional: subtle haptic feedback (short vibration) when each new item is added to selection
 
-### 4. Maintain Existing Selection Features
+### 4. Remove Top Selection Toolbar
+
+The top selection toolbar ("X selected" bar with close icon) causes a layout shift when it appears/disappears, pushing the grid down. Remove it and consolidate all selection info into the bottom action bar.
+
+- Bottom bar center text shows: count + size (e.g., "3 selected · 1.2 MB")
+- Exit selection mode via back button (already wired via `OnBackPressedCallback`)
+- Hidden selected count still shown (e.g., "3 selected (1 hidden) · 1.2 MB")
+
+### 5. Maintain Existing Selection Features
 
 - Tap-to-toggle in selection mode must still work
 - Select All button still works
-- Back/X to exit selection mode still works
+- Back to exit selection mode still works
 - Hidden selected count tracking still works
 
 ---
@@ -61,10 +70,10 @@ If no suitable library exists, implement via:
 
 | File | Change Type |
 |------|------------|
-| `build.gradle.kts` | Minor — add drag-select library (or skip if manual) |
-| `MainActivity.kt` | Moderate — configure drag-select on RecyclerView, connect to ViewModel |
-| `ImageAdapter.kt` | Minor — may need to implement library interface |
-| `GalleryViewModel.kt` | Minor — add bulk selection method if needed |
+| `DragSelectTouchListener.kt` | **New file** — custom touch listener with range selection + auto-scroll |
+| `MainActivity.kt` | Moderate — wire drag listener, remove top toolbar, show count+size in bottom bar |
+| `GalleryViewModel.kt` | Minor — add `setDragSelection()` method |
+| `activity_main.xml` | Minor — add `overScrollMode="never"` to RecyclerView |
 
 ## Acceptance Criteria
 

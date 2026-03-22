@@ -261,12 +261,31 @@ private fun handleItemLongClick(item: MediaItem) {
 | `app/src/main/java/.../GalleryViewModel.kt` | Added `selectItem()` method (add-only, no toggle) |
 | `app/src/main/java/.../MainActivity.kt` | Wired drag listener, updated long-press handler |
 
+## Implementation Notes
+
+### Range-based drag selection
+The drag listener reports the full range (start → current position) on each move. The ViewModel receives the drag range URIs plus the pre-drag selection and sets `selectedItems = preDragSelection + dragRange`. This means:
+- Dragging forward selects items in the range
+- Dragging back **deselects** items that fall outside the range
+- Items selected before the drag (via previous taps) are preserved
+
+### Overscroll disabled
+`android:overScrollMode="never"` is set on the RecyclerView to prevent the Android 12+ stretch effect, which caused a visual "shiver" when touching the grid near the top/bottom edges.
+
+### Selection toolbar removed
+The top selection toolbar ("X selected" bar) was removed — it pushed the grid down on enter/exit, causing a visible layout shift. The selection count and file size are now shown together in the bottom action bar (e.g., "3 selected · 1.2 MB"). Exiting selection mode is done via the back button (already wired).
+
+### Touch intercept
+The `DragSelectTouchListener` only intercepts `ACTION_MOVE` during an active drag. All other events (`ACTION_DOWN`, `ACTION_UP`, `ACTION_CANCEL`) pass through to the RecyclerView so normal scrolling and tap behavior are unaffected.
+
 ## Acceptance Criteria
 
 - [ ] Long-press + drag selects multiple items in one gesture
 - [ ] Auto-scrolls when dragging near top/bottom edges
-- [ ] Dragging over already-selected items keeps them selected (no deselect during drag)
+- [ ] Dragging back deselects items outside the current range
+- [ ] Previously tapped items stay selected during drag
 - [ ] Tap-to-toggle still works in selection mode
-- [ ] Normal scrolling works when not in selection mode
-- [ ] All existing selection features (Select All, exit, hidden count) still work
+- [ ] Normal scrolling works when not in selection mode (no shiver/jitter)
+- [ ] X button in bottom action bar exits selection mode
+- [ ] All existing selection features (Select All, back to exit, hidden count) still work
 - [ ] Build succeeds, all tests pass

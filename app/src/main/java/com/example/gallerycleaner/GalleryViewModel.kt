@@ -264,6 +264,11 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
         _selectedItems.value = emptySet()
     }
 
+    fun setDragSelection(uris: Set<Uri>, preExistingSelection: Set<Uri>) {
+        if (!_isSelectionMode.value) return
+        _selectedItems.value = preExistingSelection + uris
+    }
+
     fun toggleItemSelection(uri: Uri) {
         val current = _selectedItems.value.toMutableSet()
         if (uri in current) {

@@ -37,6 +37,18 @@ class MainActivity : AppCompatActivity() {
         onItemLongClick = { item -> handleItemLongClick(item) }
     )
 
+    // Selection state before the drag started (so dragging back deselects correctly)
+    private var preDragSelection: Set<Uri> = emptySet()
+
+    private val dragSelectListener = DragSelectTouchListener { rangeStart, rangeEnd ->
+        val items = adapter.currentList
+        val dragUris = (rangeStart..rangeEnd)
+            .filter { it in items.indices }
+            .map { items[it].uri }
+            .toSet()
+        viewModel.setDragSelection(dragUris, preDragSelection)
+    }
+
     private val backCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.exitSelectionMode()
@@ -134,6 +146,7 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span_count))
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
+        dragSelectListener.attachToRecyclerView(binding.recyclerView)
 
         // Track items that scroll off the top as "viewed" and update FAB state
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -215,6 +228,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSelectionActionBar() {
+        binding.btnExitSelection.setOnClickListener { viewModel.exitSelectionMode() }
         binding.btnSelectAll.setOnClickListener { viewModel.selectAll() }
         binding.btnDelete.setOnClickListener { handleDelete() }
     }
@@ -427,20 +441,18 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyStateContainer.visibility = View.GONE
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.topBar.visibility = View.VISIBLE
-                binding.selectionToolbar.visibility = View.VISIBLE
+                binding.selectionToolbar.visibility = View.GONE
                 binding.selectionActionBar.visibility = View.VISIBLE
 
-                // Update toolbar title with selection count
+                // Show selection count + size in the bottom bar
                 val selectedCount = state.selectedItems.size
-                val title = if (state.hiddenSelectedCount > 0) {
+                val sizeText = android.text.format.Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
+                val countText = if (state.hiddenSelectedCount > 0) {
                     getString(R.string.selected_with_hidden, selectedCount, state.hiddenSelectedCount)
                 } else {
                     getString(R.string.selected_count, selectedCount)
                 }
-                binding.selectionToolbar.title = title
-
-                // Show total size of selected items
-                binding.selectionSize.text = android.text.format.Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
+                binding.selectionSize.text = "$countText · $sizeText"
 
                 adapter.submitList(state.items)
                 adapter.updateSelectionState(state.selectedItems, true)
@@ -473,7 +485,17 @@ class MainActivity : AppCompatActivity() {
     private fun handleItemLongClick(item: MediaItem) {
         val state = viewModel.uiState.value
         if (state !is GalleryUiState.Selection) {
+            // Capture selection before entering mode (empty for fresh drag)
+            preDragSelection = emptySet()
             viewModel.enterSelectionMode(item.uri)
+
+            // Start drag-select so user can keep finger down and drag
+            val position = adapter.currentList.indexOfFirst { it.uri == item.uri }
+            if (position >= 0) {
+                // The initial item is now selected — capture it as pre-drag
+                preDragSelection = setOf(item.uri)
+                dragSelectListener.startDragSelection(position)
+            }
         }
     }
 
