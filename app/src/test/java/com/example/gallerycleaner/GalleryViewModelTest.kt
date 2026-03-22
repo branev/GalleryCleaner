@@ -379,6 +379,137 @@ class GalleryViewModelTest {
         assertEquals(setOf(SourceType.WHATSAPP), result)
     }
 
+    // ==================== Drag Selection Logic Tests ====================
+
+    @Test
+    fun `setDragSelection unions drag range with pre-existing selection`() {
+        val preExisting = setOf(uri1, uri2)
+        val dragRange = setOf(uri3, uri4)
+        val result = setDragSelection(true, dragRange, preExisting)
+        assertEquals(setOf(uri1, uri2, uri3, uri4), result)
+    }
+
+    @Test
+    fun `setDragSelection with overlapping items does not duplicate`() {
+        val preExisting = setOf(uri1, uri2)
+        val dragRange = setOf(uri2, uri3)
+        val result = setDragSelection(true, dragRange, preExisting)
+        assertEquals(setOf(uri1, uri2, uri3), result)
+    }
+
+    @Test
+    fun `setDragSelection shrinks when drag range reduces`() {
+        // First drag: items 1-5
+        val preExisting = setOf(uri1)
+        val firstDrag = setOf(uri1, uri2, uri3, uri4, uri5)
+        val result1 = setDragSelection(true, firstDrag, preExisting)
+        assertEquals(setOf(uri1, uri2, uri3, uri4, uri5), result1)
+
+        // Drag back to 1-3: items 4,5 should drop out
+        val secondDrag = setOf(uri1, uri2, uri3)
+        val result2 = setDragSelection(true, secondDrag, preExisting)
+        assertEquals(setOf(uri1, uri2, uri3), result2)
+    }
+
+    @Test
+    fun `setDragSelection preserves pre-existing items outside drag range`() {
+        val preExisting = setOf(uri1, uri5) // items 1 and 5 were tapped before drag
+        val dragRange = setOf(uri2, uri3) // drag covers items 2-3
+        val result = setDragSelection(true, dragRange, preExisting)
+        assertEquals(setOf(uri1, uri2, uri3, uri5), result)
+    }
+
+    @Test
+    fun `setDragSelection returns null when not in selection mode`() {
+        val result = setDragSelection(false, setOf(uri1, uri2), emptySet())
+        assertNull(result)
+    }
+
+    @Test
+    fun `setDragSelection with empty drag range preserves pre-existing`() {
+        val preExisting = setOf(uri1, uri2)
+        val result = setDragSelection(true, emptySet(), preExisting)
+        assertEquals(preExisting, result)
+    }
+
+    @Test
+    fun `setDragSelection with empty pre-existing and empty drag returns empty`() {
+        val result = setDragSelection(true, emptySet(), emptySet())
+        assertEquals(emptySet<Uri>(), result)
+    }
+
+    // ==================== Selected Items Total Size Tests ====================
+
+    @Test
+    fun `getSelectedItemsTotalSize sums sizes of selected items`() {
+        val items = listOf(
+            MediaItem(uri1, "a.jpg", null, null, SourceType.CAMERA, MediaType.PHOTO, size = 1000L),
+            MediaItem(uri2, "b.jpg", null, null, SourceType.CAMERA, MediaType.PHOTO, size = 2000L),
+            MediaItem(uri3, "c.jpg", null, null, SourceType.CAMERA, MediaType.PHOTO, size = 3000L)
+        )
+        val selected = setOf(uri1, uri3)
+        val result = getSelectedItemsTotalSize(items, selected)
+        assertEquals(4000L, result)
+    }
+
+    @Test
+    fun `getSelectedItemsTotalSize returns zero when nothing selected`() {
+        val items = listOf(
+            MediaItem(uri1, "a.jpg", null, null, SourceType.CAMERA, MediaType.PHOTO, size = 1000L)
+        )
+        val result = getSelectedItemsTotalSize(items, emptySet())
+        assertEquals(0L, result)
+    }
+
+    @Test
+    fun `getSelectedItemsTotalSize ignores URIs not in items list`() {
+        val items = listOf(
+            MediaItem(uri1, "a.jpg", null, null, SourceType.CAMERA, MediaType.PHOTO, size = 1000L)
+        )
+        val nonExistentUri = mock(Uri::class.java)
+        val selected = setOf(uri1, nonExistentUri)
+        val result = getSelectedItemsTotalSize(items, selected)
+        assertEquals(1000L, result)
+    }
+
+    @Test
+    fun `getSelectedItemsTotalSize with empty items returns zero`() {
+        val result = getSelectedItemsTotalSize(emptyList(), setOf(uri1))
+        assertEquals(0L, result)
+    }
+
+    // ==================== Drag Range to URI Mapping Tests ====================
+
+    @Test
+    fun `mapDragRangeToUris returns correct URIs for valid range`() {
+        val result = mapDragRangeToUris(testItems, 1, 3)
+        assertEquals(setOf(uri2, uri3, uri4), result)
+    }
+
+    @Test
+    fun `mapDragRangeToUris drops out-of-bounds positions`() {
+        val result = mapDragRangeToUris(testItems, 3, 7) // items only have index 0-4
+        assertEquals(setOf(uri4, uri5), result)
+    }
+
+    @Test
+    fun `mapDragRangeToUris with fully out-of-bounds range returns empty`() {
+        val result = mapDragRangeToUris(testItems, 10, 15)
+        assertEquals(emptySet<Uri>(), result)
+    }
+
+    @Test
+    fun `mapDragRangeToUris with single position returns single URI`() {
+        val result = mapDragRangeToUris(testItems, 2, 2)
+        assertEquals(setOf(uri3), result)
+    }
+
+    @Test
+    fun `mapDragRangeToUris with empty items returns empty`() {
+        val result = mapDragRangeToUris(emptyList(), 0, 5)
+        assertEquals(emptySet<Uri>(), result)
+    }
+
     // ==================== Helper Functions (mirror ViewModel logic) ====================
 
     private fun filterItems(items: List<MediaItem>, selectedSources: Set<SourceType>): List<MediaItem> {
@@ -432,5 +563,25 @@ class GalleryViewModelTest {
 
     private fun removeDeletedItems(items: List<MediaItem>, deletedUris: Set<Uri>): List<MediaItem> {
         return items.filter { it.uri !in deletedUris }
+    }
+
+    private fun setDragSelection(
+        isSelectionMode: Boolean,
+        dragUris: Set<Uri>,
+        preExisting: Set<Uri>
+    ): Set<Uri>? {
+        if (!isSelectionMode) return null
+        return preExisting + dragUris
+    }
+
+    private fun getSelectedItemsTotalSize(items: List<MediaItem>, selectedUris: Set<Uri>): Long {
+        return items.filter { it.uri in selectedUris }.sumOf { it.size }
+    }
+
+    private fun mapDragRangeToUris(items: List<MediaItem>, rangeStart: Int, rangeEnd: Int): Set<Uri> {
+        return (rangeStart..rangeEnd)
+            .filter { it in items.indices }
+            .map { items[it].uri }
+            .toSet()
     }
 }
