@@ -1,5 +1,7 @@
 # SDD-20260321-008: Contextual Hints & Help
 
+## Status: COMPLETE
+
 ## Summary
 
 Add contextual tooltips that appear once at the right moment to teach users key features, plus a `?` help button in the header that opens a tips bottom sheet with a "Reset tips" option.
@@ -136,14 +138,14 @@ A simple bottom sheet listing the app's key features/tips with a "Reset tips" bu
 
 ## Acceptance Criteria
 
-- [ ] Each contextual hint appears once at the right moment
-- [ ] Hints are never shown again after dismissal
-- [ ] `?` button in header opens help bottom sheet
-- [ ] Help sheet lists key tips with icons
-- [ ] "Reset Tips" re-enables all contextual hints
-- [ ] Snackbar confirms tips were reset
-- [ ] Hints don't interfere with normal app usage
-- [ ] Build succeeds, all tests pass
+- [x] Each contextual hint appears once at the right moment
+- [x] Hints are never shown again after dismissal
+- [x] `?` button in header opens help bottom sheet
+- [x] Help sheet lists key tips with icons
+- [x] "Reset Tips" re-enables all contextual hints
+- [x] Snackbar confirms tips were reset
+- [x] Hints don't interfere with normal app usage (non-focusable PopupWindow)
+- [x] Build succeeds, all tests pass
 
 ## Out of Scope
 

@@ -12,6 +12,7 @@
 | 20260321-004 | Fast scroller with date tooltip | 1/1 | Draggable thumb, date tooltip, transparent track |
 | 20260321-006 | Pinch-to-zoom grid | 1/1 | 2-5 columns, continuous, persisted, pinch-safe in selection |
 | 20260321-007 | Review progress bar | 1/1 | Thin teal bar, updates on scroll/delete/undo |
+| 20260321-008 | Contextual hints & help | 3/3 | 8 hints, help button, tips sheet, priority queue |
 | 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
 
 ## Pending (`todo/`)
@@ -19,7 +20,6 @@
 | SDD | Feature | Priority | Dependencies | Notes |
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
-| 20260321-008 | Contextual hints | Low | 002 (drag) | Tooltips + help button + tips sheet |
 
 ## Other
 
