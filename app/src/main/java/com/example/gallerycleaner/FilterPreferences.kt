@@ -23,6 +23,9 @@ class FilterPreferences(context: Context) {
     private val _selectedSortOption = MutableStateFlow(loadSortOption())
     val selectedSortOption: StateFlow<SortOption> = _selectedSortOption.asStateFlow()
 
+    private val _gridColumnCount = MutableStateFlow(loadGridColumnCount())
+    val gridColumnCount: StateFlow<Int> = _gridColumnCount.asStateFlow()
+
     private fun loadSelectedSources(): Set<SourceType> {
         val stored = prefs.getStringSet(KEY_SELECTED_SOURCES, null)
         return if (stored == null) {
@@ -127,6 +130,15 @@ class FilterPreferences(context: Context) {
         _selectedSortOption.value = sortOption
     }
 
+    private fun loadGridColumnCount(): Int {
+        return prefs.getInt(KEY_GRID_COLUMNS, 3)
+    }
+
+    fun saveGridColumnCount(count: Int) {
+        prefs.edit().putInt(KEY_GRID_COLUMNS, count).apply()
+        _gridColumnCount.value = count
+    }
+
     companion object {
         private const val PREFS_NAME = "gallery_filter_prefs"
         private const val KEY_SELECTED_SOURCES = "selected_sources"
@@ -135,5 +147,6 @@ class FilterPreferences(context: Context) {
         private const val KEY_CUSTOM_START = "custom_date_start"
         private const val KEY_CUSTOM_END = "custom_date_end"
         private const val KEY_SORT_OPTION = "sort_option"
+        private const val KEY_GRID_COLUMNS = "grid_column_count"
     }
 }

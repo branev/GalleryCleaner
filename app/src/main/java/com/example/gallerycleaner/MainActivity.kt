@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private var preDragSelection: Set<Uri> = emptySet()
 
     private lateinit var fastScrollHelper: FastScrollHelper
+    private lateinit var scaleGestureDetector: android.view.ScaleGestureDetector
 
     private val dragSelectListener = DragSelectTouchListener(
         onDragRangeChanged = { rangeStart, rangeEnd ->
@@ -159,9 +160,12 @@ class MainActivity : AppCompatActivity() {
         successSnackbar = null
     }
 
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
     private fun setupRecyclerView() {
-        val layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span_count))
+        val savedColumns = viewModel.gridColumnCount.value
+        val layoutManager = GridLayoutManager(this, savedColumns)
         binding.recyclerView.layoutManager = layoutManager
+        adapter.thumbnailSize = resources.displayMetrics.widthPixels / savedColumns
         binding.recyclerView.adapter = adapter
         dragSelectListener.attachToRecyclerView(binding.recyclerView)
 
@@ -173,6 +177,52 @@ class MainActivity : AppCompatActivity() {
             getDateAtPosition = { position -> formatDateForPosition(position) }
         )
         fastScrollHelper.attach()
+
+        // Pinch-to-zoom grid columns
+        var cumulativeScale = 1.0f
+        scaleGestureDetector = android.view.ScaleGestureDetector(this,
+            object : android.view.ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                override fun onScaleBegin(detector: android.view.ScaleGestureDetector): Boolean {
+                    cumulativeScale = 1.0f
+                    dragSelectListener.isPinching = true
+                    return true
+                }
+
+                override fun onScaleEnd(detector: android.view.ScaleGestureDetector) {
+                    // Delay re-enabling drag-select to avoid the second finger
+                    // lift being interpreted as a drag start
+                    binding.recyclerView.postDelayed({
+                        dragSelectListener.isPinching = false
+                    }, 200)
+                }
+
+                override fun onScale(detector: android.view.ScaleGestureDetector): Boolean {
+                    cumulativeScale *= detector.scaleFactor
+                    val currentSpan = layoutManager.spanCount
+
+                    val newSpan = when {
+                        cumulativeScale < 0.8f -> {
+                            cumulativeScale = 1.0f
+                            (currentSpan + 1).coerceAtMost(5)
+                        }
+                        cumulativeScale > 1.2f -> {
+                            cumulativeScale = 1.0f
+                            (currentSpan - 1).coerceAtLeast(2)
+                        }
+                        else -> currentSpan
+                    }
+
+                    if (newSpan != currentSpan) {
+                        changeGridColumns(layoutManager, newSpan)
+                    }
+                    return true
+                }
+            })
+
+        binding.recyclerView.setOnTouchListener { _, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            false
+        }
 
         // Track items that scroll off the top as "viewed" and update FAB state
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -697,6 +747,16 @@ class MainActivity : AppCompatActivity() {
             .start()
 
         successSnackbar = null
+    }
+
+    private fun changeGridColumns(layoutManager: GridLayoutManager, newSpanCount: Int) {
+        val firstVisible = layoutManager.findFirstVisibleItemPosition()
+        layoutManager.spanCount = newSpanCount
+        if (firstVisible != RecyclerView.NO_POSITION) {
+            layoutManager.scrollToPosition(firstVisible)
+        }
+        adapter.thumbnailSize = resources.displayMetrics.widthPixels / newSpanCount
+        viewModel.setGridColumnCount(newSpanCount)
     }
 
     private fun formatDateForPosition(position: Int): String {

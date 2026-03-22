@@ -68,6 +68,11 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
     val selectedMediaTypes: StateFlow<Set<MediaType>> = filterPreferences.selectedMediaTypes
     val selectedDateRange: StateFlow<DateRange> = filterPreferences.selectedDateRange
     val selectedSortOption: StateFlow<SortOption> = filterPreferences.selectedSortOption
+    val gridColumnCount: StateFlow<Int> = filterPreferences.gridColumnCount
+
+    fun setGridColumnCount(count: Int) {
+        filterPreferences.saveGridColumnCount(count.coerceIn(2, 5))
+    }
 
     // Derived: true when any filter differs from defaults
     val hasActiveFilters: StateFlow<Boolean> = combine(

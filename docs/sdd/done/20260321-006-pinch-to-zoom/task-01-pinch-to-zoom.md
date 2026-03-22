@@ -220,14 +220,17 @@ Add this line right before `binding.recyclerView.adapter = adapter`.
 | `app/src/main/java/.../MainActivity.kt` | ScaleGestureDetector, `changeGridColumns()`, saved column init |
 | `app/src/main/java/.../ImageAdapter.kt` | Added `thumbnailSize` field, use in Coil load |
 
+## Status: COMPLETE
+
 ## Acceptance Criteria
 
-- [ ] Pinch-out shows fewer, larger thumbnails (minimum 2 columns)
-- [ ] Pinch-in shows more, smaller thumbnails (maximum 5 columns)
-- [ ] Continuous: multiple steps in one pinch gesture
-- [ ] Bidirectional: can reverse direction mid-pinch
-- [ ] Scroll position approximately maintained during zoom
-- [ ] Column preference persists across app restarts
-- [ ] Image loading size adjusts for column count
-- [ ] Pinch gesture doesn't interfere with normal scrolling, drag-to-select, or fast scroll
-- [ ] Build succeeds, all tests pass
+- [x] Pinch-out shows fewer, larger thumbnails (minimum 2 columns)
+- [x] Pinch-in shows more, smaller thumbnails (maximum 5 columns)
+- [x] Continuous: multiple steps in one pinch gesture
+- [x] Bidirectional: can reverse direction mid-pinch
+- [x] Scroll position approximately maintained during zoom
+- [x] Column preference persists across app restarts
+- [x] Image loading size adjusts for column count
+- [x] Pinch gesture doesn't interfere with normal scrolling, drag-to-select, or fast scroll
+- [x] Pinch during selection mode does NOT select items (isPinching guard + cooldown)
+- [x] Build succeeds, all tests pass

@@ -1,5 +1,7 @@
 # SDD-20260321-006: Pinch-to-Zoom Grid
 
+## Status: COMPLETE
+
 ## Summary
 
 Allow users to change the grid column count by pinching on the RecyclerView. Pinch-in shows fewer, larger thumbnails (2 columns); pinch-out shows more, smaller thumbnails (5 columns). Useful for scanning large libraries quickly or reviewing individual photos.

@@ -24,6 +24,9 @@ class ImageAdapter(
     // Viewed items state
     private var viewedItems: Set<Uri> = emptySet()
 
+    // Thumbnail loading size (adjusts with pinch-to-zoom)
+    var thumbnailSize: Int = 300
+
     object Diff : DiffUtil.ItemCallback<MediaItem>() {
         override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem) =
             oldItem.uri == newItem.uri
@@ -91,7 +94,7 @@ class ImageAdapter(
             binding.imageView.setImageDrawable(null)
             binding.imageView.load(item.uri) {
                 crossfade(true)
-                size(300)
+                size(thumbnailSize)
                 // For videos, use VideoFrameDecoder to extract a thumbnail frame
                 if (item.mediaType == MediaType.VIDEO) {
                     decoderFactory { result, options, _ ->

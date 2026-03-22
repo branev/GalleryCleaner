@@ -22,6 +22,7 @@ class DragSelectTouchListener(
 ) : RecyclerView.OnItemTouchListener {
 
     var inSelectionMode = false
+    var isPinching = false
 
     private var isActive = false
     private var startPosition = RecyclerView.NO_POSITION
@@ -89,7 +90,14 @@ class DragSelectTouchListener(
             return false
         }
 
-        if (inSelectionMode) {
+        // Cancel pending drag if a second finger touches down (pinch gesture)
+        if (e.actionMasked == MotionEvent.ACTION_POINTER_DOWN) {
+            pendingDragPosition = RecyclerView.NO_POSITION
+            if (isActive) stopDragSelection()
+            return false
+        }
+
+        if (inSelectionMode && !isPinching) {
             when (e.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     val child = rv.findChildViewUnder(e.x, e.y)
