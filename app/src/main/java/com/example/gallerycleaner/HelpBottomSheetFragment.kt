@@ -1,6 +1,8 @@
 package com.example.gallerycleaner
 
+import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -69,8 +71,7 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun setupSupportButton() {
         binding.btnSupportDeveloper.setOnClickListener {
-            startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW,
-                android.net.Uri.parse("https://ko-fi.com/branev")))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://ko-fi.com/branev")))
         }
     }
 
