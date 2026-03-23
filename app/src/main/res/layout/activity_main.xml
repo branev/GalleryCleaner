@@ -42,7 +42,7 @@
                 android:id="@+id/btnHelp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_help_outline"
                 android:contentDescription="@string/tips_and_shortcuts" />
@@ -62,15 +62,18 @@
                     android:gravity="center"
                     app:backgroundTint="@color/badge_unviewed_bg"
                     app:cornerRadius="20dp"
-                    app:icon="@null" />
+                    app:icon="@drawable/ic_filter_list"
+                    app:iconSize="18dp"
+                    app:iconTint="@color/badge_unviewed_text"
+                    app:iconGravity="start" />
 
                 <View
                     android:id="@+id/filterActiveDot"
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:layout_gravity="top|end"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
                     android:elevation="1dp"
                     android:background="@drawable/filter_active_dot"
                     android:visibility="gone" />
@@ -79,34 +82,63 @@
 
         </LinearLayout>
 
-        <!-- Row 2: Media Type Chips -->
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/mediaTypeChipGroup"
-            android:layout_width="wrap_content"
+        <!-- Row 2: Media Type Chips + Ko-fi -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:singleSelection="false">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipPhotos"
-                style="@style/PillFilterChip"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/mediaTypeChipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="false">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPhotos"
+                    style="@style/PillFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/photos"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:checked="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipVideos"
+                    style="@style/PillFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/videos"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:checked="true" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnKofi"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="@string/photos"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:checked="true" />
+                android:text="@string/support_developer"
+                android:textSize="13sp"
+                android:textColor="#6F4E37"
+                app:icon="@drawable/kofi_logo"
+                app:iconSize="20dp"
+                app:iconGravity="start"
+                app:iconTint="@null"
+                app:backgroundTint="#FFDD00"
+                app:cornerRadius="999dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVideos"
-                style="@style/PillFilterChip"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/videos"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:checked="true" />
+        </LinearLayout>
 
-        </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
 

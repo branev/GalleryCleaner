@@ -33,6 +33,30 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp" />
 
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="?attr/colorOutlineVariant" />
+
+    <!-- Support the developer -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSupportDeveloper"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/support_developer"
+        android:textStyle="bold"
+        app:icon="@drawable/kofi_logo"
+        app:iconSize="24dp"
+        app:iconGravity="start"
+        app:iconTint="@null"
+        app:cornerRadius="999dp" />
+
     <!-- OK button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOkHelp"

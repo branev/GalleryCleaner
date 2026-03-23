@@ -24,6 +24,7 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTips()
+        setupSupportButton()
         setupResetButton()
     }
 
@@ -63,6 +64,13 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
             row.addView(icon)
             row.addView(text)
             binding.tipContainer.addView(row)
+        }
+    }
+
+    private fun setupSupportButton() {
+        binding.btnSupportDeveloper.setOnClickListener {
+            startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse("https://ko-fi.com/branev")))
         }
     }
 

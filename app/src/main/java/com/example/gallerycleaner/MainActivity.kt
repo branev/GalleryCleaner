@@ -198,6 +198,7 @@ class MainActivity : AppCompatActivity() {
         setupSelectionActionBar()
         setupContinueFab()
         setupHelpButton()
+        setupKofiLink()
         setupBackHandler()
         observeUiState()
         observeViewedItems()
@@ -402,6 +403,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupHelpButton() {
         binding.btnHelp.setOnClickListener {
             HelpBottomSheetFragment.newInstance().show(supportFragmentManager, HelpBottomSheetFragment.TAG)
+        }
+    }
+
+    private fun setupKofiLink() {
+        binding.btnKofi.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://ko-fi.com/branev")))
         }
     }
 
