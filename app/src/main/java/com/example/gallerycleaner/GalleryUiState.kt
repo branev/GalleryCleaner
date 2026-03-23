@@ -48,4 +48,11 @@ sealed class GalleryUiState {
         val selectedDateRange: DateRange,
         val selectedSortOption: SortOption
     ) : GalleryUiState()
+
+    val displayedItems: List<MediaItem>
+        get() = when (this) {
+            is Normal -> items
+            is Selection -> items
+            else -> emptyList()
+        }
 }

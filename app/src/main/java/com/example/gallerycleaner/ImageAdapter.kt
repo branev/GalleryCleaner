@@ -165,9 +165,6 @@ class ImageAdapter(
                 View.VISIBLE
             }
 
-            // Warning icon is not used in normal flow - it's for hidden items
-            // which would need special handling in the ViewModel
-            binding.warningIcon.visibility = View.GONE
         }
     }
 

@@ -316,13 +316,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun markItemsAboveViewportAsViewed(layoutManager: GridLayoutManager) {
         val state = viewModel.uiState.value
-        if (state !is GalleryUiState.Normal && state !is GalleryUiState.Selection) return
-
-        val items = when (state) {
-            is GalleryUiState.Normal -> state.items
-            is GalleryUiState.Selection -> state.items
-            else -> return
-        }
+        val items = state.displayedItems
+        if (items.isEmpty()) return
 
         // Mark items that have scrolled off the top (position 0 to first visible - 1)
         val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
@@ -371,15 +366,7 @@ class MainActivity : AppCompatActivity() {
         bottomSheet.show(supportFragmentManager, FilterBottomSheetFragment.TAG)
     }
 
-    private fun updateFilterSummary(
-        selectedSources: Set<SourceType>,
-        sourceCounts: Map<SourceType, Int>,
-        selectedDateRange: DateRange,
-        selectedSortOption: SortOption
-    ) {
-        // Filter summary hidden per new design — filters visible in bottom sheet only
-        binding.filterSummary.visibility = View.GONE
-    }
+
 
     private fun setupSelectionActionBar() {
         binding.btnExitSelection.setOnClickListener { viewModel.exitSelectionMode() }
@@ -413,12 +400,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun scrollToFirstUnviewed() {
-        val state = viewModel.uiState.value
-        val items = when (state) {
-            is GalleryUiState.Normal -> state.items
-            is GalleryUiState.Selection -> state.items
-            else -> emptyList()
-        }
+        val items = viewModel.uiState.value.displayedItems
 
         val firstUnviewedIndex = viewModel.getFirstUnviewedIndex(items)
         if (firstUnviewedIndex >= 0) {
@@ -430,12 +412,8 @@ class MainActivity : AppCompatActivity() {
         // Only update if FAB is visible
         if (binding.fabContinue.visibility != View.VISIBLE) return
 
-        val state = viewModel.uiState.value
-        val items = when (state) {
-            is GalleryUiState.Normal -> state.items
-            is GalleryUiState.Selection -> state.items
-            else -> return
-        }
+        val items = viewModel.uiState.value.displayedItems
+        if (items.isEmpty()) return
 
         val firstUnviewedIndex = viewModel.getFirstUnviewedIndex(items)
         val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
@@ -457,11 +435,7 @@ class MainActivity : AppCompatActivity() {
                     adapter.updateViewedItems(viewedItems)
 
                     // Determine if Continue FAB should be visible
-                    val items = when (uiState) {
-                        is GalleryUiState.Normal -> uiState.items
-                        is GalleryUiState.Selection -> uiState.items
-                        else -> emptyList()
-                    }
+                    val items = uiState.displayedItems
 
                     // Show FAB if there are viewed items AND there are unviewed items to scroll to
                     val hasViewedItems = viewedItems.isNotEmpty()
@@ -598,7 +572,7 @@ class MainActivity : AppCompatActivity() {
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
-                updateFilterSummary(state.selectedSources, state.sourceCounts, state.selectedDateRange, state.selectedSortOption)
+
             }
 
             is GalleryUiState.NoMatchingItems -> {
@@ -621,7 +595,7 @@ class MainActivity : AppCompatActivity() {
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
-                updateFilterSummary(state.selectedSources, state.sourceCounts, state.selectedDateRange, state.selectedSortOption)
+
             }
 
             is GalleryUiState.Normal -> {
@@ -655,7 +629,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 adapter.updateSelectionState(emptySet(), false)
                 updateMediaTypeChips(state.selectedMediaTypes)
-                updateFilterSummary(state.selectedSources, state.sourceCounts, state.selectedDateRange, state.selectedSortOption)
+
                 backCallback.isEnabled = false
 
                 // Show filters hint on first load with items
@@ -692,7 +666,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.submitList(state.items)
                 adapter.updateSelectionState(state.selectedItems, true)
                 updateMediaTypeChips(state.selectedMediaTypes)
-                updateFilterSummary(state.selectedSources, state.sourceCounts, state.selectedDateRange, state.selectedSortOption)
+
                 backCallback.isEnabled = true
             }
         }

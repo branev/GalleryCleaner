@@ -215,8 +215,6 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    @Deprecated("Use loadMedia() instead", ReplaceWith("loadMedia()"))
-    fun loadImages() = loadMedia()
 
     fun toggleSourceFilter(source: SourceType) {
         val current = selectedSources.value.toMutableSet()
