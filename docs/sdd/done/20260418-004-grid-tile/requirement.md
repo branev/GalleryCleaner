@@ -1,5 +1,7 @@
 # SDD-20260418-004: Grid Tile Redesign
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 **Depends on:** SDD-20260418-002 — Design Tokens ✓
@@ -78,19 +80,19 @@ Design reference: *One square, five states.*
 
 ## Acceptance criteria
 
-- [ ] Grid tiles render with 14dp corner radius (visibly softer than before)
-- [ ] Source pill is a small dark chip with white text (not peach/orange)
-- [ ] Video tile shows a matching dark chip with play glyph + duration top-left
-- [ ] Reviewed tiles: photo subtly faded (85% opacity, 75% saturation) —
+- [x] Grid tiles render with 14dp corner radius (visibly softer than before)
+- [x] Source pill is a small dark chip with white text (not peach/orange)
+- [x] Video tile shows a matching dark chip with play glyph + duration top-left
+- [x] Reviewed tiles: photo subtly faded (85% opacity, 75% saturation) —
       **readable**, not muddy. Source pill on reviewed tile stays at full
       color/contrast
-- [ ] Enter selection mode: unselected tiles dim to ~55% lightness
-- [ ] Selected tile: accent-colored ring around it, subtle warm tint on the
+- [x] Enter selection mode: unselected tiles dim to ~55% lightness
+- [x] Selected tile: accent-colored ring around it, subtle warm tint on the
       photo, orange check circle top-right. Photo details still visible
-- [ ] Exiting selection mode restores all tiles to their normal state
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] No references remain to `badge_unviewed_bg`, `badge_unviewed_text`,
+- [x] Exiting selection mode restores all tiles to their normal state
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] No references remain to `badge_unviewed_bg`, `badge_unviewed_text`,
       `badge_viewed_bg`, `badge_viewed_text`, or the four deleted drawables
-- [ ] Manual smoke test: scroll through large library, enter/exit selection,
+- [x] Manual smoke test: scroll through large library, enter/exit selection,
       select and deselect items, mark items as viewed → all states render
       correctly

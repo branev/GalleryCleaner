@@ -398,13 +398,13 @@ Install. On the main grid:
 
 ## Definition of Done
 
-- [ ] All changes from the Files Changed table in `requirement.md` landed
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] No lingering references in `app/` to the four deleted drawables or
+- [x] All changes from the Files Changed table in `requirement.md` landed
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] No lingering references in `app/` to the four deleted drawables or
       four deleted color tokens
-- [ ] Visual smoke test (Step 9) passes — every tile state behaves as
+- [x] Visual smoke test (Step 9) passes — every tile state behaves as
       described
-- [ ] PR opened with title `SDD-20260418-004 — Grid Tile Redesign`
+- [x] PR opened with title `SDD-20260418-004 — Grid Tile Redesign`
 
 ## Known gotchas
 
