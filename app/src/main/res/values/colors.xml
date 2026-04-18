@@ -1,6 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Legacy colors (keep for compatibility) -->
+    <!-- ============================================================
+         Direction B palette (SDD-20260418-002)
+         Source of truth for every color in the app.
+         ============================================================ -->
+
+    <!-- Neutrals -->
+    <color name="bg">#FAF6EF</color>
+    <color name="surface">#FFFDF8</color>
+    <color name="surface_alt">#F3ECDF</color>
+    <color name="line">#E8DFCE</color>
+    <color name="line_strong">#D4C6AD</color>
+
+    <!-- Ink scale (primary/secondary/tertiary/muted text) -->
+    <color name="ink">#1D1710</color>
+    <color name="ink2">#4A3E2E</color>
+    <color name="ink3">#77674F</color>
+    <color name="ink4">#A8957B</color>
+
+    <!-- Accent family (warm orange) -->
+    <color name="accent">#E85A3D</color>
+    <color name="accent_ink">#FFFFFF</color>
+    <color name="accent_soft">#FBE0D5</color>
+    <color name="accent_deep">#A83320</color>
+
+    <!-- Semantic -->
+    <color name="danger">#C8342B</color>
+    <color name="danger_soft">#F8DDDB</color>
+    <color name="success">#2E7D5B</color>
+
+    <!-- ============================================================
+         Material 3 role bindings — every attribute in themes.xml
+         maps to one of these names.
+         ============================================================ -->
+    <color name="md_theme_primary">#E85A3D</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#FBE0D5</color>
+    <color name="md_theme_onPrimaryContainer">#A83320</color>
+
+    <color name="md_theme_secondary">#4A3E2E</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#F3ECDF</color>
+    <color name="md_theme_onSecondaryContainer">#1D1710</color>
+
+    <color name="md_theme_tertiary">#77674F</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#F3ECDF</color>
+    <color name="md_theme_onTertiaryContainer">#1D1710</color>
+
+    <color name="md_theme_error">#C8342B</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#F8DDDB</color>
+    <color name="md_theme_onErrorContainer">#7A1A12</color>
+
+    <color name="md_theme_background">#FAF6EF</color>
+    <color name="md_theme_onBackground">#1D1710</color>
+    <color name="md_theme_surface">#FFFDF8</color>
+    <color name="md_theme_onSurface">#1D1710</color>
+    <color name="md_theme_surfaceVariant">#F3ECDF</color>
+    <color name="md_theme_onSurfaceVariant">#4A3E2E</color>
+
+    <color name="md_theme_outline">#D4C6AD</color>
+    <color name="md_theme_outlineVariant">#E8DFCE</color>
+
+    <!-- ============================================================
+         Legacy color names — still referenced by existing layouts.
+         Each will be removed by a later SDD (003-014) when its
+         surface migrates to the tokens above. Remapped here to
+         Direction B approximations so the current app keeps working.
+         ============================================================ -->
+    <color name="viewer_toolbar_bg">#99000000</color>
+
+    <color name="header_title_green">#1D1710</color>
+    <color name="filter_btn_bg">#FBE0D5</color>
+    <color name="filter_btn_text">#A83320</color>
+    <color name="chip_selected_bg">#1D1710</color>
+    <color name="chip_selected_text">#FFFFFF</color>
+    <color name="chip_unselected_border">#E8DFCE</color>
+    <color name="chip_unselected_text">#4A3E2E</color>
+
+    <color name="badge_unviewed_bg">#FBE0D5</color>
+    <color name="badge_unviewed_text">#A83320</color>
+    <color name="badge_viewed_bg">#D9FFFDF8</color>
+    <color name="badge_viewed_text">#1D1710</color>
+
+    <color name="fab_continue_bg">#1D1710</color>
+
+    <color name="empty_state_icon_bg">#F3ECDF</color>
+    <color name="empty_state_icon_color">#77674F</color>
+    <color name="empty_state_subtitle_color">#77674F</color>
+    <color name="empty_state_reset_btn_bg">#1D1710</color>
+    <color name="empty_state_reset_btn_text">#FFFFFF</color>
+
+    <color name="filter_btn_active_bg">#E85A3D</color>
+    <color name="filter_btn_active_text">#FFFFFF</color>
+
+    <color name="fast_scroll_track">#00000000</color>
+    <color name="fast_scroll_thumb">#CC1D1710</color>
+    <color name="fast_scroll_tooltip_bg">#1D1710</color>
+
+    <color name="overlay_bg">#99000000</color>
+    <color name="success_checkmark">#2E7D5B</color>
+
+    <color name="hint_tooltip_bg">#1D1710</color>
+
+    <!-- Legacy AndroidX defaults — leave alone -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,85 +112,4 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    <!-- Material 3 Color Scheme - Light Theme -->
-    <!-- Primary - Teal/Cyan for a clean gallery app feel -->
-    <color name="md_theme_primary">#006874</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#97F0FF</color>
-    <color name="md_theme_onPrimaryContainer">#001F24</color>
-
-    <!-- Secondary -->
-    <color name="md_theme_secondary">#4A6267</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_secondaryContainer">#CDE7EC</color>
-    <color name="md_theme_onSecondaryContainer">#051F23</color>
-
-    <!-- Tertiary -->
-    <color name="md_theme_tertiary">#525E7D</color>
-    <color name="md_theme_onTertiary">#FFFFFF</color>
-    <color name="md_theme_tertiaryContainer">#DAE2FF</color>
-    <color name="md_theme_onTertiaryContainer">#0E1B37</color>
-
-    <!-- Error -->
-    <color name="md_theme_error">#BA1A1A</color>
-    <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_errorContainer">#FFDAD6</color>
-    <color name="md_theme_onErrorContainer">#410002</color>
-
-    <!-- Background & Surface -->
-    <color name="md_theme_background">#FFFFFF</color>
-    <color name="md_theme_onBackground">#191C1D</color>
-    <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#191C1D</color>
-    <color name="md_theme_surfaceVariant">#DBE4E6</color>
-    <color name="md_theme_onSurfaceVariant">#3F484A</color>
-
-    <!-- Outline -->
-    <color name="md_theme_outline">#6F797A</color>
-    <color name="md_theme_outlineVariant">#BFC8CA</color>
-
-    <!-- Media Viewer -->
-    <color name="viewer_toolbar_bg">#99000000</color>
-
-    <!-- Header & Badge colors (SDD-20250321-001) -->
-    <color name="header_title_green">#1B5E20</color>
-    <color name="filter_btn_bg">#E0F2F1</color>
-    <color name="filter_btn_text">#00796B</color>
-    <color name="chip_selected_bg">#E0F2F1</color>
-    <color name="chip_selected_text">#00796B</color>
-    <color name="chip_unselected_border">#D1D5DB</color>
-    <color name="chip_unselected_text">#4B5563</color>
-
-    <!-- Badge colors (SDD-20250321-001) -->
-    <color name="badge_unviewed_bg">#C9E5E4</color>
-    <color name="badge_unviewed_text">#4B5E59</color>
-    <color name="badge_viewed_bg">#D9FFFFFF</color>
-    <color name="badge_viewed_text">#1F2937</color>
-
-    <!-- Continue FAB (SDD-20250321-001) -->
-    <color name="fab_continue_bg">#057A70</color>
-
-    <!-- Empty state colors (SDD-20250321-002) -->
-    <color name="empty_state_icon_bg">#E5E5EA</color>
-    <color name="empty_state_icon_color">#8E8E93</color>
-    <color name="empty_state_subtitle_color">#8E8E93</color>
-    <color name="empty_state_reset_btn_bg">#1A008080</color>
-    <color name="empty_state_reset_btn_text">#008080</color>
-
-    <!-- Active filter indicator (SDD-20260321-003) -->
-    <color name="filter_btn_active_bg">#008080</color>
-    <color name="filter_btn_active_text">#FFFFFF</color>
-
-    <!-- Fast scroller (SDD-20260321-004) -->
-    <color name="fast_scroll_track">#00000000</color>
-    <color name="fast_scroll_thumb">#CC008080</color>
-    <color name="fast_scroll_tooltip_bg">#008080</color>
-
-    <!-- Delete success overlay (SDD-20260321-001) -->
-    <color name="overlay_bg">#99000000</color>
-    <color name="success_checkmark">#34D399</color>
-
-    <!-- Hint tooltip (SDD-20260321-008) -->
-    <color name="hint_tooltip_bg">#2C2C2E</color>
 </resources>

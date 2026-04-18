@@ -24,7 +24,7 @@ A native Android gallery app that helps you clean up your photo library by organ
 - MVVM architecture with ViewModel + StateFlow
 - Material Design 3
 - Coil for image loading
-- Inter font (SIL Open Font License)
+- Inter and JetBrains Mono fonts — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
 
 ## Building
 
