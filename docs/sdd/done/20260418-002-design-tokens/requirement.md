@@ -1,5 +1,7 @@
 # SDD-20260418-002: Design Tokens
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 ## Summary
@@ -58,15 +60,15 @@ are ready. It also lets us ship something small and mergeable on day one.
 
 ## Acceptance criteria
 
-- [ ] 4 JetBrains Mono TTFs and family XML present under `res/font/`
-- [ ] `THIRD_PARTY_NOTICES.md` exists at project root with both OFL texts
-- [ ] All 17 Direction B tokens in `colors.xml` with correct hex values
-- [ ] All `md_theme_*` roles point to Direction B tokens
-- [ ] Every legacy color name still resolves (build doesn't fail for missing
+- [x] 4 JetBrains Mono TTFs and family XML present under `res/font/`
+- [x] `THIRD_PARTY_NOTICES.md` exists at project root with both OFL texts
+- [x] All 17 Direction B tokens in `colors.xml` with correct hex values
+- [x] All `md_theme_*` roles point to Direction B tokens
+- [x] Every legacy color name still resolves (build doesn't fail for missing
       references)
-- [ ] Chip color state lists follow the ink-vs-line logic
-- [ ] `./gradlew assembleDebug` succeeds
-- [ ] `./gradlew testDebugUnitTest` passes
-- [ ] `./gradlew lint` has no new errors
-- [ ] Launching the app shows a cream background, ink-colored title, and
+- [x] Chip color state lists follow the ink-vs-line logic
+- [x] `./gradlew assembleDebug` succeeds
+- [x] `./gradlew testDebugUnitTest` passes
+- [x] `./gradlew lint` has no new errors
+- [x] Launching the app shows a cream background, ink-colored title, and
       orange-tinted Filters button — no crashes, no missing resources

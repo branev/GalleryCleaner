@@ -394,12 +394,12 @@ Install and launch the app. Verify:
 
 ## Definition of Done
 
-- [ ] All nine files changed per the table in `requirement.md`
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` runs clean
-- [ ] App launches, no crashes, no missing resources at runtime
-- [ ] Visual smoke test (Step 9) matches expectations
-- [ ] `THIRD_PARTY_NOTICES.md` exists with both full OFL texts
-- [ ] PR opened against `master` with title
+- [x] All nine files changed per the table in `requirement.md`
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` runs clean
+- [x] App launches, no crashes, no missing resources at runtime
+- [x] Visual smoke test (Step 9) matches expectations
+- [x] `THIRD_PARTY_NOTICES.md` exists with both full OFL texts
+- [x] PR opened against `master` with title
       `SDD-20260418-002 — Design Tokens`
 
 ## Known gotchas
