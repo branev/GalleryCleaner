@@ -282,17 +282,20 @@ SDDs depend on **SDD-20260418-002 Design Tokens** shipping first.
 | 005 | `20260418-005-date-section-headers/` | B1. Sticky/inline date section headers in the grid. New adapter item type, SpanSizeLookup, bucket logic. |
 | 006 | `20260418-006-selection-bar/` | Floating pill bar, size-readout under count, 55% dim on unselected (override reviewed state), Delete as only colored affordance. |
 | 007 | `20260418-007-continue-fab/` | B2. Ghost/caught-up FAB visual state and `All caught up` label swap. |
-| 008 | `20260418-008-filter-sheet/` | Four titled sections, source chips with mono counts, Apply shows change count, outline Cancel, light status-bar over scrim. |
-| 009 | `20260418-009-empty-state/` | Outline circle, ink-filled Reset, text Edit filters, filter-combo copy. |
+| 008 | `20260418-008-filter-and-empty-state/` | **Combined (was 008 + 009):** pending-state filter sheet with four titled sections, mono counts, Apply shows change count, light status-bar over scrim. **Plus:** outlined empty-state circle, ink-filled Reset, text Edit filters, filter-combo subtitle. |
 | 010 | `20260418-010-delete-success/` | Card (not fullscreen), hero display-size `789 kB`, brand confetti, 7s progress ring around Undo icon. |
 | 011 | `20260418-011-hint-card/` | Ink bg, two-line title+detail, lightbulb in 12%-white circle. Decision on × vs "Got it" button. |
 | 012 | `20260418-012-help-sheet/` | Tip rows with divider separators, accent tip icons, Ko-fi support card at bottom, light status-bar over scrim. |
 | 013 | `20260418-013-media-viewer/` | B3. Remove `⋯`, add Keep action (marks reviewed + advance), accent scrubber, video-only player controls. |
 | 014 | `20260418-014-info-sheet/` | Screen 09. New `MediaInfoBottomSheetFragment` with thumbnail+filename header, key/value details list (Size, Duration [video-only], Resolution [mono], Captured, Source, Path [mono]), and outline `Locate in source folder` action. Light status-bar icons over scrim. |
 
-Recommended order: **002 → 003 → 004 → 006 → 007 → 009 → 011 → 008 → 012 → 010 → 005 → 013 → 014**.
+Recommended order: **002 → 003 → 004 → 006 → 007 → 011 → 008 → 012 → 010 → 005 → 013 → 014**.
 (Foundation first, then top-level chrome, then behavioral/new-surface work 005,
 013, 014 last.)
+
+> SDD-009 was merged into 008 — they touch the same user journey (picking
+> filters → "nothing matched" → edit filters → re-pick), so one atomic SDD
+> keeps the filter-combo copy and shared wiring in one PR.
 
 ---
 
@@ -360,7 +363,7 @@ Status bar stays light (`windowLightStatusBar=true`) on `bg`.
 
 Individual tasks carry their own checklists. This SDD is complete when:
 
-- [ ] All 13 child SDDs (002–014) merged
+- [ ] All 12 child SDDs (002–008, 010–014; 009 merged into 008) merged
 - [ ] No remaining references to the dropped color tokens
   (`header_title_green`, `chip_selected_*`, `filter_btn_*`,
   `badge_unviewed_*`, `badge_viewed_*`, `fab_continue_bg`, `fast_scroll_*`,

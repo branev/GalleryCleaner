@@ -28,8 +28,7 @@
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-008 | Filter sheet | High | 002 ✓ | Sections, mono counts, change-count apply |
-| 20260418-009 | Empty state | Medium | 002 ✓ | Outline circle, two-action layout |
+| 20260418-008 | Filter sheet & empty state | High | 002 ✓ | Combined: pending-state sheet + outlined empty state + filter-combo copy. Merges former SDD-009 |
 | 20260418-010 | Delete success | Medium | 002 ✓ | Hero readout, confetti, 7s progress ring |
 | 20260418-011 | Hint card | Low | 002 ✓ | Ink bg, two-line format |
 | 20260418-012 | Help sheet | Low | 002 ✓ | Dividers, accent icons, Ko-fi card |
