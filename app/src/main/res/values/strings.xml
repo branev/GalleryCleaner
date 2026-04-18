@@ -41,6 +41,12 @@
     <!-- Top bar (SDD-20260418-003) -->
     <string name="n_left_counter">%1$d LEFT</string>
 
+    <!-- Date section headers (SDD-20260418-005) -->
+    <plurals name="header_item_count">
+        <item quantity="one">%1$d item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
+
     <!-- Trash dialog -->
     <string name="trash_confirmation_title">Move %1$d items to trash?</string>
     <string name="trash_confirmation_message">Items will be permanently deleted after 30 days.</string>

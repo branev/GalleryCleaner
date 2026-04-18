@@ -12,30 +12,93 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.decode.VideoFrameDecoder
 import coil.load
 import coil.request.videoFrameMillis
+import com.example.gallerycleaner.databinding.ItemDateHeaderBinding
 import com.example.gallerycleaner.databinding.ItemImageBinding
 
 class ImageAdapter(
     private val onItemClick: (MediaItem) -> Unit,
     private val onItemLongClick: (MediaItem) -> Unit
-) : ListAdapter<MediaItem, ImageAdapter.VH>(Diff) {
+) : ListAdapter<GridItem, RecyclerView.ViewHolder>(Diff) {
 
-    // Selection state
     private var selectedItems: Set<Uri> = emptySet()
     private var isSelectionMode: Boolean = false
-
-    // Viewed items state
     private var viewedItems: Set<Uri> = emptySet()
 
-    // Thumbnail loading size (adjusts with pinch-to-zoom)
     var thumbnailSize: Int = 300
 
-    object Diff : DiffUtil.ItemCallback<MediaItem>() {
-        override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem) =
-            oldItem.uri == newItem.uri
+    companion object {
+        const val VIEW_TYPE_HEADER = 0
+        const val VIEW_TYPE_MEDIA = 1
 
-        override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem) =
+        private const val PAYLOAD_SELECTION_MODE = "selection_mode"
+        private const val PAYLOAD_SELECTION_STATE = "selection_state"
+        private const val PAYLOAD_VIEWED_STATE = "viewed_state"
+
+        fun formatDuration(durationMs: Long): String {
+            val totalSeconds = durationMs / 1000
+            val minutes = totalSeconds / 60
+            val seconds = totalSeconds % 60
+            return "%d:%02d".format(minutes, seconds)
+        }
+    }
+
+    object Diff : DiffUtil.ItemCallback<GridItem>() {
+        override fun areItemsTheSame(oldItem: GridItem, newItem: GridItem): Boolean = when {
+            oldItem is GridItem.Header && newItem is GridItem.Header ->
+                oldItem.bucketId == newItem.bucketId
+            oldItem is GridItem.Media && newItem is GridItem.Media ->
+                oldItem.item.uri == newItem.item.uri
+            else -> false
+        }
+
+        override fun areContentsTheSame(oldItem: GridItem, newItem: GridItem): Boolean =
             oldItem == newItem
     }
+
+    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
+        is GridItem.Header -> VIEW_TYPE_HEADER
+        is GridItem.Media -> VIEW_TYPE_MEDIA
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            VIEW_TYPE_HEADER -> HeaderVH(ItemDateHeaderBinding.inflate(inflater, parent, false))
+            else -> ImageVH(ItemImageBinding.inflate(inflater, parent, false))
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is GridItem.Header -> (holder as HeaderVH).bind(item)
+            is GridItem.Media -> (holder as ImageVH).bind(item.item)
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty() || holder !is ImageVH) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+        val mediaItem = (getItem(position) as? GridItem.Media)?.item ?: return
+        for (payload in payloads) {
+            when (payload) {
+                PAYLOAD_SELECTION_MODE, PAYLOAD_SELECTION_STATE -> {
+                    holder.updateSelectionVisuals(mediaItem)
+                    holder.updateViewedVisuals(mediaItem)
+                }
+                PAYLOAD_VIEWED_STATE -> holder.updateViewedVisuals(mediaItem)
+            }
+        }
+    }
+
+    /** Utility: unpack media items from the current list (headers excluded). */
+    fun mediaItemsInOrder(): List<MediaItem> =
+        currentList.filterIsInstance<GridItem.Media>().map { it.item }
 
     fun updateSelectionState(selectedItems: Set<Uri>, isSelectionMode: Boolean) {
         val oldSelected = this.selectedItems
@@ -44,15 +107,13 @@ class ImageAdapter(
         this.selectedItems = selectedItems
         this.isSelectionMode = isSelectionMode
 
-        // Notify changes for efficient partial updates
         if (oldMode != isSelectionMode) {
-            // Mode changed - update all items
             notifyItemRangeChanged(0, itemCount, PAYLOAD_SELECTION_MODE)
         } else if (oldSelected != selectedItems) {
-            // Only selection changed - update affected items
             val changedUris = (oldSelected - selectedItems) + (selectedItems - oldSelected)
             for (i in 0 until itemCount) {
-                if (getItem(i).uri in changedUris) {
+                val gi = getItem(i)
+                if (gi is GridItem.Media && gi.item.uri in changedUris) {
                     notifyItemChanged(i, PAYLOAD_SELECTION_STATE)
                 }
             }
@@ -62,47 +123,56 @@ class ImageAdapter(
     fun updateViewedItems(viewedItems: Set<Uri>) {
         val oldViewed = this.viewedItems
         this.viewedItems = viewedItems
-
-        // Update only newly viewed items
         val newlyViewed = viewedItems - oldViewed
         for (i in 0 until itemCount) {
-            if (getItem(i).uri in newlyViewed) {
+            val gi = getItem(i)
+            if (gi is GridItem.Media && gi.item.uri in newlyViewed) {
                 notifyItemChanged(i, PAYLOAD_VIEWED_STATE)
             }
         }
     }
 
-    inner class VH(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class HeaderVH(private val binding: ItemDateHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(header: GridItem.Header) {
+            binding.headerTitle.text = header.title
+            binding.headerCount.text = binding.root.resources
+                .getQuantityString(R.plurals.header_item_count, header.count, header.count)
+        }
+    }
+
+    inner class ImageVH(private val binding: ItemImageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(getItem(position))
+                    (getItem(position) as? GridItem.Media)?.let { onItemClick(it.item) }
                 }
             }
-
             binding.root.setOnLongClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onItemLongClick(getItem(position))
-                    true
-                } else false
+                    (getItem(position) as? GridItem.Media)?.let {
+                        onItemLongClick(it.item)
+                        return@setOnLongClickListener true
+                    }
+                }
+                false
             }
         }
 
         fun bind(item: MediaItem) {
-            // Clear previous image to prevent showing stale content during recycling
             binding.imageView.setImageDrawable(null)
             binding.imageView.load(item.uri) {
                 crossfade(true)
                 size(thumbnailSize)
-                // For videos, use VideoFrameDecoder to extract a thumbnail frame
                 if (item.mediaType == MediaType.VIDEO) {
                     decoderFactory { result, options, _ ->
                         VideoFrameDecoder(result.source, options)
                     }
-                    videoFrameMillis(1000) // Get frame at 1 second
+                    videoFrameMillis(1000)
                 }
             }
 
@@ -112,7 +182,6 @@ class ImageAdapter(
             }
             binding.sourceBadge.text = label
 
-            // Show video duration badge for videos
             if (item.mediaType == MediaType.VIDEO) {
                 binding.videoDurationBadge.visibility = View.VISIBLE
                 binding.videoDuration.text = formatDuration(item.duration)
@@ -126,8 +195,6 @@ class ImageAdapter(
 
         fun updateViewedVisuals(item: MediaItem) {
             val isViewed = item.uri in viewedItems
-            // Gentle fade on the photo only — badges stay at full contrast.
-            // During selection mode, selection dim overrides the reviewed fade.
             if (isViewed && !isSelectionMode) {
                 binding.imageView.alpha = 0.85f
                 val matrix = ColorMatrix().apply { setSaturation(0.75f) }
@@ -140,59 +207,13 @@ class ImageAdapter(
 
         fun updateSelectionVisuals(item: MediaItem) {
             val isSelected = item.uri in selectedItems
-
-            // Ring + warm tint + check circle on the selected tile
             binding.selectionRing.visibility = if (isSelected) View.VISIBLE else View.GONE
             binding.selectionTint.visibility = if (isSelected) View.VISIBLE else View.GONE
             binding.checkMark.visibility = if (isSelected) View.VISIBLE else View.GONE
-
-            // 55% white dim on NON-selected tiles while in selection mode
             binding.dimOverlay.visibility =
                 if (isSelectionMode && !isSelected) View.VISIBLE else View.GONE
-
-            // Hide source badge on dimmed tiles only — on selected ones the photo is still visible
             binding.sourceBadge.visibility =
                 if (isSelectionMode && !isSelected) View.GONE else View.VISIBLE
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return VH(binding)
-    }
-
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads)
-        } else {
-            val item = getItem(position)
-            // Partial bind for state changes
-            for (payload in payloads) {
-                when (payload) {
-                    PAYLOAD_SELECTION_MODE, PAYLOAD_SELECTION_STATE -> {
-                        holder.updateSelectionVisuals(item)
-                        holder.updateViewedVisuals(item) // Opacity depends on selection mode
-                    }
-                    PAYLOAD_VIEWED_STATE -> holder.updateViewedVisuals(item)
-                }
-            }
-        }
-    }
-
-    companion object {
-        private const val PAYLOAD_SELECTION_MODE = "selection_mode"
-        private const val PAYLOAD_SELECTION_STATE = "selection_state"
-        private const val PAYLOAD_VIEWED_STATE = "viewed_state"
-
-        fun formatDuration(durationMs: Long): String {
-            val totalSeconds = durationMs / 1000
-            val minutes = totalSeconds / 60
-            val seconds = totalSeconds % 60
-            return "%d:%02d".format(minutes, seconds)
         }
     }
 }

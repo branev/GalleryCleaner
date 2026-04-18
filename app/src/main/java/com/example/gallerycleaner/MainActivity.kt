@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
 
     private val dragSelectListener = DragSelectTouchListener(
         onDragRangeChanged = { rangeStart, rangeEnd ->
-            val items = adapter.currentList
+            val list = adapter.currentList
             val dragUris = (rangeStart..rangeEnd)
-                .filter { it in items.indices }
-                .map { items[it].uri }
+                .filter { it in list.indices }
+                .mapNotNull { (list[it] as? GridItem.Media)?.item?.uri }
                 .toSet()
             viewModel.setDragSelection(dragUris, preDragSelection)
         },
@@ -229,6 +229,15 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
         dragSelectListener.attachToRecyclerView(binding.recyclerView)
 
+        // Date-section headers span the full grid width; media tiles span 1.
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int =
+                when (adapter.getItemViewType(position)) {
+                    ImageAdapter.VIEW_TYPE_HEADER -> layoutManager.spanCount
+                    else -> 1
+                }
+        }
+
         fastScrollHelper = FastScrollHelper(
             recyclerView = binding.recyclerView,
             track = binding.fastScrollTrack,
@@ -236,11 +245,11 @@ class MainActivity : AppCompatActivity() {
             tooltip = binding.fastScrollTooltip,
             getDateAtPosition = { position -> formatDateForPosition(position) },
             onFastScrollPositionChanged = { position ->
-                // Mark all items above the fast-scroll position as viewed
-                val items = adapter.currentList
-                if (position > 0 && items.isNotEmpty()) {
-                    val urisToMark = (0 until position.coerceAtMost(items.size))
-                        .map { items[it].uri }
+                // Mark all media items above the fast-scroll position as viewed (headers skipped)
+                val list = adapter.currentList
+                if (position > 0 && list.isNotEmpty()) {
+                    val urisToMark = (0 until position.coerceAtMost(list.size))
+                        .mapNotNull { (list[it] as? GridItem.Media)?.item?.uri }
                     viewModel.markItemsAsViewed(urisToMark)
                 }
             }
@@ -392,11 +401,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun scrollToFirstUnviewed() {
-        val items = viewModel.uiState.value.displayedItems
+        val mediaItems = adapter.mediaItemsInOrder()
+        val firstUnviewedMediaIndex = viewModel.getFirstUnviewedIndex(mediaItems)
+        if (firstUnviewedMediaIndex < 0) return
 
-        val firstUnviewedIndex = viewModel.getFirstUnviewedIndex(items)
-        if (firstUnviewedIndex >= 0) {
-            binding.recyclerView.smoothScrollToPosition(firstUnviewedIndex)
+        val targetUri = mediaItems[firstUnviewedMediaIndex].uri
+        val gridPosition = adapter.currentList.indexOfFirst {
+            it is GridItem.Media && it.item.uri == targetUri
+        }
+        if (gridPosition >= 0) {
+            binding.recyclerView.smoothScrollToPosition(gridPosition)
         }
     }
 
@@ -404,14 +418,23 @@ class MainActivity : AppCompatActivity() {
         // Only update if FAB is visible
         if (binding.fabContinue.visibility != View.VISIBLE) return
 
-        val items = viewModel.uiState.value.displayedItems
-        if (items.isEmpty()) return
+        val mediaItems = adapter.mediaItemsInOrder()
+        if (mediaItems.isEmpty()) return
 
-        val firstUnviewedIndex = viewModel.getFirstUnviewedIndex(items)
+        val firstUnviewedMediaIndex = viewModel.getFirstUnviewedIndex(mediaItems)
+        if (firstUnviewedMediaIndex < 0) {
+            binding.fabContinue.isEnabled = false
+            binding.fabContinue.alpha = 0.5f
+            return
+        }
+        val targetUri = mediaItems[firstUnviewedMediaIndex].uri
+        val gridPosition = adapter.currentList.indexOfFirst {
+            it is GridItem.Media && it.item.uri == targetUri
+        }
         val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
 
         // Disable FAB if we're already at or past the first unviewed item
-        val canScrollToUnviewed = firstUnviewedIndex > lastVisiblePosition
+        val canScrollToUnviewed = gridPosition > lastVisiblePosition
         binding.fabContinue.isEnabled = canScrollToUnviewed
         binding.fabContinue.alpha = if (canScrollToUnviewed) 1.0f else 0.5f
     }
@@ -616,7 +639,7 @@ class MainActivity : AppCompatActivity() {
                     binding.filterLoadingIndicator.visibility = View.VISIBLE
                 }
 
-                adapter.submitList(state.items) {
+                adapter.submitList(DateBucket.bucketize(state.items)) {
                     binding.filterLoadingIndicator.visibility = View.GONE
                     if (filtersChanged) {
                         binding.recyclerView.scrollToPosition(0)
@@ -658,7 +681,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 binding.selectionSize.text = getString(R.string.selection_count_size, countText, sizeText)
 
-                adapter.submitList(state.items)
+                adapter.submitList(DateBucket.bucketize(state.items))
                 adapter.updateSelectionState(state.selectedItems, true)
                 updateMediaTypeChips(state.selectedMediaTypes)
 
@@ -698,7 +721,9 @@ class MainActivity : AppCompatActivity() {
             // Snapshot the selection (contains the initial item) for drag range math
             preDragSelection = viewModel.getSelectedItems()
 
-            val position = adapter.currentList.indexOfFirst { it.uri == item.uri }
+            val position = adapter.currentList.indexOfFirst {
+                it is GridItem.Media && it.item.uri == item.uri
+            }
             if (position >= 0) {
                 dragSelectListener.startDragSelection(position)
             }
@@ -891,8 +916,9 @@ class MainActivity : AppCompatActivity() {
     private fun formatDateForPosition(position: Int): String {
         val items = adapter.currentList
         if (position !in items.indices) return ""
+        val mediaItem = (items[position] as? GridItem.Media)?.item ?: return ""
 
-        val timestamp = items[position].dateAdded
+        val timestamp = mediaItem.dateAdded
         val itemDate = Date(timestamp * 1000L)
         val now = Calendar.getInstance()
         val itemCal = Calendar.getInstance().apply { time = itemDate }
