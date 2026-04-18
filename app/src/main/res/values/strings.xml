@@ -72,7 +72,7 @@
     <string name="play_pause">Play or pause video</string>
 
     <!-- Continue reviewing -->
-    <string name="continue_reviewing">Continue reviewing</string>
+    <string name="fab_continue">Continue</string>
 
     <!-- Delete success overlay (SDD-20260321-001) -->
     <string name="delete_success_title">Done! %1$d items deleted</string>

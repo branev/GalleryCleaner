@@ -332,13 +332,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:contentDescription="@string/continue_reviewing"
-        android:text="@string/continue_reviewing"
-        android:textColor="@android:color/white"
+        android:text="@string/fab_continue"
         android:visibility="gone"
-        app:backgroundTint="@color/fab_continue_bg"
+        app:backgroundTint="@color/ink"
         app:icon="@drawable/ic_arrow_downward"
-        app:iconTint="@android:color/white"
+        app:strokeWidth="1dp"
+        app:shapeAppearanceOverlay="@style/PillShape"
         app:layout_constraintBottom_toTopOf="@id/selectionActionBar"
         app:layout_constraintEnd_toEndOf="parent" />
 

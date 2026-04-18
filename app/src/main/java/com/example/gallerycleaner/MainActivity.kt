@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -414,29 +415,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Continue FAB is shown only when tapping it is useful:
+     * - there's at least one unreviewed item ahead of the last visible row,
+     * - and the app is in a state where the grid is actually displayed.
+     * In every other case the FAB hides. The design's "All caught up" ghost
+     * state is reserved for when every item is reviewed — not implemented
+     * here because in practice users delete as they go.
+     */
     private fun updateContinueFabState(layoutManager: GridLayoutManager) {
-        // Only update if FAB is visible
-        if (binding.fabContinue.visibility != View.VISIBLE) return
-
+        val state = viewModel.uiState.value
+        val isGridShown = state is GalleryUiState.Normal || state is GalleryUiState.Selection
+        val viewedItems = viewModel.viewedItems.value
         val mediaItems = adapter.mediaItemsInOrder()
-        if (mediaItems.isEmpty()) return
+
+        if (!isGridShown || viewedItems.isEmpty() || mediaItems.isEmpty()) {
+            binding.fabContinue.visibility = View.GONE
+            return
+        }
 
         val firstUnviewedMediaIndex = viewModel.getFirstUnviewedIndex(mediaItems)
         if (firstUnviewedMediaIndex < 0) {
-            binding.fabContinue.isEnabled = false
-            binding.fabContinue.alpha = 0.5f
+            binding.fabContinue.visibility = View.GONE
             return
         }
+
         val targetUri = mediaItems[firstUnviewedMediaIndex].uri
         val gridPosition = adapter.currentList.indexOfFirst {
             it is GridItem.Media && it.item.uri == targetUri
         }
         val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
 
-        // Disable FAB if we're already at or past the first unviewed item
-        val canScrollToUnviewed = gridPosition > lastVisiblePosition
-        binding.fabContinue.isEnabled = canScrollToUnviewed
-        binding.fabContinue.alpha = if (canScrollToUnviewed) 1.0f else 0.5f
+        if (gridPosition > lastVisiblePosition) {
+            val fab = binding.fabContinue
+            fab.visibility = View.VISIBLE
+            fab.isEnabled = true
+            fab.setText(R.string.fab_continue)
+            fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.ink))
+            fab.setTextColor(getColor(android.R.color.white))
+            fab.iconTint = ColorStateList.valueOf(getColor(android.R.color.white))
+            fab.strokeColor = ColorStateList.valueOf(android.graphics.Color.TRANSPARENT)
+            fab.elevation = 6.dp().toFloat()
+        } else {
+            binding.fabContinue.visibility = View.GONE
+        }
     }
 
     private fun observeViewedItems() {
@@ -459,26 +481,16 @@ class MainActivity : AppCompatActivity() {
                     binding.unreviewedCounter.text =
                         getString(R.string.n_left_counter, unreviewedCount)
 
-                    // Show FAB if there are viewed items AND there are unviewed items to scroll to
-                    val hasViewedItems = viewedItems.isNotEmpty()
-                    val hasUnviewedItems = unreviewedCount > 0
-                    val showFab = hasViewedItems && hasUnviewedItems &&
-                            (uiState is GalleryUiState.Normal || uiState is GalleryUiState.Selection)
+                    // Refresh Continue FAB (updateContinueFabState owns visibility + state)
+                    val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
+                    layoutManager?.let { updateContinueFabState(it) }
 
-                    if (showFab) {
-                        binding.fabContinue.visibility = View.VISIBLE
+                    // Show the hint only the first time the FAB actually appears
+                    if (binding.fabContinue.visibility == View.VISIBLE) {
                         hintManager.showHint(
                             HintPreferences.HINT_CONTINUE_FAB,
                             getString(R.string.hint_continue_fab)
                         )
-                    } else {
-                        binding.fabContinue.visibility = View.GONE
-                    }
-
-                    // Update FAB enabled state when visibility changes
-                    if (showFab) {
-                        val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
-                        layoutManager?.let { updateContinueFabState(it) }
                     }
 
                     // Update review progress bar
