@@ -21,6 +21,20 @@
 | SDD | Feature | Priority | Dependencies | Notes |
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
+| 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
+| 20260418-002 | Design tokens | High | None | Foundation — colors, JetBrains Mono, theme bindings |
+| 20260418-003 | Top bar | High | 002 | Title ink, Ko-fi out, filter pill active, N LEFT counter |
+| 20260418-004 | Grid tile | High | 002 | Subtle badges, 14dp radius, reviewed 85%/75% |
+| 20260418-005 | Date section headers | Medium | 002, 004 | **New behavior** — grouped grid |
+| 20260418-006 | Selection bar | High | 002, 004 | Floating pill, 55% dim, size readout |
+| 20260418-007 | Continue FAB states | Medium | 002 | Active/ghost visual states |
+| 20260418-008 | Filter sheet | High | 002 | Sections, mono counts, change-count apply |
+| 20260418-009 | Empty state | Medium | 002 | Outline circle, two-action layout |
+| 20260418-010 | Delete success | Medium | 002 | Hero readout, confetti, 7s progress ring |
+| 20260418-011 | Hint card | Low | 002 | Ink bg, two-line format |
+| 20260418-012 | Help sheet | Low | 002 | Dividers, accent icons, Ko-fi card |
+| 20260418-013 | Media viewer | Medium | 002 | **New behavior** — Keep action, remove ⋯ |
+| 20260418-014 | Info sheet | Medium | 002, 013 | **New screen** — file metadata bottom sheet |
 
 ## Other
 
