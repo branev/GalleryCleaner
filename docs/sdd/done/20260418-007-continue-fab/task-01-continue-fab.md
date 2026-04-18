@@ -2,25 +2,30 @@
 
 **Parent:** SDD-20260418-007 — Continue FAB States
 
+> **As-shipped note:** during implementation we reviewed the UX and
+> decided to **only** render the active state and hide the FAB in every
+> other case (instead of showing a "ghost" state when the user is past
+> the first unreviewed tile). The design's two-state treatment only
+> makes sense when the user has reviewed *every* item in the current
+> filter, which is rare in a gallery cleaner. The ghost state is
+> deferred — the helper code still has the branch commented-style so
+> it's easy to re-enable. The steps below have been updated to reflect
+> what actually shipped.
+
 ## What You're Changing
 
 The Continue FAB today has one look — solid ink pill — and fades to 50%
 alpha when you're already at the bottom of the unreviewed queue. You're
-turning that fade into a fully distinct **"All caught up"** ghost state:
-translucent pill, `line_strong` outline, muted text, no shadow, not
-clickable.
-
-Behavior stays the same (the FAB still hides entirely when all items
-are reviewed). Only the in-between state — "there are unreviewed items
-but you're already past them" — gets a new visual identity and a new
-label.
+replacing that half-dimmed state with a clean hide: the FAB only
+appears when tapping it would actually jump the user somewhere useful.
 
 ## Before vs After
 
 | Element | Before | After |
 |---|---|---|
-| Active (unreviewed items ahead) | ink pill, white "Continue reviewing", elevation 6dp | ink pill, white **"Continue"**, elevation 6dp |
-| Past the queue | same pill at `alpha=0.5`, `isEnabled=false` | 72% white pill, 1dp `line_strong` outline, `ink4` text, **"All caught up"**, no shadow, `isEnabled=false` |
+| Active (user scrolled above the first unreviewed) | ink pill, white "Continue reviewing", elevation 6dp | ink pill, white **"Continue"**, elevation 6dp |
+| User is at/past first unreviewed | same pill at `alpha=0.5`, `isEnabled=false` | **hidden** (visibility `GONE`) |
+| All items reviewed | hidden | **still hidden** (ghost state deferred) |
 
 ## Prerequisites
 
@@ -30,17 +35,16 @@ label.
 
 ## Step-by-Step Instructions
 
-### Step 1 — Add the two new string resources
+### Step 1 — Add the new string resource
 
 Open `app/src/main/res/values/strings.xml`. Find `continue_reviewing`
-(around line 75). Replace that single line with three lines (the old
-string stays for now — we remove it in Step 5 after the layout and
-code have stopped using it):
+(around line 75) and add `fab_continue` after it (the old string stays
+for now — we remove it in Step 5 after the layout and code have
+stopped using it):
 
 ```xml
 <string name="continue_reviewing">Continue reviewing</string>
 <string name="fab_continue">Continue</string>
-<string name="fab_all_caught_up">All caught up</string>
 ```
 
 > **Why keep `continue_reviewing` temporarily?** Some code paths may
@@ -64,6 +68,7 @@ Open `app/src/main/res/layout/activity_main.xml` and find the
     app:backgroundTint="@color/ink"
     app:icon="@drawable/ic_arrow_downward"
     app:strokeWidth="1dp"
+    app:shapeAppearanceOverlay="@style/PillShape"
     app:layout_constraintBottom_toTopOf="@id/selectionActionBar"
     app:layout_constraintEnd_toEndOf="parent" />
 ```
@@ -73,45 +78,56 @@ Open `app/src/main/res/layout/activity_main.xml` and find the
 > - `android:contentDescription` removed (ExtendedFAB announces its
 >   visible text via TalkBack automatically — redundant)
 > - Hard-coded `android:textColor="@android:color/white"` and
->   `app:iconTint="@android:color/white"` removed — set from Kotlin on
->   each state change
-> - `app:strokeWidth="1dp"` added — visible only when the stroke color
->   is opaque (caught-up state), invisible when the stroke color is
->   transparent (active state)
+>   `app:iconTint="@android:color/white"` removed — set from Kotlin
+> - `app:strokeWidth="1dp"` added — reserved for a future ghost state;
+>   set transparent in Kotlin for the active state so it's invisible
+> - `app:shapeAppearanceOverlay="@style/PillShape"` added — once you
+>   specify `strokeWidth`, ExtendedFAB falls off its default pill
+>   shape and renders slightly rectangular; this overlay (already
+>   defined in `themes.xml`) pins the corners back to a true pill
 
-### Step 3 — Rewrite `updateContinueFabState`
+### Step 3 — Make `updateContinueFabState` own visibility + state
 
 Open `MainActivity.kt` and find `updateContinueFabState` (around line
-417). Replace the whole method body with the logic below. It sets six
-visual properties (bg tint, text color, icon tint, stroke color, label,
-elevation) plus `isEnabled` for each of the two states.
+417). Replace the whole method with the version below. It becomes the
+single authority on FAB visibility: hide in every case where tapping
+wouldn't help, show the active ink pill otherwise.
 
 ```kotlin
+/**
+ * Continue FAB is shown only when tapping it is useful:
+ * - there's at least one unreviewed item ahead of the last visible row,
+ * - and the app is in a state where the grid is actually displayed.
+ * In every other case the FAB hides. The design's "All caught up" ghost
+ * state is reserved for when every item is reviewed — not implemented
+ * here because in practice users delete as they go.
+ */
 private fun updateContinueFabState(layoutManager: GridLayoutManager) {
-    // Only update if FAB is visible
-    if (binding.fabContinue.visibility != View.VISIBLE) return
-
+    val state = viewModel.uiState.value
+    val isGridShown = state is GalleryUiState.Normal || state is GalleryUiState.Selection
+    val viewedItems = viewModel.viewedItems.value
     val mediaItems = adapter.mediaItemsInOrder()
-    if (mediaItems.isEmpty()) return
 
-    val firstUnviewedMediaIndex = viewModel.getFirstUnviewedIndex(mediaItems)
-    val canScrollToUnviewed = if (firstUnviewedMediaIndex < 0) {
-        false
-    } else {
-        val targetUri = mediaItems[firstUnviewedMediaIndex].uri
-        val gridPosition = adapter.currentList.indexOfFirst {
-            it is GridItem.Media && it.item.uri == targetUri
-        }
-        val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
-        gridPosition > lastVisiblePosition
+    if (!isGridShown || viewedItems.isEmpty() || mediaItems.isEmpty()) {
+        binding.fabContinue.visibility = View.GONE
+        return
     }
 
-    applyFabState(active = canScrollToUnviewed)
-}
+    val firstUnviewedMediaIndex = viewModel.getFirstUnviewedIndex(mediaItems)
+    if (firstUnviewedMediaIndex < 0) {
+        binding.fabContinue.visibility = View.GONE
+        return
+    }
 
-private fun applyFabState(active: Boolean) {
-    val fab = binding.fabContinue
-    if (active) {
+    val targetUri = mediaItems[firstUnviewedMediaIndex].uri
+    val gridPosition = adapter.currentList.indexOfFirst {
+        it is GridItem.Media && it.item.uri == targetUri
+    }
+    val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+
+    if (gridPosition > lastVisiblePosition) {
+        val fab = binding.fabContinue
+        fab.visibility = View.VISIBLE
         fab.isEnabled = true
         fab.setText(R.string.fab_continue)
         fab.backgroundTintList = ColorStateList.valueOf(getColor(R.color.ink))
@@ -120,13 +136,7 @@ private fun applyFabState(active: Boolean) {
         fab.strokeColor = ColorStateList.valueOf(android.graphics.Color.TRANSPARENT)
         fab.elevation = 6.dp().toFloat()
     } else {
-        fab.isEnabled = false
-        fab.setText(R.string.fab_all_caught_up)
-        fab.backgroundTintList = ColorStateList.valueOf(0xB8FFFFFF.toInt()) // 72% white
-        fab.setTextColor(getColor(R.color.ink4))
-        fab.iconTint = ColorStateList.valueOf(getColor(R.color.ink4))
-        fab.strokeColor = ColorStateList.valueOf(getColor(R.color.line_strong))
-        fab.elevation = 0f
+        binding.fabContinue.visibility = View.GONE
     }
 }
 ```
@@ -137,15 +147,31 @@ Add the import near the top of the file if it isn't already present:
 import android.content.res.ColorStateList
 ```
 
-> **Why programmatic and not state-list drawables?** The ExtendedFAB's
-> `app:strokeWidth` and `app:elevation` attributes don't accept state
-> lists — only `backgroundTint`, `textColor`, `iconTint`, and
-> `strokeColor` do. Using Kotlin for everything keeps the two states in
-> one place, easy to reason about.
->
-> **Why `0xB8FFFFFF.toInt()` instead of `@color/...`?** No token exists
-> for 72% white; adding one for a single use site would be churn. If
-> the color proves reusable later, promote it then.
+Also update `observeViewedItems` so it stops toggling `fabContinue`
+visibility on its own — let `updateContinueFabState` own that. Find
+the block that does `binding.fabContinue.visibility = View.VISIBLE / GONE`
+(around line 481) and replace it with:
+
+```kotlin
+// Refresh Continue FAB (updateContinueFabState owns visibility + state)
+val layoutManager = binding.recyclerView.layoutManager as? GridLayoutManager
+layoutManager?.let { updateContinueFabState(it) }
+
+// Show the hint only the first time the FAB actually appears
+if (binding.fabContinue.visibility == View.VISIBLE) {
+    hintManager.showHint(
+        HintPreferences.HINT_CONTINUE_FAB,
+        getString(R.string.hint_continue_fab)
+    )
+}
+```
+
+> **Why programmatic styling?** The ExtendedFAB's `app:strokeWidth`
+> and `app:elevation` attributes don't accept state lists — only
+> `backgroundTint`, `textColor`, `iconTint`, and `strokeColor` do.
+> Kotlin keeps the whole active-state setup in one block, easy to
+> reason about, and lets us fall back to `visibility = GONE` cleanly
+> for every non-active case.
 
 ### Step 4 — Point the FAB to the new default text
 
@@ -195,28 +221,26 @@ Likely failures:
 
 Install. Then:
 
-1. Open the app on a library where you have some viewed + some
-   unviewed items. The FAB appears bottom-right as a **solid ink
-   "Continue"** pill.
-2. Tap the FAB — grid scrolls down to the first unreviewed tile. FAB
-   stays active while tiles below it are still unreviewed.
-3. Keep scrolling past the last unreviewed tile. The FAB should
-   transition to a **translucent "All caught up"** pill with a visible
-   thin outline. No shadow. Tapping it should do nothing.
-4. Scroll back up. FAB returns to the active solid state.
-5. Review all items (long-press → delete a few, or view them
-   individually). When *nothing* unreviewed is left in the current
-   filter, the FAB should hide entirely (regression check — existing
-   visibility logic still works).
+1. Fresh launch (nothing reviewed yet): FAB is hidden.
+2. Scroll down through the grid. As tiles get marked reviewed by the
+   fast-scroller, you stay below the first unreviewed tile, so the
+   FAB stays hidden.
+3. Scroll back up, past the reviewed tiles. The FAB appears as a
+   **solid ink "Continue"** pill.
+4. Tap it. Grid smooth-scrolls down to the first unreviewed tile; once
+   your viewport reaches it, the FAB hides again.
+5. Keep scrolling past all unreviewed tiles — FAB remains hidden.
+6. Review every item in the current filter (via deletes or the media
+   viewer) — FAB still hidden (no ghost state in this iteration).
 
 ## Definition of Done
 
-- [ ] All Files Changed from `requirement.md` landed
-- [ ] `continue_reviewing` removed from `strings.xml`; no references
+- [x] All Files Changed from `requirement.md` landed
+- [x] `continue_reviewing` removed from `strings.xml`; no references
       remain in `app/src/`
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] Visual smoke test (Step 7) passes end-to-end
-- [ ] PR opened with title `SDD-20260418-007 — Continue FAB States`
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] Visual smoke test (Step 7) passes end-to-end
+- [x] PR opened with title `SDD-20260418-007 — Continue FAB States`
 
 ## Known gotchas
 

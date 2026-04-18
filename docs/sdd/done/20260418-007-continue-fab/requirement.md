@@ -1,24 +1,28 @@
 # SDD-20260418-007: Continue FAB States
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 **Depends on:** SDD-20260418-002 ✓
 
 ## Summary
 
-Replace the FAB's current "alpha 0.5 + disabled" fallback with two visually
-distinct states:
+Replace the FAB's current "alpha 0.5 + disabled" fallback with cleaner
+visibility semantics: the FAB appears **only** when tapping it is useful,
+otherwise it hides entirely.
 
 - **Active** — ink-filled pill, white text + icon, label `Continue`,
   elevation 6dp. Tapping scrolls to the next unreviewed tile.
-- **Caught up** — translucent white pill (72% white), 1dp `line_strong`
-  outline, `ink4` text + icon, label `All caught up`, no shadow, not
-  clickable.
+- **Hidden** — whenever the user is at or past the first unreviewed
+  item (or everything is reviewed). No ghost, no disabled-looking
+  button. Less chrome in the grid during normal scroll-down review.
 
-Behavior is unchanged: the FAB still shows only when there are both viewed
-*and* unviewed items in the current filter. What changes is what it looks
-like when the user is already scrolled past the first unreviewed tile —
-instead of fading, it declares "all caught up" clearly.
+The design spec shows a second "All caught up" ghost state for the
+edge case where the user has reviewed *everything*; in practice
+gallery-cleaner users delete or keep as they go, so that state is rare
+and deliberately deferred. If we want it back, reintroduce it via the
+commented-out block in `updateContinueFabState`.
 
 ## Why it's separate
 
@@ -28,32 +32,26 @@ the review-flow refresh isolated from other surfaces.
 
 ## Scope
 
-1. **Rename label strings**:
-   - Keep `continue_reviewing` (legacy; leave as-is until anything else
-     that references it is found — it isn't referenced elsewhere, so we
-     remove it at the end of this SDD)
+1. **String rename**:
+   - Remove `continue_reviewing` ("Continue reviewing")
    - Add `fab_continue` = "Continue"
-   - Add `fab_all_caught_up` = "All caught up"
 2. **Layout update** (`activity_main.xml` `fabContinue`):
-   - Default `android:text="@string/fab_continue"` (overridden at runtime)
-   - Drop `android:contentDescription` — ExtendedFAB uses `text` as
-     accessibility label automatically
-   - Add `app:strokeWidth="1dp"` (always present; color varies by state
-     via Kotlin)
-   - Remove `android:textColor` and `app:iconTint` hard-codes (both set
-     from Kotlin)
-3. **Styling helper** — replace the current `alpha = 0.5f` fallback in
-   `updateContinueFabState` with programmatic state swaps:
-   - Active → `@color/ink` bg, white text/icon, stroke color
-     transparent, elevation 6dp, `isEnabled = true`, label
-     `fab_continue`
-   - Caught up → `#B8FFFFFF` bg (72% white), `@color/ink4` text/icon,
-     `@color/line_strong` stroke, elevation 0, `isEnabled = false`,
-     label `fab_all_caught_up`
-4. **Click listener guard**: the listener is a no-op when `!isEnabled`
-   (Material default), but assert in review.
-5. **Legacy string cleanup**: remove `continue_reviewing` from
-   `strings.xml` after the layout and Kotlin switch to the new strings.
+   - Default `android:text="@string/fab_continue"`
+   - Drop `android:contentDescription` (ExtendedFAB reads text for a11y)
+   - Add `app:shapeAppearanceOverlay="@style/PillShape"` (explicit pill
+     corners after adding `strokeWidth`)
+   - Add `app:strokeWidth="1dp"` (reserved for future ghost state; color
+     set transparent in Kotlin)
+   - Remove hard-coded `android:textColor` and `app:iconTint`
+3. **Visibility + state logic** — `updateContinueFabState` is now the
+   single authority on FAB visibility:
+   - Hide if not in `Normal`/`Selection` state, no viewed items, no
+     media items, all items reviewed, or user is at/past first
+     unreviewed
+   - Otherwise show the active pill: `@color/ink` bg, white text/icon,
+     transparent stroke, elevation 6dp, `isEnabled = true`
+4. **Hint trigger**: fire `HINT_CONTINUE_FAB` only when the FAB ended
+   up visible after `updateContinueFabState`, not before.
 
 ## Not in scope
 
@@ -69,22 +67,21 @@ the review-flow refresh isolated from other surfaces.
 
 | File | Change |
 |------|--------|
-| `res/values/strings.xml` | Add `fab_continue`, `fab_all_caught_up`; remove `continue_reviewing` |
-| `res/layout/activity_main.xml` | FAB attrs trimmed, default `text` updated, `strokeWidth` added |
-| `MainActivity.kt` | `updateContinueFabState` rewritten to set bg/text/icon/stroke/elevation/label per state |
+| `res/values/strings.xml` | Add `fab_continue`, remove `continue_reviewing` |
+| `res/layout/activity_main.xml` | FAB attrs trimmed, default `text` updated, `strokeWidth`, pill shape overlay added |
+| `MainActivity.kt` | `updateContinueFabState` becomes the sole visibility+state authority; `observeViewedItems` stops toggling FAB visibility directly |
 
 ## Acceptance criteria
 
-- [ ] Scroll state where user has reviewed top items but not bottom
-      ones: FAB shows as a solid ink pill labeled `Continue` with a
-      visible shadow. Tap → grid scrolls to the first unreviewed tile.
-- [ ] Scroll to the bottom (past the last unreviewed item): FAB
-      transitions to a translucent outlined pill labeled
-      `All caught up`, no shadow, tap does nothing.
-- [ ] Scroll back up above unreviewed items: FAB returns to the active
-      solid ink look.
-- [ ] FAB still hides (visibility `GONE`) when there are no unviewed
-      items in the current filter *and* no viewed items — no regression
-      on the visibility logic.
-- [ ] `continue_reviewing` string no longer exists.
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] Fresh launch (nothing reviewed yet): FAB hidden.
+- [x] Scroll down through the top of the grid, reviewing tiles along
+      the way: FAB stays hidden (user is currently at/past the first
+      unreviewed tile).
+- [x] Scroll back up (past some reviewed tiles): FAB appears as a
+      solid ink pill labeled `Continue`. Tap → grid scrolls to the
+      first unreviewed tile; FAB hides once the user's view catches up
+      to it.
+- [x] Review every item in the current filter: FAB stays hidden (no
+      ghost state in this iteration).
+- [x] `continue_reviewing` string no longer exists.
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.

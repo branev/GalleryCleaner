@@ -20,6 +20,7 @@
 | 20260418-004 | Grid tile | 1/1 | 14dp corners, glass-dark chips, reviewed 85%/75% fade, accent ring selection |
 | 20260418-005 | Date section headers | 1/1 | GridItem sealed class, DateBucket utility, mixed-type ListAdapter, SpanSizeLookup |
 | 20260418-006 | Selection action bar | 1/1 | Outlined pill, stacked count+size readout, mono size, hairline divider |
+| 20260418-007 | Continue FAB states | 1/1 | Shorter "Continue" label, hide-when-useless visibility; ghost state deferred |
 
 ## Pending (`todo/`)
 
@@ -27,7 +28,6 @@
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-007 | Continue FAB states | Medium | 002 ✓ | Active/ghost visual states |
 | 20260418-008 | Filter sheet | High | 002 ✓ | Sections, mono counts, change-count apply |
 | 20260418-009 | Empty state | Medium | 002 ✓ | Outline circle, two-action layout |
 | 20260418-010 | Delete success | Medium | 002 ✓ | Hero readout, confetti, 7s progress ring |
