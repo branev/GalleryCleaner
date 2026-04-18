@@ -671,15 +671,17 @@ class MainActivity : AppCompatActivity() {
                 binding.selectionActionBar.visibility = View.VISIBLE
                 dragSelectListener.inSelectionMode = true
 
-                // Show selection count + size in the bottom bar
+                // Show selection count on top, total size below in mono
                 val selectedCount = state.selectedItems.size
-                val sizeText = Formatter.formatFileSize(this, viewModel.getSelectedItemsTotalSize())
-                val countText = if (state.hiddenSelectedCount > 0) {
+                val totalSize = viewModel.getSelectedItemsTotalSize()
+                binding.selectionCount.text = if (state.hiddenSelectedCount > 0) {
                     getString(R.string.selected_with_hidden, selectedCount, state.hiddenSelectedCount)
                 } else {
                     getString(R.string.selected_count, selectedCount)
                 }
-                binding.selectionSize.text = getString(R.string.selection_count_size, countText, sizeText)
+                binding.selectionSizeSmall.visibility =
+                    if (totalSize > 0L) View.VISIBLE else View.GONE
+                binding.selectionSizeSmall.text = Formatter.formatFileSize(this, totalSize)
 
                 adapter.submitList(DateBucket.bucketize(state.items))
                 adapter.updateSelectionState(state.selectedItems, true)
