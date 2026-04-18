@@ -1,5 +1,7 @@
 package com.example.gallerycleaner
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -124,47 +126,33 @@ class ImageAdapter(
 
         fun updateViewedVisuals(item: MediaItem) {
             val isViewed = item.uri in viewedItems
-            // Reduce opacity for viewed items (only when not in selection mode)
-            binding.root.alpha = if (isViewed && !isSelectionMode) 0.6f else 1.0f
-
-            // Update badge colors based on viewed state
+            // Gentle fade on the photo only — badges stay at full contrast.
+            // During selection mode, selection dim overrides the reviewed fade.
             if (isViewed && !isSelectionMode) {
-                binding.sourceBadge.setBackgroundResource(R.drawable.badge_bg_viewed)
-                binding.sourceBadge.setTextColor(
-                    binding.root.context.getColor(R.color.badge_viewed_text)
-                )
+                binding.imageView.alpha = 0.85f
+                val matrix = ColorMatrix().apply { setSaturation(0.75f) }
+                binding.imageView.colorFilter = ColorMatrixColorFilter(matrix)
             } else {
-                binding.sourceBadge.setBackgroundResource(R.drawable.badge_bg_unviewed)
-                binding.sourceBadge.setTextColor(
-                    binding.root.context.getColor(R.color.badge_unviewed_text)
-                )
+                binding.imageView.alpha = 1.0f
+                binding.imageView.colorFilter = null
             }
         }
 
         fun updateSelectionVisuals(item: MediaItem) {
             val isSelected = item.uri in selectedItems
 
-            // Show/hide checkmark based on selection
-            binding.checkMark.visibility = if (isSelectionMode && isSelected) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            // Ring + warm tint + check circle on the selected tile
+            binding.selectionRing.visibility = if (isSelected) View.VISIBLE else View.GONE
+            binding.selectionTint.visibility = if (isSelected) View.VISIBLE else View.GONE
+            binding.checkMark.visibility = if (isSelected) View.VISIBLE else View.GONE
 
-            // Show/hide selection overlay
-            binding.selectionOverlay.visibility = if (isSelected) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            // 55% white dim on NON-selected tiles while in selection mode
+            binding.dimOverlay.visibility =
+                if (isSelectionMode && !isSelected) View.VISIBLE else View.GONE
 
-            // Hide source badge in selection mode for cleaner look
-            binding.sourceBadge.visibility = if (isSelectionMode) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
-
+            // Hide source badge on dimmed tiles only — on selected ones the photo is still visible
+            binding.sourceBadge.visibility =
+                if (isSelectionMode && !isSelected) View.GONE else View.VISIBLE
         }
     }
 

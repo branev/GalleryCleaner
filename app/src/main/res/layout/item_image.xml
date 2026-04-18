@@ -19,38 +19,71 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- Selection overlay (dim effect when selected) -->
+    <!-- Dim overlay: shown on NON-selected tiles while in selection mode -->
     <View
-        android:id="@+id/selectionOverlay"
+        android:id="@+id/dimOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/selection_overlay"
+        android:background="@drawable/tile_dim_overlay"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/imageView"
         app:layout_constraintBottom_toBottomOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@id/imageView"
         app:layout_constraintEnd_toEndOf="@id/imageView" />
 
-    <!-- Checkmark icon (top-right when selected) -->
-    <ImageView
-        android:id="@+id/checkMark"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_margin="4dp"
-        android:src="@drawable/ic_check_circle"
+    <!-- Accent tint: 14% warm glow on selected tile -->
+    <View
+        android:id="@+id/selectionTint"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/tile_selection_tint"
         android:visibility="gone"
-        android:contentDescription="@string/selected"
-        app:tint="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="@id/imageView"
         app:layout_constraintEnd_toEndOf="@id/imageView" />
 
-    <!-- Video duration badge (top-left) -->
+    <!-- 3dp accent ring around selected tile -->
+    <View
+        android:id="@+id/selectionRing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/tile_selection_ring"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="@id/imageView"
+        app:layout_constraintEnd_toEndOf="@id/imageView" />
+
+    <!-- 22dp accent check circle (top-right when selected) -->
+    <FrameLayout
+        android:id="@+id/checkMark"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/tile_selected_check_bg"
+        android:elevation="2dp"
+        android:visibility="gone"
+        android:contentDescription="@string/selected"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintEnd_toEndOf="@id/imageView">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check_large"
+            android:importantForAccessibility="no"
+            app:tint="@android:color/white" />
+    </FrameLayout>
+
+    <!-- Video duration badge (top-left) — glass-dark chip -->
     <LinearLayout
         android:id="@+id/videoDurationBadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@drawable/video_badge_bg"
+        android:layout_margin="6dp"
+        android:background="@drawable/glass_dark_chip"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="6dp"
@@ -63,7 +96,8 @@
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_play_small" />
+            android:src="@drawable/ic_play_small"
+            app:tint="@android:color/white" />
 
         <TextView
             android:id="@+id/videoDuration"
@@ -76,21 +110,22 @@
 
     </LinearLayout>
 
-    <!-- Source badge (bottom-left) -->
+    <!-- Source badge (bottom-left) — glass-dark chip -->
     <TextView
         android:id="@+id/sourceBadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@drawable/badge_bg_unviewed"
+        android:layout_margin="6dp"
+        android:background="@drawable/glass_dark_chip"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        android:textColor="@color/badge_unviewed_text"
-        android:textSize="11sp"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@id/imageView" />
 

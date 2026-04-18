@@ -49,7 +49,7 @@
 
     <!-- Grid item rounded corners -->
     <style name="RoundedImageCorners" parent="">
-        <item name="cornerSize">4dp</item>
+        <item name="cornerSize">14dp</item>
     </style>
 
     <!-- Pill-shaped filter chips -->
