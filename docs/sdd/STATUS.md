@@ -27,6 +27,7 @@
 | SDD | Feature | Priority | Dependencies | Notes |
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
+| 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
 | 20260418-008 | Filter sheet & empty state | High | 002 ✓ | Combined: pending-state sheet + outlined empty state + filter-combo copy. Merges former SDD-009 |
 | 20260418-010 | Delete success | Medium | 002 ✓ | Hero readout, confetti, 7s progress ring |
