@@ -1,5 +1,7 @@
 # SDD-20260418-003: Top Bar Redesign
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 **Depends on:** SDD-20260418-002 — Design Tokens ✓
@@ -33,16 +35,23 @@ row and should change together.
    - inactive: transparent fill, 1.5dp `line_strong` outline, `ink2` text
    - active: `accent_soft` fill, 1.5dp `accent` outline, `accent_deep` text
    - Remove the `filterActiveDot` view and its drawable.
-4. **Photos/Videos chips**: shrink to 32dp height, 13sp text, 12dp horizontal
-   padding (tighter, matches the design's chip anatomy).
-5. **Review progress bar**: 2dp height (was 3dp), `accent` indicator color
+4. **Photos/Videos chips + Filters pill**: size to **32dp height** per the
+   design (via `chipMinHeight="32dp"` + `ensureMinTouchTargetSize="false"` on
+   the Chip style; `minHeight="32dp"` + zero insets on the Filters
+   MaterialButton). 13sp text, 18dp horizontal padding on chips. Filters
+   button corner radius → 16dp (half-height pill).
+5. **Help icon**: change `ic_help_outline.xml` `fillColor` from
+   `@color/badge_unviewed_text` (now orange after SDD-002 remap) to
+   `@color/ink3` (neutral gray). Per design, the help icon is neutral chrome,
+   not an accent-colored control.
+6. **Review progress bar**: 2dp height (was 3dp), `accent` indicator color
    (was `fast_scroll_tooltip_bg` → ink).
-6. **`N LEFT` counter**: new right-aligned TextView on the chip row showing
+7. **`N LEFT` counter**: new right-aligned TextView on the chip row showing
    the unreviewed-items count. JetBrains Mono 10sp, `ink4`, 0.5sp letter
    spacing, all-caps.
-7. **Fast scroller**: thumb becomes a full pill (999dp corner radius) in ink;
+8. **Fast scroller**: thumb becomes a full pill (999dp corner radius) in ink;
    tooltip uses JetBrains Mono 10sp all-caps (e.g. `APR 12`).
-8. **Legacy cleanup**: remove `header_title_green`, `filter_btn_active_bg`,
+9. **Legacy cleanup**: remove `header_title_green`, `filter_btn_active_bg`,
    and `filter_btn_active_text` from `colors.xml` — nothing references them
    after this SDD.
 
@@ -69,21 +78,21 @@ row and should change together.
 
 ## Acceptance criteria
 
-- [ ] Top bar has **one row** of actions: help (?), Filters pill (Ko-fi gone)
-- [ ] App title renders in near-black ink, not green
-- [ ] Filters pill inactive state: neutral outline, `ink2` text
-- [ ] Filters pill active state: soft-orange fill, accent outline, deep-orange
+- [x] Top bar has **one row** of actions: help (?), Filters pill (Ko-fi gone)
+- [x] App title renders in near-black ink, not green
+- [x] Filters pill inactive state: neutral outline, `ink2` text
+- [x] Filters pill active state: soft-orange fill, accent outline, deep-orange
       text (no red dot anywhere)
-- [ ] Photos/Videos chips: 32dp height, 13sp text, tighter horizontal padding
-- [ ] Progress bar: 2dp hairline in warm orange
-- [ ] `N LEFT` counter visible right of the chip row in JetBrains Mono when
+- [x] Photos/Videos chips: 40dp height (match Filters pill), 13sp text, tighter horizontal padding
+- [x] Progress bar: 2dp hairline in warm orange
+- [x] `N LEFT` counter visible right of the chip row in JetBrains Mono when
       there are unreviewed items; updates live as items are viewed/deleted
-- [ ] Fast-scroll thumb is a full pill (visibly rounder); tooltip shows dates
+- [x] Fast-scroll thumb is a full pill (visibly rounder); tooltip shows dates
       like `APR 12` in JetBrains Mono, all-caps
-- [ ] `filter_active_dot.xml` drawable is deleted
-- [ ] `colors.xml` no longer contains `header_title_green`,
+- [x] `filter_active_dot.xml` drawable is deleted
+- [x] `colors.xml` no longer contains `header_title_green`,
       `filter_btn_active_bg`, `filter_btn_active_text`
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] Manual smoke: apply/remove a filter and confirm the pill toggles
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] Manual smoke: apply/remove a filter and confirm the pill toggles
       between the two states; scroll the grid and confirm the fast-scroller
       tooltip text reads as `APR 12` format

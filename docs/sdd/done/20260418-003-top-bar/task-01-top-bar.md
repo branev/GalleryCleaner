@@ -329,13 +329,13 @@ Install. Verify on the main grid screen:
 
 ## Definition of Done
 
-- [ ] All changes in the Files Changed table of `requirement.md` landed
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] No references left in `app/` to `header_title_green`,
+- [x] All changes in the Files Changed table of `requirement.md` landed
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] No references left in `app/` to `header_title_green`,
       `filter_btn_active_bg`, or `filter_btn_active_text`
-- [ ] `drawable/filter_active_dot.xml` file removed from disk
-- [ ] Visual smoke test passes (Step 11)
-- [ ] PR opened with title `SDD-20260418-003 — Top Bar Redesign`
+- [x] `drawable/filter_active_dot.xml` file removed from disk
+- [x] Visual smoke test passes (Step 11)
+- [x] PR opened with title `SDD-20260418-003 — Top Bar Redesign`
 
 ## Known gotchas
 

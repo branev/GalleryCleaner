@@ -16,6 +16,7 @@
 | 20260322-001 | Code review fixes & test coverage | 1/1 | 7 review fixes, 16 new tests |
 | 20260322-002 | Hint UX rework | 1/1 | Bottom card with Got it, 3/session, slide animation |
 | 20260418-002 | Design tokens | 1/1 | Direction B palette, JetBrains Mono, Material 3 theme bindings |
+| 20260418-003 | Top bar | 1/1 | Ink title, Ko-fi out, filter pill active state, N LEFT counter, 32dp pills |
 
 ## Pending (`todo/`)
 
@@ -23,8 +24,7 @@
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-003 | Top bar | High | 002 ✓ | Title ink, Ko-fi out, filter pill active, N LEFT counter |
-| 20260418-004 | Grid tile | High | 002 ✓ | Subtle badges, 14dp radius, reviewed 85%/75% |
+| 20260418-004 | Grid tile | High | 002 ✓, 003 ✓ | Subtle badges, 14dp radius, reviewed 85%/75% |
 | 20260418-005 | Date section headers | Medium | 002, 004 | **New behavior** — grouped grid |
 | 20260418-006 | Selection bar | High | 002, 004 | Floating pill, 55% dim, size readout |
 | 20260418-007 | Continue FAB states | Medium | 002 ✓ | Active/ghost visual states |
