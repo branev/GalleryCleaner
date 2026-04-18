@@ -18,6 +18,7 @@
 | 20260418-002 | Design tokens | 1/1 | Direction B palette, JetBrains Mono, Material 3 theme bindings |
 | 20260418-003 | Top bar | 1/1 | Ink title, Ko-fi out, filter pill active state, N LEFT counter, 32dp pills |
 | 20260418-004 | Grid tile | 1/1 | 14dp corners, glass-dark chips, reviewed 85%/75% fade, accent ring selection |
+| 20260418-005 | Date section headers | 1/1 | GridItem sealed class, DateBucket utility, mixed-type ListAdapter, SpanSizeLookup |
 
 ## Pending (`todo/`)
 
@@ -25,7 +26,6 @@
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-005 | Date section headers | Medium | 002 ✓, 004 ✓ | **New behavior** — grouped grid |
 | 20260418-006 | Selection bar | High | 002 ✓, 004 ✓ | Floating pill, 55% dim, size readout |
 | 20260418-007 | Continue FAB states | Medium | 002 ✓ | Active/ghost visual states |
 | 20260418-008 | Filter sheet | High | 002 ✓ | Sections, mono counts, change-count apply |

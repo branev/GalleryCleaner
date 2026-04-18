@@ -730,11 +730,11 @@ Install. On the grid:
 
 ## Definition of Done
 
-- [ ] All changes from the Files Changed table in `requirement.md` landed
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] `DateBucketTest` has at least 5 passing tests (see Step 3)
-- [ ] Visual smoke test (Step 11) passes end-to-end
-- [ ] PR opened with title
+- [x] All changes from the Files Changed table in `requirement.md` landed
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] `DateBucketTest` has at least 5 passing tests (see Step 3)
+- [x] Visual smoke test (Step 11) passes end-to-end
+- [x] PR opened with title
       `SDD-20260418-005 — Date Section Headers`
 
 ## Known gotchas

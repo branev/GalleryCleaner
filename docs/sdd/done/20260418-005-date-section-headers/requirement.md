@@ -1,5 +1,7 @@
 # SDD-20260418-005: Date Section Headers
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 **Depends on:** SDD-20260418-002 ✓, SDD-20260418-004 ✓
@@ -93,22 +95,22 @@ newest-first, Today appears first; oldest-first reverses the list.
 
 ## Acceptance criteria
 
-- [ ] Grid shows section headers above date groups (Today, Yesterday, This
+- [x] Grid shows section headers above date groups (Today, Yesterday, This
       week, Last week, April 2026, …)
-- [ ] Headers span the full grid width regardless of column count
-- [ ] Header text: bucket name on the left, `N items` count on the right
-- [ ] Header styling matches spec: 13sp 600 ink title, 11sp 500 ink4 count,
+- [x] Headers span the full grid width regardless of column count
+- [x] Header text: bucket name on the left, `N items` count on the right
+- [x] Header styling matches spec: 13sp 600 ink title, 11sp 500 ink4 count,
       20dp top / 10dp bottom padding
-- [ ] Long-press on any tile still enters selection mode correctly
-- [ ] Drag-select across tiles works; dragging across a header skips it
+- [x] Long-press on any tile still enters selection mode correctly
+- [x] Drag-select across tiles works; dragging across a header skips it
       (no crash, no weird "selected" header)
-- [ ] Fast-scrolling tooltip shows the current tile's date (not "Today"
+- [x] Fast-scrolling tooltip shows the current tile's date (not "Today"
       for a header)
-- [ ] "Continue" FAB scrolls to the first unreviewed tile (not to a header)
-- [ ] Pinch-zoom columns: 2, 3, 4, 5 all work, headers always span
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] `DateBucketTest` covers: today/yesterday edge cases, week/month
+- [x] "Continue" FAB scrolls to the first unreviewed tile (not to a header)
+- [x] Pinch-zoom columns: 2, 3, 4, 5 all work, headers always span
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] `DateBucketTest` covers: today/yesterday edge cases, week/month
       boundary, empty list, sort-order respect
-- [ ] Manual smoke: scroll a large library, add/remove filters, select
+- [x] Manual smoke: scroll a large library, add/remove filters, select
       items across multiple buckets, delete items → headers update counts
       live
