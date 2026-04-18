@@ -253,12 +253,12 @@ Install. Then:
 
 ## Definition of Done
 
-- [ ] All Files Changed from `requirement.md` landed
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] No references to `selection_count_size` or old `selectionSize`
+- [x] All Files Changed from `requirement.md` landed
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] No references to `selection_count_size` or old `selectionSize`
       view id anywhere in `app/`
-- [ ] Visual smoke test (Step 6) passes
-- [ ] PR opened with title
+- [x] Visual smoke test (Step 6) passes
+- [x] PR opened with title
       `SDD-20260418-006 — Selection Action Bar`
 
 ## Known gotchas

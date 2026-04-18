@@ -1,5 +1,7 @@
 # SDD-20260418-006: Selection Action Bar
 
+**Status:** COMPLETE
+
 **Parent:** SDD-20260418-001 — Visual Redesign (umbrella)
 
 **Depends on:** SDD-20260418-002 ✓, SDD-20260418-004 ✓
@@ -61,17 +63,17 @@ its own commit.
 
 ## Acceptance criteria
 
-- [ ] Selection bar is a pill (visibly rounded ends), not a wide card
-- [ ] 1dp `line`-color outline visible on the pill
-- [ ] Close (×) on the left, then Select all, then a 1dp gray divider,
+- [x] Selection bar is a pill (visibly rounded ends), not a wide card
+- [x] 1dp `line`-color outline visible on the pill
+- [x] Close (×) on the left, then Select all, then a 1dp gray divider,
       then the stacked count + size, then the Delete button on the right
-- [ ] Count text: `N selected` in bold ink, 13sp
-- [ ] Size text: `X kB`/`X MB`/`X GB` below the count, 11sp mono, muted
+- [x] Count text: `N selected` in bold ink, 13sp
+- [x] Size text: `X kB`/`X MB`/`X GB` below the count, 11sp mono, muted
       `ink3` color
-- [ ] Size text hides when `N selected` is 0 or selection total size is 0
-- [ ] Selecting more items updates both texts live, with no layout jump
-- [ ] `selection_count_size` no longer exists in `strings.xml`
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
-- [ ] Smoke test: long-press a tile → bar appears. Tap several more →
+- [x] Size text hides when `N selected` is 0 or selection total size is 0
+- [x] Selecting more items updates both texts live, with no layout jump
+- [x] `selection_count_size` no longer exists in `strings.xml`
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds
+- [x] Smoke test: long-press a tile → bar appears. Tap several more →
       count + size update. Tap Select all → whole library picked. × →
       bar disappears, grid returns to normal
