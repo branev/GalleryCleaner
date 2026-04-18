@@ -6,7 +6,6 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -198,7 +197,6 @@ class MainActivity : AppCompatActivity() {
         setupSelectionActionBar()
         setupContinueFab()
         setupHelpButton()
-        setupKofiLink()
         setupBackHandler()
         observeUiState()
         observeViewedItems()
@@ -393,12 +391,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupKofiLink() {
-        binding.btnKofi.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://ko-fi.com/branev")))
-        }
-    }
-
     private fun scrollToFirstUnviewed() {
         val items = viewModel.uiState.value.displayedItems
 
@@ -437,9 +429,16 @@ class MainActivity : AppCompatActivity() {
                     // Determine if Continue FAB should be visible
                     val items = uiState.displayedItems
 
+                    // Update N LEFT counter (top bar, right of chips)
+                    val unreviewedCount = items.count { it.uri !in viewedItems }
+                    binding.unreviewedCounter.visibility =
+                        if (unreviewedCount > 0) View.VISIBLE else View.GONE
+                    binding.unreviewedCounter.text =
+                        getString(R.string.n_left_counter, unreviewedCount)
+
                     // Show FAB if there are viewed items AND there are unviewed items to scroll to
                     val hasViewedItems = viewedItems.isNotEmpty()
-                    val hasUnviewedItems = items.any { it.uri !in viewedItems }
+                    val hasUnviewedItems = unreviewedCount > 0
                     val showFab = hasViewedItems && hasUnviewedItems &&
                             (uiState is GalleryUiState.Normal || uiState is GalleryUiState.Selection)
 
@@ -493,11 +492,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateFiltersButtonAppearance(isActive: Boolean) {
-        val bgColor = if (isActive) R.color.filter_btn_active_bg else R.color.badge_unviewed_bg
-        val textColor = if (isActive) R.color.filter_btn_active_text else R.color.badge_unviewed_text
-        binding.btnFilters.backgroundTintList = ColorStateList.valueOf(getColor(bgColor))
-        binding.btnFilters.setTextColor(getColor(textColor))
-        binding.filterActiveDot.visibility = if (isActive) View.VISIBLE else View.GONE
+        binding.btnFilters.isActivated = isActive
     }
 
     private fun observeUiState() {

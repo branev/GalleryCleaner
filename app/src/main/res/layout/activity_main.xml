@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -36,7 +37,7 @@
                 android:text="@string/app_name"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/header_title_green" />
+                android:textColor="@color/ink" />
 
             <ImageButton
                 android:id="@+id/btnHelp"
@@ -47,38 +48,26 @@
                 android:src="@drawable/ic_help_outline"
                 android:contentDescription="@string/tips_and_shortcuts" />
 
-            <FrameLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilters"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFilters"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/filters"
-                    android:textSize="14sp"
-                    android:textColor="@color/badge_unviewed_text"
-                    android:gravity="center"
-                    app:backgroundTint="@color/badge_unviewed_bg"
-                    app:cornerRadius="20dp"
-                    app:icon="@drawable/ic_filter_list"
-                    app:iconSize="18dp"
-                    app:iconTint="@color/badge_unviewed_text"
-                    app:iconGravity="start" />
-
-                <View
-                    android:id="@+id/filterActiveDot"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:elevation="1dp"
-                    android:background="@drawable/filter_active_dot"
-                    android:visibility="gone" />
-
-            </FrameLayout>
+                android:layout_height="32dp"
+                android:minHeight="32dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/filters"
+                android:textSize="13sp"
+                android:textColor="@color/filter_pill_text_tint"
+                android:gravity="center"
+                app:backgroundTint="@color/filter_pill_bg_tint"
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/filter_pill_stroke_tint"
+                app:strokeWidth="1.5dp"
+                app:icon="@drawable/ic_filter_list"
+                app:iconSize="18dp"
+                app:iconTint="@color/filter_pill_text_tint"
+                app:iconGravity="start" />
 
         </LinearLayout>
 
@@ -99,20 +88,22 @@
                     android:id="@+id/chipPhotos"
                     style="@style/PillFilterChip"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="32dp"
                     android:text="@string/photos"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:textSize="13sp"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
                     android:checked="true" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipVideos"
                     style="@style/PillFilterChip"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="32dp"
                     android:text="@string/videos"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:textSize="13sp"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
                     android:checked="true" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -122,20 +113,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnKofi"
-                style="@style/Widget.Material3.Button.TextButton"
+            <TextView
+                android:id="@+id/unreviewedCounter"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/support_developer"
-                android:textSize="13sp"
-                android:textColor="#6F4E37"
-                app:icon="@drawable/kofi_logo"
-                app:iconSize="20dp"
-                app:iconGravity="start"
-                app:iconTint="@null"
-                app:backgroundTint="#FFDD00"
-                app:cornerRadius="999dp" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/jetbrains_mono"
+                android:textSize="10sp"
+                android:textColor="@color/ink4"
+                android:letterSpacing="0.05"
+                android:textAllCaps="true"
+                android:textFontWeight="500"
+                android:paddingEnd="4dp"
+                tools:text="188 LEFT" />
 
         </LinearLayout>
 
@@ -173,9 +162,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:indicatorColor="@color/fast_scroll_tooltip_bg"
-        app:trackColor="#E0E0E0"
-        app:trackThickness="3dp"
+        app:indicatorColor="@color/accent"
+        app:trackColor="@color/line"
+        app:trackThickness="2dp"
         app:trackCornerRadius="2dp"
         app:layout_constraintTop_toBottomOf="@id/filterLoadingIndicator"
         app:layout_constraintStart_toStartOf="parent"
@@ -228,8 +217,11 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="6dp"
         android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:textSize="10sp"
+        android:fontFamily="@font/jetbrains_mono"
+        android:textFontWeight="600"
+        android:letterSpacing="0.1"
+        android:textAllCaps="true"
         android:alpha="0"
         android:elevation="3dp"
         app:layout_constraintEnd_toStartOf="@id/fastScrollThumb"

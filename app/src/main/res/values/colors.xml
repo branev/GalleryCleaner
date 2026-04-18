@@ -71,7 +71,6 @@
          ============================================================ -->
     <color name="viewer_toolbar_bg">#99000000</color>
 
-    <color name="header_title_green">#1D1710</color>
     <color name="filter_btn_bg">#FBE0D5</color>
     <color name="filter_btn_text">#A83320</color>
     <color name="chip_selected_bg">#1D1710</color>
@@ -91,9 +90,6 @@
     <color name="empty_state_subtitle_color">#77674F</color>
     <color name="empty_state_reset_btn_bg">#1D1710</color>
     <color name="empty_state_reset_btn_text">#FFFFFF</color>
-
-    <color name="filter_btn_active_bg">#E85A3D</color>
-    <color name="filter_btn_active_text">#FFFFFF</color>
 
     <color name="fast_scroll_track">#00000000</color>
     <color name="fast_scroll_thumb">#CC1D1710</color>
