@@ -367,6 +367,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnResetFilters.setOnClickListener {
             viewModel.resetFilters()
         }
+        binding.btnEditFilters.setOnClickListener {
+            showFilterBottomSheet()
+        }
     }
 
     private fun showFilterBottomSheet() {
@@ -580,6 +583,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptyTitle.text = state.message
                 binding.emptySubtitle.visibility = View.GONE
                 binding.btnResetFilters.visibility = View.GONE
+                binding.btnEditFilters.visibility = View.GONE
             }
 
             is GalleryUiState.NoFiltersSelected -> {
@@ -599,6 +603,7 @@ class MainActivity : AppCompatActivity() {
                 binding.emptySubtitle.text = getString(R.string.select_categories_hint)
                 binding.emptySubtitle.visibility = View.VISIBLE
                 binding.btnResetFilters.visibility = View.VISIBLE
+                binding.btnEditFilters.visibility = View.GONE
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
@@ -616,12 +621,21 @@ class MainActivity : AppCompatActivity() {
                 binding.selectionActionBar.visibility = View.GONE
                 backCallback.isEnabled = false
 
-                // Show "no matching items" state
+                // Show "no matching items" state with the active filter combo
+                val combo = FilterComboFormatter.format(
+                    context = this,
+                    mediaTypes = state.selectedMediaTypes,
+                    sources = state.selectedSources,
+                    allAvailableSources = state.allSourceCounts.keys,
+                    dateRange = state.selectedDateRange,
+                    sortOption = state.selectedSortOption,
+                )
                 binding.emptyIcon.setImageResource(R.drawable.ic_search_off)
                 binding.emptyTitle.text = getString(R.string.no_matching_items)
-                binding.emptySubtitle.text = getString(R.string.adjust_filters_hint)
+                binding.emptySubtitle.text = getString(R.string.no_matches_subtitle, combo)
                 binding.emptySubtitle.visibility = View.VISIBLE
                 binding.btnResetFilters.visibility = View.VISIBLE
+                binding.btnEditFilters.visibility = View.VISIBLE
 
                 adapter.submitList(emptyList())
                 updateMediaTypeChips(state.selectedMediaTypes)
@@ -964,6 +978,7 @@ class MainActivity : AppCompatActivity() {
         binding.emptyTitle.text = message
         binding.emptySubtitle.visibility = View.GONE
         binding.btnResetFilters.visibility = View.GONE
+        binding.btnEditFilters.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 

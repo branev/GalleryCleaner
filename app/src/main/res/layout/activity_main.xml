@@ -368,58 +368,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Icon in circular background -->
+        <!-- Icon in outlined ring -->
         <FrameLayout
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:background="@drawable/empty_state_icon_bg">
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/empty_state_ring">
 
             <ImageView
                 android:id="@+id/emptyIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_search_off" />
+                android:src="@drawable/ic_search_off"
+                app:tint="@color/ink3" />
 
         </FrameLayout>
 
-        <!-- Title -->
         <TextView
             android:id="@+id/emptyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:textSize="22sp"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/ink" />
 
-        <!-- Subtitle -->
         <TextView
             android:id="@+id/emptySubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxWidth="240dp"
-            android:textSize="17sp"
-            android:textColor="@color/empty_state_subtitle_color"
+            android:maxWidth="260dp"
+            android:textSize="15sp"
+            android:textColor="@color/ink3"
             android:gravity="center"
             android:lineSpacingMultiplier="1.3" />
 
-        <!-- Reset Filters Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnResetFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginTop="24dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/reset_filters"
+            android:textColor="@android:color/white"
+            android:paddingHorizontal="28dp"
+            app:backgroundTint="@color/ink"
+            app:cornerRadius="22dp"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditFilters"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/reset_filters"
-            android:textColor="@color/empty_state_reset_btn_text"
-            android:textStyle="bold"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="12dp"
-            app:backgroundTint="@color/empty_state_reset_btn_bg"
-            app:cornerRadius="999dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/edit_filters"
+            android:textColor="@color/ink2"
             android:visibility="gone" />
 
     </LinearLayout>

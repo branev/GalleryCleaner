@@ -80,12 +80,6 @@
 
     <color name="fab_continue_bg">#1D1710</color>
 
-    <color name="empty_state_icon_bg">#F3ECDF</color>
-    <color name="empty_state_icon_color">#77674F</color>
-    <color name="empty_state_subtitle_color">#77674F</color>
-    <color name="empty_state_reset_btn_bg">#1D1710</color>
-    <color name="empty_state_reset_btn_text">#FFFFFF</color>
-
     <color name="fast_scroll_track">#00000000</color>
     <color name="fast_scroll_thumb">#CC1D1710</color>
     <color name="fast_scroll_tooltip_bg">#1D1710</color>

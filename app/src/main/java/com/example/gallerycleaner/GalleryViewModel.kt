@@ -249,6 +249,14 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
         filterPreferences.saveSelectedMediaTypes(current)
     }
 
+    fun setSelectedMediaTypes(mediaTypes: Set<MediaType>) {
+        filterPreferences.saveSelectedMediaTypes(mediaTypes)
+    }
+
+    fun setSelectedSources(sources: Set<SourceType>) {
+        filterPreferences.saveSelectedSources(sources)
+    }
+
     fun setDateRangePreset(preset: DateRangePreset) {
         filterPreferences.saveDateRange(DateRange(preset))
     }

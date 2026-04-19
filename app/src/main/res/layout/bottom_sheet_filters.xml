@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="24dp">
+    android:background="@color/surface"
+    android:paddingBottom="16dp">
 
-    <!-- Drag Handle -->
+    <!-- Drag handle (36x4dp) -->
     <View
-        android:layout_width="32dp"
+        android:layout_width="36dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/bottom_sheet_handle" />
 
-    <!-- Header -->
+    <!-- Header: title + Reset accent link -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:gravity="center_vertical">
 
         <TextView
@@ -32,95 +34,111 @@
             android:text="@string/filters"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/ink" />
 
-        <com.google.android.material.button.MaterialButton
+        <TextView
             android:id="@+id/btnReset"
-            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reset" />
+            android:padding="6dp"
+            android:text="@string/reset"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/accent"
+            android:background="?attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>
 
-    <!-- Date Range Section -->
-    <TextView
+    <!-- TYPE section -->
+    <include layout="@layout/item_filter_section_label"
+        android:id="@+id/labelType" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/typeChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
-        android:text="@string/date_range"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant" />
+        android:paddingHorizontal="20dp"
+        app:chipSpacingHorizontal="6dp"
+        app:chipSpacingVertical="6dp"
+        app:singleSelection="false" />
 
-    <HorizontalScrollView
+    <!-- SOURCE section -->
+    <include layout="@layout/item_filter_section_label"
+        android:id="@+id/labelSource" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/sourceChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingHorizontal="12dp"
-        android:clipToPadding="false">
+        android:paddingHorizontal="20dp"
+        app:chipSpacingHorizontal="6dp"
+        app:chipSpacingVertical="6dp"
+        app:singleSelection="false" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/dateRangeChipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true" />
-
-    </HorizontalScrollView>
-
-    <!-- Sources Section -->
-    <TextView
+    <!-- DATE section -->
+    <include layout="@layout/item_filter_section_label"
+        android:id="@+id/labelDate" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/dateRangeChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
-        android:text="@string/sources"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant" />
+        android:paddingHorizontal="20dp"
+        app:chipSpacingHorizontal="6dp"
+        app:chipSpacingVertical="6dp"
+        app:singleSelection="true"
+        app:selectionRequired="true" />
 
-    <HorizontalScrollView
+    <!-- SORT BY section -->
+    <include layout="@layout/item_filter_section_label"
+        android:id="@+id/labelSort" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/sortChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingHorizontal="12dp"
-        android:clipToPadding="false">
+        android:paddingHorizontal="20dp"
+        app:chipSpacingHorizontal="6dp"
+        app:chipSpacingVertical="6dp"
+        app:singleSelection="true"
+        app:selectionRequired="true" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/sourceChipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="false" />
-
-    </HorizontalScrollView>
-
-    <!-- Sort Section -->
-    <TextView
+    <!-- Footer: Cancel + Apply -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
-        android:text="@string/sort_by"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:gravity="center_vertical">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingHorizontal="12dp"
-        android:clipToPadding="false">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/cancel"
+            android:textColor="@color/ink"
+            app:cornerRadius="22dp"
+            app:strokeColor="@color/line_strong"
+            app:strokeWidth="1dp" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/sortChipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true" />
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="1dp" />
 
-    </HorizontalScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="2"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/apply"
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/ink"
+            app:cornerRadius="22dp"
+            tools:text="Apply · 3 changes" />
+
+    </LinearLayout>
 
 </LinearLayout>

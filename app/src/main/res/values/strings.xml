@@ -29,6 +29,25 @@
     <string name="sources">Sources</string>
     <string name="sort_by">Sort By</string>
 
+    <!-- Filter sheet sections + footer (SDD-20260418-008) -->
+    <string name="filter_section_type">Type</string>
+    <string name="filter_section_source">Source</string>
+    <string name="filter_section_date">Date</string>
+    <string name="filter_section_sort">Sort by</string>
+    <string name="apply">Apply</string>
+    <string name="apply_with_changes">Apply · %1$d changes</string>
+    <string name="filter_type_all">All</string>
+
+    <!-- Empty state (SDD-20260418-008) -->
+    <string name="edit_filters">Edit filters</string>
+    <string name="no_matches_subtitle">Nothing fits %1$s. Try widening the range.</string>
+    <string name="filter_combo_separator">\u00A0·\u00A0</string>
+    <plurals name="filter_combo_sources_count">
+        <item quantity="one">%1$d source</item>
+        <item quantity="other">%1$d sources</item>
+    </plurals>
+    <string name="filter_combo_any_filter">your current filters</string>
+
     <!-- Navigation -->
     <string name="press_back_again_to_exit">Press back again to exit</string>
 
