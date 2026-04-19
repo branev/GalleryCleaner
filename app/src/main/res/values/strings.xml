@@ -96,7 +96,6 @@
     <!-- Delete success card (SDD-20260418-010) -->
     <string name="freed_subtitle">freed · %1$d items moved to trash</string>
     <string name="freed_subtitle_single">freed · 1 item moved to trash</string>
-    <string name="overlay_ok">OK</string>
     <string name="exit_selection">Exit selection</string>
 
     <!-- Contextual hints (SDD-20260418-011) — title + detail pairs -->
@@ -127,7 +126,9 @@
     <string name="hints_reset_confirmation">Tips will appear again as you use the app</string>
 
     <!-- Help bottom sheet (SDD-20260321-008) -->
-    <string name="tips_and_shortcuts">Tips &amp; Shortcuts</string>
+    <string name="tips_and_shortcuts">Tips &amp; shortcuts</string>
+    <string name="kofi_card_title">Enjoying the app?</string>
+    <string name="kofi_card_subtitle">One coffee keeps it ad-free.</string>
     <string name="tip_long_press">Long-press an image to start selecting</string>
     <string name="tip_drag_select">Swipe horizontally across items to select multiple</string>
     <string name="tip_pinch_zoom">Pinch to zoom the grid in or out (2–5 columns)</string>
