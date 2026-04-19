@@ -25,6 +25,7 @@
 | 20260418-010 | Delete success | 1/1 | 320dp card on 30% scrim, 56dp accent-soft check badge, mono hero size, 7s progress ring around Undo, 60 falling-confetti pieces with fresh random pattern per delete, Snackbar removed on Android-11+ path. |
 | 20260418-011 | Hint card | 1/1 | Two-line title+detail split, 28dp lightbulb-in-circle, × close top-right (after preview, design's × chosen over "Got it"), stroke removed, 16 new hint strings. |
 | 20260418-012 | Help sheet | 1/1 | Header `Reset tips` link, 22dp accent tip icons with line dividers, full-width Ko-fi support card (accent-soft icon + chevron), status-bar flip, OK button + `overlay_ok` string removed. Reset keeps sheet open and confirms via snackbar. |
+| 20260418-013 | Media viewer | 1/1 | Chrome metadata gains source (11sp 55% white), Info·Keep·Delete bottom bar with icon+text stack (Delete on danger), custom accent-tinted video player row replaces MediaController, white-outlined center play button, video poster via loadThumbnail+MMR fallback (videoContainer hidden until play to dodge SurfaceView black-hole), result-launcher routes Keep → markAsViewed and Delete → performTrash. Info stubs snackbar pending SDD-014. |
 
 ## Pending (`todo/`)
 
@@ -33,8 +34,7 @@
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-013 | Media viewer | Medium | 002 ✓ | **New behavior** — Keep action, remove ⋯ |
-| 20260418-014 | Info sheet | Medium | 002, 013 | **New screen** — file metadata bottom sheet |
+| 20260418-014 | Info sheet | Medium | 002, 013 ✓ | **New screen** — file metadata bottom sheet |
 
 ## Other
 
