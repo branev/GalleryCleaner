@@ -186,7 +186,8 @@ class MainActivity : AppCompatActivity() {
         hintManager = HintManager(
             hintPreferences,
             binding.hintCard,
-            binding.hintText,
+            binding.hintTitle,
+            binding.hintDetail,
             binding.btnGotIt
         )
 
@@ -311,7 +312,8 @@ class MainActivity : AppCompatActivity() {
                     // Show fast scroll hint on first scroll
                     hintManager.showHint(
                         HintPreferences.HINT_FAST_SCROLL,
-                        getString(R.string.hint_fast_scroll)
+                        getString(R.string.hint_fast_scroll_title),
+                        getString(R.string.hint_fast_scroll_detail),
                     )
                 }
                 // Update FAB enabled state based on scroll position
@@ -490,7 +492,8 @@ class MainActivity : AppCompatActivity() {
                     if (binding.fabContinue.visibility == View.VISIBLE) {
                         hintManager.showHint(
                             HintPreferences.HINT_CONTINUE_FAB,
-                            getString(R.string.hint_continue_fab)
+                            getString(R.string.hint_continue_fab_title),
+                            getString(R.string.hint_continue_fab_detail),
                         )
                     }
 
@@ -507,7 +510,8 @@ class MainActivity : AppCompatActivity() {
                         binding.reviewProgressBar.setProgressCompat(viewedCount, true)
                         hintManager.showHint(
                             HintPreferences.HINT_PROGRESS_BAR,
-                            getString(R.string.hint_progress_bar)
+                            getString(R.string.hint_progress_bar_title),
+                            getString(R.string.hint_progress_bar_detail),
                         )
                     } else {
                         binding.reviewProgressBar.visibility = View.GONE
@@ -677,11 +681,13 @@ class MainActivity : AppCompatActivity() {
                 // Show filters hint on first load with items
                 hintManager.showHint(
                     HintPreferences.HINT_FILTERS,
-                    getString(R.string.hint_filters)
+                    getString(R.string.hint_filters_title),
+                    getString(R.string.hint_filters_detail),
                 )
                 hintManager.showHint(
                     HintPreferences.HINT_PINCH_ZOOM,
-                    getString(R.string.hint_pinch_zoom)
+                    getString(R.string.hint_pinch_zoom_title),
+                    getString(R.string.hint_pinch_zoom_detail),
                 )
             }
 
@@ -723,7 +729,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             hintManager.showHint(
                 HintPreferences.HINT_LONG_PRESS,
-                getString(R.string.hint_long_press)
+                getString(R.string.hint_long_press_title),
+                getString(R.string.hint_long_press_detail),
             )
             openMediaViewer(item)
         }
@@ -756,7 +763,8 @@ class MainActivity : AppCompatActivity() {
 
             hintManager.showHint(
                 HintPreferences.HINT_DRAG_SELECT,
-                getString(R.string.hint_drag_select)
+                getString(R.string.hint_drag_select_title),
+                getString(R.string.hint_drag_select_detail),
             )
         }
     }
@@ -898,7 +906,8 @@ class MainActivity : AppCompatActivity() {
 
         hintManager.showHint(
             HintPreferences.HINT_TRASH_UNDO,
-            getString(R.string.hint_trash_undo)
+            getString(R.string.hint_trash_undo_title),
+            getString(R.string.hint_trash_undo_detail),
         )
     }
 

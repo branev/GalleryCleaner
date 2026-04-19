@@ -439,7 +439,7 @@
         android:layout_margin="16dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/hint_tooltip_bg"
-        app:cardCornerRadius="16dp"
+        app:cardCornerRadius="14dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -450,25 +450,50 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp"
-            android:paddingVertical="12dp">
+            android:padding="12dp">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+            <FrameLayout
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_marginEnd="12dp"
-                android:src="@drawable/ic_lightbulb"
-                android:importantForAccessibility="no" />
+                android:background="@drawable/hint_icon_bg">
 
-            <TextView
-                android:id="@+id/hintText"
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_lightbulb"
+                    app:tint="@android:color/white"
+                    android:importantForAccessibility="no" />
+            </FrameLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:lineSpacingMultiplier="1.2" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hintTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Tip · swipe to select" />
+
+                <TextView
+                    android:id="@+id/hintDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="13sp"
+                    android:maxLines="2"
+                    tools:text="Long-press one, then drag across others." />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGotIt"
@@ -476,9 +501,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/got_it"
-                android:textColor="@color/fast_scroll_tooltip_bg"
+                android:textColor="@color/accent"
                 android:textStyle="bold"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 

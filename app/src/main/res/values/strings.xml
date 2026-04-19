@@ -99,15 +99,31 @@
     <string name="overlay_ok">OK</string>
     <string name="exit_selection">Exit selection</string>
 
-    <!-- Contextual hints (SDD-20260321-008) -->
-    <string name="hint_long_press">Long-press to select items for deletion</string>
-    <string name="hint_filters">Filter by source, date range, or type</string>
-    <string name="hint_drag_select">Swipe horizontally across items to select more</string>
-    <string name="hint_pinch_zoom">Pinch to zoom the grid in or out</string>
-    <string name="hint_fast_scroll">Drag the right edge to scroll quickly</string>
-    <string name="hint_continue_fab">Tap to jump to where you left off</string>
-    <string name="hint_progress_bar">This bar shows how much you\'ve reviewed</string>
-    <string name="hint_trash_undo">Items go to trash for 30 days — you can undo</string>
+    <!-- Contextual hints (SDD-20260418-011) — title + detail pairs -->
+    <string name="hint_long_press_title">Tip · long-press to select</string>
+    <string name="hint_long_press_detail">Hold any tile to enter selection mode.</string>
+
+    <string name="hint_filters_title">Tip · filter your library</string>
+    <string name="hint_filters_detail">Narrow by source, date, or type.</string>
+
+    <string name="hint_drag_select_title">Tip · swipe to select</string>
+    <string name="hint_drag_select_detail">Long-press one, then drag across others.</string>
+
+    <string name="hint_pinch_zoom_title">Tip · pinch to zoom</string>
+    <string name="hint_pinch_zoom_detail">Spread or pinch to change the column count.</string>
+
+    <string name="hint_fast_scroll_title">Tip · fly through dates</string>
+    <string name="hint_fast_scroll_detail">Drag the right edge to scroll quickly.</string>
+
+    <string name="hint_continue_fab_title">Tip · resume review</string>
+    <string name="hint_continue_fab_detail">Tap Continue to jump back to where you left off.</string>
+
+    <string name="hint_progress_bar_title">Tip · track your progress</string>
+    <string name="hint_progress_bar_detail">The thin bar at the top shows how much you\'ve reviewed.</string>
+
+    <string name="hint_trash_undo_title">Tip · 30-day trash</string>
+    <string name="hint_trash_undo_detail">Deleted items sit in system trash for 30 days — you can restore them.</string>
+
     <string name="hints_reset_confirmation">Tips will appear again as you use the app</string>
 
     <!-- Help bottom sheet (SDD-20260321-008) -->

@@ -6,12 +6,13 @@ import com.google.android.material.card.MaterialCardView
 
 /**
  * Manages contextual hint display using a bottom card with "Got it" button.
- * Shows one hint at a time, queues others by priority, max 2 per session.
+ * Shows one hint at a time, queues others by priority, max 3 per session.
  */
 class HintManager(
     private val prefs: HintPreferences,
     private val hintCard: MaterialCardView,
-    private val hintText: TextView,
+    private val hintTitle: TextView,
+    private val hintDetail: TextView,
     btnGotIt: View
 ) {
     private var isShowing = false
@@ -28,7 +29,8 @@ class HintManager(
 
     private data class PendingHint(
         val hintId: String,
-        val message: String,
+        val title: String,
+        val detail: String,
         val priority: Int
     )
 
@@ -38,7 +40,7 @@ class HintManager(
         }
     }
 
-    fun showHint(hintId: String, message: String) {
+    fun showHint(hintId: String, title: String, detail: String) {
         if (prefs.isHintShown(hintId)) return
         if (hintsShownThisSession >= MAX_HINTS_PER_SESSION) return
 
@@ -49,7 +51,7 @@ class HintManager(
         // If a hint is showing or pending, queue this one
         if (isShowing || isPending) {
             if (queue.none { it.hintId == hintId }) {
-                queue.add(PendingHint(hintId, message, priority))
+                queue.add(PendingHint(hintId, title, detail, priority))
             }
             return
         }
@@ -60,15 +62,16 @@ class HintManager(
             isPending = false
             pendingRunnable = null
             if (!prefs.isHintShown(hintId)) {
-                displayCard(hintId, message)
+                displayCard(hintId, title, detail)
             }
         }
         pendingRunnable = runnable
         hintCard.postDelayed(runnable, SHOW_DELAY_MS)
     }
 
-    private fun displayCard(hintId: String, message: String) {
-        hintText.text = message
+    private fun displayCard(hintId: String, title: String, detail: String) {
+        hintTitle.text = title
+        hintDetail.text = detail
         hintCard.visibility = View.VISIBLE
 
         // Slide up animation
@@ -107,7 +110,7 @@ class HintManager(
             isPending = false
             pendingRunnable = null
             if (!prefs.isHintShown(next.hintId)) {
-                displayCard(next.hintId, next.message)
+                displayCard(next.hintId, next.title, next.detail)
             }
         }
         pendingRunnable = runnable
