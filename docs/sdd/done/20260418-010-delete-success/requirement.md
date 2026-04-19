@@ -121,9 +121,7 @@ value the app provides.
 
 ## Not in scope
 
-- Animated confetti (falling physics, rotation over time). Static
-  placement is enough; if we want motion later, it's one added
-  `ObjectAnimator` per piece.
+- Backdrop blur (needs API 31+; minSdk stays at 26 for now).
 - Replacing the Snackbar on the pre-Android-11 path. That whole path
   goes away when minSdk bumps to 30 (SDD-20260419-001); touching it
   now is churn.
@@ -142,36 +140,38 @@ value the app provides.
 | `res/drawable/ic_undo.xml` | **New or verify** — 24dp undo arrow in ink |
 | `res/values/strings.xml` | Add `freed_subtitle_plural` (plural), `continue_action`; remove `delete_success_title`, `overlay_ok`, `space_saved` after confirming no other callers |
 | `res/values/strings.xml` (plurals.xml if present) | Add plural for freed subtitle |
-| `ConfettiView.kt` | **New** — deterministic 22-piece static spray |
+| `ConfettiView.kt` | **New** — 60-piece falling-confetti animation, fresh random seed per call |
 | `UndoProgressRing.kt` | **New** — custom View rendering a draining arc |
 | `MainActivity.kt` | `showTrashSuccessSnackbar()` → `showTrashSuccessCard()`; wire card + animator; remove Snackbar construction on Android-11+ path; update binding references |
-| `app/src/test/…/ConfettiViewTest.kt` | **New** — covers: same seed → same positions, different seeds → different positions, position count = 22 |
+| `app/src/test/…/ConfettiViewTest.kt` | **New** — covers: same seed → same positions, different seeds → different positions, count = PIECE_COUNT, upper-band start position |
+| `res/values/colors.xml` | Added `card_scrim` (#4D000000, 30% black) — lighter than the existing `overlay_bg` scrim |
 
 ## Acceptance criteria
 
-- [ ] After deleting one or more items on Android 11+, a centered white
+- [x] After deleting one or more items on Android 11+, a centered white
       card appears over the dimmed grid. No bottom Snackbar.
-- [ ] Card shows a 56dp accent-soft circle with an accent check, then
+- [x] Card shows a 56dp accent-soft circle with an accent check, then
       the freed size in mono display type (e.g. `789 kB`), then
       `freed · N items moved to trash`.
-- [ ] Two buttons inside the card: `Undo` (outline) and `Continue`
+- [x] Two buttons inside the card: `Undo` (outline) and `Continue`
       (ink-filled). Undo has a visible progress ring around its leading
       undo icon.
-- [ ] The progress ring drains smoothly over ~7 seconds; when it hits
+- [x] The progress ring drains smoothly over ~7 seconds; when it hits
       zero the card auto-dismisses (commit, no restore).
-- [ ] Tapping `Continue` dismisses the card immediately and commits.
+- [x] Tapping `Continue` dismisses the card immediately and commits.
       The status bar returns to light.
-- [ ] Tapping `Undo` restores the trashed items via
+- [x] Tapping `Undo` restores the trashed items via
       `createTrashRequest(isTrashed=false)` and dismisses the card.
-- [ ] Tapping the dark scrim outside the card does **not** dismiss.
-- [ ] Confetti is visible behind the card — 22 pieces, no overlap with
-      the card's inner content. Deleting the same total size twice in
-      a row produces the same confetti layout.
-- [ ] No reference to `successCheckmark`, `successTitle`, `btnOverlayOk`,
+- [x] Tapping the dark scrim outside the card does **not** dismiss.
+- [x] Confetti is visible behind the card — 60 pieces falling from the
+      top with gravity, sideways drift, and tumble rotation. Fresh
+      random pattern every time the card opens; animation auto-stops
+      when all pieces leave the canvas.
+- [x] No reference to `successCheckmark`, `successTitle`, `btnOverlayOk`,
       `space_saved`, or `delete_success_title` remains in code or
       layouts.
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
-- [ ] `ConfettiViewTest` covers ≥ 3 cases (determinism, count,
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] `ConfettiViewTest` covers ≥ 3 cases (determinism, count,
       seed-variation).
 
 ## Task breakdown
