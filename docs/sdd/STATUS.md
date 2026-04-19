@@ -34,7 +34,6 @@
 
 | SDD | Feature | Priority | Dependencies | Notes |
 |-----|---------|----------|-------------|-------|
-| 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
 
 ## Other
