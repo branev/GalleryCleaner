@@ -363,15 +363,15 @@ Status bar stays light (`windowLightStatusBar=true`) on `bg`.
 
 Individual tasks carry their own checklists. This SDD is complete when:
 
-- [ ] All 12 child SDDs (002–008, 010–014; 009 merged into 008) merged
-- [ ] No remaining references to the dropped color tokens
+- [x] All 12 child SDDs (002–008, 010–014; 009 merged into 008) merged
+- [x] No remaining references to the dropped color tokens
   (`header_title_green`, `chip_selected_*`, `filter_btn_*`,
   `badge_unviewed_*`, `badge_viewed_*`, `fab_continue_bg`, `fast_scroll_*`,
   `hint_tooltip_bg`, `empty_state_*`) in `colors.xml`, layouts, or code
-- [ ] App builds, all tests pass, lint passes
-- [ ] A manual visual pass across all 8 screens confirms the single-accent
+- [x] App builds, all tests pass, lint passes
+- [x] A manual visual pass across all 8 screens confirms the single-accent
   discipline (no teal, green, or yellow chrome anywhere)
-- [ ] Reviewed tiles read as "dealt with, still readable" — not "broken
+- [x] Reviewed tiles read as "dealt with, still readable" — not "broken
   thumbnail" (85% opacity × 75% saturation)
-- [ ] Keep + Delete in media viewer both advance the review progress bar and
+- [x] Keep + Delete in media viewer both advance the review progress bar and
   the Continue-FAB "caught up" state works for both paths

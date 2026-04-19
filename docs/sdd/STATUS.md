@@ -28,6 +28,7 @@
 | 20260418-013 | Media viewer | 1/1 | Chrome metadata gains source (11sp 55% white), Info·Keep·Delete bottom bar with icon+text stack (Delete on danger), custom accent-tinted video player row replaces MediaController, white-outlined center play button, video poster via loadThumbnail+MMR fallback (videoContainer hidden until play to dodge SurfaceView black-hole), result-launcher routes Keep → markAsViewed and Delete → performTrash. Info wired to SDD-014 sheet. |
 | 20260418-014 | Info sheet | 1/1 | New `MediaInfoBottomSheetFragment` with thumbnail + filename header, details list (Size, Duration video-only, Resolution, Captured, Source, Path), async MediaStore query for Resolution + `DATE_TAKEN`, path-row copy-to-clipboard icon. "Locate in folder" dropped — Android's scoped-storage rules reject `ACTION_VIEW` on `DocumentsContract` URIs without a prior SAF grant. |
 | 20260419-002 | Confetti physics rework | 1/1 | Two-origin fountain pop (460–680 dp/s up, 18%/82% of card), linear + angular drag + per-piece turbulence, edge-on ribbon illusion via `canvas.scale(widthScale,1f)`, weighted 3-shape (ribbon 55 / streamer 25 / disc 20) and 4-color (32/32/18/18 — discs skip ink) distribution, 2.5s life with ease-in/out alpha, upward whoosh on top-15 fastest + per-piece mass jitter. Claude Design spec. |
+| 20260418-001 | Visual redesign (umbrella) | 12/12 | Direction B shipped end-to-end across all 9 surfaces. Child SDDs 002–008, 010–014 all merged (009 folded into 008). Orphan legacy color tokens (filter_btn_\*, chip_selected_\*, chip_unselected_\*, fab_continue_bg, viewer_toolbar_bg) removed as closing cleanup. |
 
 ## Pending (`todo/`)
 
@@ -35,7 +36,6 @@
 |-----|---------|----------|-------------|-------|
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
-| 20260418-001 | Visual redesign (umbrella) | High | None | All 13 child SDDs done; ready to close. Vision + cross-ref index |
 
 ## Other
 

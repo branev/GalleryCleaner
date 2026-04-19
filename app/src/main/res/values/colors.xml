@@ -64,22 +64,9 @@
     <color name="md_theme_outlineVariant">#E8DFCE</color>
 
     <!-- ============================================================
-         Legacy color names — still referenced by existing layouts.
-         Each will be removed by a later SDD (003-014) when its
-         surface migrates to the tokens above. Remapped here to
-         Direction B approximations so the current app keeps working.
+         Feature-scoped tokens still in active use. Kept by-name for
+         clarity at the call site; values align with Direction B.
          ============================================================ -->
-    <color name="viewer_toolbar_bg">#99000000</color>
-
-    <color name="filter_btn_bg">#FBE0D5</color>
-    <color name="filter_btn_text">#A83320</color>
-    <color name="chip_selected_bg">#1D1710</color>
-    <color name="chip_selected_text">#FFFFFF</color>
-    <color name="chip_unselected_border">#E8DFCE</color>
-    <color name="chip_unselected_text">#4A3E2E</color>
-
-    <color name="fab_continue_bg">#1D1710</color>
-
     <color name="fast_scroll_track">#00000000</color>
     <color name="fast_scroll_thumb">#CC1D1710</color>
     <color name="fast_scroll_tooltip_bg">#1D1710</color>
