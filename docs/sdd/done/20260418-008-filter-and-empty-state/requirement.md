@@ -112,26 +112,26 @@ dependency chain. One atomic change here is cleaner.
 
 ## Acceptance criteria
 
-- [ ] Tapping the Filters pill opens the sheet with four visible
+- [x] Tapping the Filters pill opens the sheet with four visible
       sections in order: Type, Source, Date, Sort by.
-- [ ] Source chips show `Name  N` with the N in JetBrains Mono.
-- [ ] Tapping chips updates the pill but does NOT refresh the grid
+- [x] Source chips show `Name  N` with the N in JetBrains Mono.
+- [x] Tapping chips updates the pill but does NOT refresh the grid
       behind the sheet (changes are pending).
-- [ ] `Apply · N changes` label updates live as chips toggle. When
+- [x] `Apply · N changes` label updates live as chips toggle. When
       pending equals applied, the button reads `Apply` (no change
       count, still enabled).
-- [ ] Tapping Apply commits changes, dismisses the sheet, grid updates.
-- [ ] Tapping Cancel or swiping the sheet down discards pending
+- [x] Tapping Apply commits changes, dismisses the sheet, grid updates.
+- [x] Tapping Cancel or swiping the sheet down discards pending
       changes, grid is unchanged.
-- [ ] While sheet is open, status-bar time/icons render light
+- [x] While sheet is open, status-bar time/icons render light
       (visible against the dark scrim). Restores to dark on dismiss.
-- [ ] Empty state shows a thin outlined circle, not a filled disc.
-- [ ] Empty-state subtitle mentions the specific filter combo (e.g.
+- [x] Empty state shows a thin outlined circle, not a filled disc.
+- [x] Empty-state subtitle mentions the specific filter combo (e.g.
       `Videos · Viber · Last 7 days`).
-- [ ] `Edit filters` text button appears below the Reset filters pill
+- [x] `Edit filters` text button appears below the Reset filters pill
       on the empty state; tapping it opens the filter sheet.
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
-- [ ] `FilterComboFormatterTest` covers ≥ 5 cases.
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] `FilterComboFormatterTest` covers ≥ 5 cases.
 
 ## Task breakdown
 

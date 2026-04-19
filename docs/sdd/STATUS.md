@@ -21,6 +21,7 @@
 | 20260418-005 | Date section headers | 1/1 | GridItem sealed class, DateBucket utility, mixed-type ListAdapter, SpanSizeLookup |
 | 20260418-006 | Selection action bar | 1/1 | Outlined pill, stacked count+size readout, mono size, hairline divider |
 | 20260418-007 | Continue FAB states | 1/1 | Shorter "Continue" label, hide-when-useless visibility; ghost state deferred |
+| 20260418-008 | Filter sheet & empty state | 2/2 | Pending-state sheet with four sections, mono source counts, light status-bar over scrim, outlined empty-state ring, ink `Reset filters` + text `Edit filters`, filter-combo subtitle. Merges old SDD-009. |
 
 ## Pending (`todo/`)
 
@@ -29,7 +30,6 @@
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-008 | Filter sheet & empty state | High | 002 ✓ | Combined: pending-state sheet + outlined empty state + filter-combo copy. Merges former SDD-009 |
 | 20260418-010 | Delete success | Medium | 002 ✓ | Hero readout, confetti, 7s progress ring |
 | 20260418-011 | Hint card | Low | 002 ✓ | Ink bg, two-line format |
 | 20260418-012 | Help sheet | Low | 002 ✓ | Dividers, accent icons, Ko-fi card |
