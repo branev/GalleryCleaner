@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -890,7 +891,18 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.freed_subtitle, count)
         }
 
-        binding.confettiLayer.start(System.nanoTime())
+        // Wait for the card to lay out so we can place the confetti
+        // fountains at card 18% / 82% of width, just above the top edge.
+        binding.successCard.doOnLayout { card ->
+            val cardLoc = IntArray(2)
+            card.getLocationOnScreen(cardLoc)
+            val confettiLoc = IntArray(2)
+            binding.confettiLayer.getLocationOnScreen(confettiLoc)
+            val left = cardLoc[0] - confettiLoc[0]
+            val top = cardLoc[1] - confettiLoc[1]
+            val rect = android.graphics.Rect(left, top, left + card.width, top + card.height)
+            binding.confettiLayer.start(System.nanoTime(), rect)
+        }
         binding.undoProgressRing.progress = 1f
 
         binding.deleteSuccessOverlay.alpha = 0f
