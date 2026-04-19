@@ -441,6 +441,7 @@
         app:cardBackgroundColor="@color/hint_tooltip_bg"
         app:cardCornerRadius="14dp"
         app:cardElevation="8dp"
+        app:strokeWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -449,7 +450,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:gravity="top"
             android:padding="12dp">
 
             <FrameLayout
@@ -491,19 +492,20 @@
                     android:layout_marginTop="2dp"
                     android:textColor="#B3FFFFFF"
                     android:textSize="13sp"
-                    android:maxLines="2"
+                    android:maxLines="3"
                     tools:text="Long-press one, then drag across others." />
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <ImageView
                 android:id="@+id/btnGotIt"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/got_it"
-                android:textColor="@color/accent"
-                android:textStyle="bold"
-                android:textSize="13sp" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_close"
+                app:tint="#99FFFFFF"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/got_it" />
 
         </LinearLayout>
 

@@ -13,16 +13,21 @@ for deletion") to a **two-line format**: a short bold title prefixed by
 lightbulb icon gets a **28dp 12%-white circular backdrop** so it reads
 as a badge rather than a floating glyph.
 
-The dismissal interaction does **not** change — the explicit "Got it"
-button stays. (Umbrella §Open decisions #1: design showed `×`, we keep
-"Got it" so users actively acknowledge.)
+Dismiss control swaps from a "Got it" text button to a small `×`
+close icon in the top-right, per the design handoff. (Umbrella
+§Open decisions #1 is resolved in the design's favor after visual
+review — the `×` reads cleaner next to the two-line text block and
+the card's reduced width.) The card itself loses its default
+Material outline to match the solid-ink design reference.
 
 ### Visual changes
 
 - Card container: existing `MaterialCardView` kept; corner radius 16dp
-  → **14dp**, padding 16/8/12/12 → **uniform 12dp**. Elevation stays
-  at 8dp. Background stays `@color/hint_tooltip_bg` (ink, already
-  correct).
+  → **14dp**, padding 16/8/12/12 → **uniform 12dp**, `strokeWidth=0dp`
+  to drop the default Material outline. Elevation stays at 8dp.
+  Background stays `@color/hint_tooltip_bg` (ink, already correct).
+  Outer LinearLayout `gravity="top"` so the icon and close align with
+  the title row, not the centerline of the two-line text block.
 - **New circular icon container**: 28dp oval, fill `#1FFFFFFF`
   (12% white). Replaces the bare 20dp lightbulb.
 - **Lightbulb glyph**: 16dp centered inside the circle, white tint.
@@ -31,8 +36,10 @@ button stays. (Umbrella §Open decisions #1: design showed `×`, we keep
   - `hintDetail` — 13sp 400 `#B3FFFFFF` (70% white), up to 2 lines,
     e.g. `Long-press one, then drag across others.`
   - 2dp vertical spacing between the two.
-- `btnGotIt` — keep the existing right-aligned text button. Color
-  stays `accent` (`#E85A3D`, already Direction B) with `bold 13sp`.
+- `btnGotIt` — **replaced** with a 32dp touch-target ImageView
+  containing a 20dp `ic_close` glyph (60% white tint). Top-right
+  aligned. ID is kept for backward-compat in `HintManager.init`.
+  `contentDescription` reuses the existing `got_it` string.
 
 ### Behavioral changes
 
@@ -87,8 +94,8 @@ hierarchy, and lines up visually with other cards in the redesign
 
 ## Not in scope
 
-- Dismissal UX change (× vs "Got it"). Keep "Got it" per umbrella Open
-  Decision #1.
+- Changing hint copy beyond the title/detail split captured in the
+  table above.
 - Auto-dismiss after a timeout. Hints stay until user acknowledges.
 - Per-hint custom icons (all hints share the lightbulb). Could be a
   follow-up if any hint genuinely warrants a different glyph.
@@ -111,10 +118,11 @@ hierarchy, and lines up visually with other cards in the redesign
       - a 28dp oval with a soft white fill and a small lightbulb inside
       - a bold white title that begins with `Tip · `
       - a dimmer second line (detail) below the title
-      - the existing `Got it` button on the right
+      - a small `×` close glyph top-right (60% white tint)
+      - no outline / stroke around the card
 - [x] All 8 hint IDs produce title + detail strings per the table
       above — no hint renders with a missing title or detail.
-- [x] Tapping `Got it` dismisses the card with the existing slide-down
+- [x] Tapping the `×` dismisses the card with the existing slide-down
       animation, then shows the next queued hint (if any) after the
       1s inter-hint delay.
 - [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
