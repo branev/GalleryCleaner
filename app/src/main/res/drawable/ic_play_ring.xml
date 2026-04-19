@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <!-- White outline ring -->
+    <path
+        android:pathData="M36,6 A30,30 0 1 1 35.999,6 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:fillColor="@android:color/transparent" />
+    <!-- White play triangle -->
+    <path
+        android:pathData="M30,24 L30,48 L50,36 Z"
+        android:fillColor="#FFFFFF" />
+</vector>

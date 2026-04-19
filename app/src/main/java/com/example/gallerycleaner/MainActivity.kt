@@ -145,6 +145,25 @@ class MainActivity : AppCompatActivity() {
             isRestoreOperation = false
         }
 
+    private val mediaViewerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            val data = result.data ?: return@registerForActivityResult
+            val action = data.getStringExtra(MediaViewerActivity.EXTRA_ACTION)
+                ?: return@registerForActivityResult
+            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getParcelableExtra(MediaViewerActivity.EXTRA_URI, Uri::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                data.getParcelableExtra(MediaViewerActivity.EXTRA_URI) as? Uri
+            } ?: return@registerForActivityResult
+
+            when (action) {
+                MediaViewerActivity.ACTION_KEPT -> viewModel.markAsViewed(uri)
+                MediaViewerActivity.ACTION_DELETE -> performTrash(setOf(uri))
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -743,8 +762,9 @@ class MainActivity : AppCompatActivity() {
             putExtra(MediaViewerActivity.EXTRA_DISPLAY_NAME, item.displayName)
             putExtra(MediaViewerActivity.EXTRA_DATE_ADDED, item.dateAdded)
             putExtra(MediaViewerActivity.EXTRA_SIZE, item.size)
+            putExtra(MediaViewerActivity.EXTRA_SOURCE, item.source.ordinal)
         }
-        startActivity(intent)
+        mediaViewerLauncher.launch(intent)
     }
 
     private fun handleItemLongClick(item: MediaItem) {
@@ -805,7 +825,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun performTrash(uris: Set<Uri>) {
         pendingTrashUris = uris
-        pendingTrashSize = viewModel.getSelectedItemsTotalSize()
+        pendingTrashSize = viewModel.getTotalSize(uris)
         isRestoreOperation = false
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

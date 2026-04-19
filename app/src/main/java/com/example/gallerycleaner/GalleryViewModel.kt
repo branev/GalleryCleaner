@@ -317,10 +317,10 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
 
     fun getSelectedCount(): Int = _selectedItems.value.size
 
-    fun getSelectedItemsTotalSize(): Long {
-        val selectedUris = _selectedItems.value
-        return _allItems.value.filter { it.uri in selectedUris }.sumOf { it.size }
-    }
+    fun getSelectedItemsTotalSize(): Long = getTotalSize(_selectedItems.value)
+
+    fun getTotalSize(uris: Set<Uri>): Long =
+        _allItems.value.filter { it.uri in uris }.sumOf { it.size }
 
     fun markAsViewed(uri: Uri) {
         if (uri !in _viewedItems.value) {
