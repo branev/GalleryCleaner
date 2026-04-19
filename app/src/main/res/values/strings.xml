@@ -93,9 +93,9 @@
     <!-- Continue reviewing -->
     <string name="fab_continue">Continue</string>
 
-    <!-- Delete success overlay (SDD-20260321-001) -->
-    <string name="delete_success_title">Done! %1$d items deleted</string>
-    <string name="space_saved">%1$s of space saved</string>
+    <!-- Delete success card (SDD-20260418-010) -->
+    <string name="freed_subtitle">freed · %1$d items moved to trash</string>
+    <string name="freed_subtitle_single">freed · 1 item moved to trash</string>
     <string name="overlay_ok">OK</string>
     <string name="exit_selection">Exit selection</string>
 

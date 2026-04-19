@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.format.Formatter
 import android.view.View
-import android.view.animation.OvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
@@ -130,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     // Trash succeeded - remove from view and show undo option
                     viewModel.removeDeletedItems(pendingTrashUris)
-                    showTrashSuccessSnackbar(count, pendingTrashSize, pendingTrashUris)
+                    showTrashSuccessCard(count, pendingTrashSize, pendingTrashUris)
                 }
             } else {
                 // User cancelled
@@ -216,9 +215,8 @@ class MainActivity : AppCompatActivity() {
         fastScrollHelper.detach()
         hintManager.dismiss()
         binding.deleteSuccessOverlay.animate().cancel()
-        binding.successCheckmark.animate().cancel()
-        successSnackbar?.dismiss()
-        successSnackbar = null
+        undoAnimator?.cancel()
+        undoAnimator = null
     }
 
     @android.annotation.SuppressLint("ClickableViewAccessibility")
@@ -846,76 +844,73 @@ class MainActivity : AppCompatActivity() {
         // Pre-Android 11 doesn't have system trash, so no restore is possible
     }
 
-    private var successSnackbar: Snackbar? = null
+    private var undoAnimator: android.animation.ValueAnimator? = null
 
-    private fun showTrashSuccessSnackbar(count: Int, totalSize: Long, trashedUris: Set<Uri>) {
-        // Show success overlay
+    private fun showTrashSuccessCard(count: Int, totalSize: Long, trashedUris: Set<Uri>) {
         binding.deleteSuccessOverlay.visibility = View.VISIBLE
         binding.deleteSuccessOverlay.bringToFront()
-        // Darken status bar to match overlay
         window.statusBarColor = getColor(R.color.overlay_bg)
         WindowCompat.getInsetsController(window, window.decorView)
             .isAppearanceLightStatusBars = false
-        binding.successTitle.text = getString(R.string.delete_success_title, count)
 
-        // Animate: fade in overlay, scale up checkmark
+        binding.successHeroSize.text = Formatter.formatFileSize(this, totalSize)
+        binding.successSubtitle.text = if (count == 1) {
+            getString(R.string.freed_subtitle_single)
+        } else {
+            getString(R.string.freed_subtitle, count)
+        }
+
+        binding.confettiLayer.start(System.nanoTime())
+        binding.undoProgressRing.progress = 1f
+
         binding.deleteSuccessOverlay.alpha = 0f
         binding.deleteSuccessOverlay.animate()
             .alpha(1f)
             .setDuration(300)
             .start()
 
-        binding.successCheckmark.scaleX = 0f
-        binding.successCheckmark.scaleY = 0f
-        binding.successCheckmark.animate()
-            .scaleX(1f).scaleY(1f)
-            .setDuration(400)
-            .setInterpolator(OvershootInterpolator())
-            .start()
-
-        // Show snackbar with 8-second custom duration
-        val message = getString(R.string.space_saved,
-            Formatter.formatFileSize(this, totalSize))
-        val snackbar = Snackbar.make(binding.root, message, 8000)
-            .setAction(getString(R.string.undo)) {
-                dismissSuccessOverlay()
-                performRestore(trashedUris)
-            }
-
-        snackbar.addCallback(object : Snackbar.Callback() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                if (event != DISMISS_EVENT_ACTION) {
+        undoAnimator?.cancel()
+        undoAnimator = android.animation.ValueAnimator.ofFloat(1f, 0f).apply {
+            duration = 7000
+            interpolator = android.view.animation.LinearInterpolator()
+            addUpdateListener { binding.undoProgressRing.progress = it.animatedValue as Float }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
                     dismissSuccessOverlay()
                 }
-            }
-        })
+            })
+            start()
+        }
 
-        successSnackbar = snackbar
-        snackbar.show()
+        binding.btnOverlayUndo.setOnClickListener {
+            undoAnimator?.cancel()
+            performRestore(trashedUris)
+            dismissSuccessOverlay()
+        }
+        binding.btnOverlayContinue.setOnClickListener {
+            undoAnimator?.cancel()
+            dismissSuccessOverlay()
+        }
+
+        // Scrim consumes taps but does not dismiss.
+        binding.deleteSuccessOverlay.setOnClickListener(null)
+        binding.deleteSuccessOverlay.isClickable = true
 
         hintManager.showHint(
             HintPreferences.HINT_TRASH_UNDO,
             getString(R.string.hint_trash_undo)
         )
-
-        // Dismiss overlay on tap or OK button
-        binding.deleteSuccessOverlay.setOnClickListener {
-            snackbar.dismiss()
-        }
-        binding.btnOverlayOk.setOnClickListener {
-            snackbar.dismiss()
-        }
     }
 
     private fun dismissSuccessOverlay() {
-        // Restore status bar
         window.statusBarColor = getColor(android.R.color.white)
         WindowCompat.getInsetsController(window, window.decorView)
             .isAppearanceLightStatusBars = true
 
-        // Cancel any running animations before dismissing
+        undoAnimator?.cancel()
+        undoAnimator = null
+
         binding.deleteSuccessOverlay.animate().cancel()
-        binding.successCheckmark.animate().cancel()
 
         binding.deleteSuccessOverlay.animate()
             .alpha(0f)
@@ -923,12 +918,11 @@ class MainActivity : AppCompatActivity() {
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     binding.deleteSuccessOverlay.visibility = View.GONE
+                    binding.confettiLayer.stop()
                     binding.deleteSuccessOverlay.animate().setListener(null)
                 }
             })
             .start()
-
-        successSnackbar = null
     }
 
     private fun changeGridColumns(layoutManager: GridLayoutManager, newSpanCount: Int) {

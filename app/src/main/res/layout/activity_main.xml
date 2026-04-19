@@ -489,7 +489,7 @@
         android:id="@+id/deleteSuccessOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/overlay_bg"
+        android:background="@color/card_scrim"
         android:elevation="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -499,44 +499,131 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <com.example.gallerycleaner.ConfettiView
+            android:id="@+id/confettiLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/successCard"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:contentPadding="28dp">
 
-            <ImageView
-                android:id="@+id/successCheckmark"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_check_large"
-                android:importantForAccessibility="no" />
-
-            <TextView
-                android:id="@+id/successTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textColor="@android:color/white"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOverlayOk"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/overlay_ok"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingHorizontal="48dp"
-                app:backgroundTint="@color/md_theme_primary"
-                app:cornerRadius="999dp" />
+                <FrameLayout
+                    android:id="@+id/successCheckBadge"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/check_badge_bg">
 
-        </LinearLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_check"
+                        app:tint="@color/accent"
+                        android:importantForAccessibility="no" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/successHeroSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/ink"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/jetbrains_mono"
+                    android:gravity="center"
+                    tools:text="789 kB" />
+
+                <TextView
+                    android:id="@+id/successSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/ink3"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    tools:text="freed · 4 items moved to trash" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:id="@+id/btnOverlayUndo"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/undo_button_bg"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <com.example.gallerycleaner.UndoProgressRing
+                            android:id="@+id/undoProgressRing"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_marginStart="8dp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_marginStart="14dp"
+                            android:src="@drawable/ic_undo"
+                            app:tint="@color/ink"
+                            android:importantForAccessibility="no" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/undo"
+                            android:textColor="@color/ink"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </FrameLayout>
+
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOverlayContinue"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:maxLines="1"
+                        android:text="@string/fab_continue"
+                        android:textColor="@android:color/white"
+                        app:backgroundTint="@color/ink"
+                        app:cornerRadius="22dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </FrameLayout>
 
