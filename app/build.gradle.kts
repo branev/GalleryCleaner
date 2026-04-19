@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gallerycleaner"
+    namespace = "com.branev.gallerycleaner"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.gallerycleaner"
+        applicationId = "com.branev.gallerycleaner"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

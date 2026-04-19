@@ -526,7 +526,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.example.gallerycleaner.ConfettiView
+        <com.branev.gallerycleaner.ConfettiView
             android:id="@+id/confettiLayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -601,7 +601,7 @@
                         android:clickable="true"
                         android:focusable="true">
 
-                        <com.example.gallerycleaner.UndoProgressRing
+                        <com.branev.gallerycleaner.UndoProgressRing
                             android:id="@+id/undoProgressRing"
                             android:layout_width="28dp"
                             android:layout_height="28dp"
