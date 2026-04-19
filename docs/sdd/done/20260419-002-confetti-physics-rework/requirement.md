@@ -198,22 +198,22 @@ for (p in pieces) {
 
 ## Acceptance criteria
 
-- [ ] Triggering a delete produces a visible upward **pop** — pieces
+- [x] Triggering a delete produces a visible upward **pop** — pieces
       visibly launch from two points above the card, cross over its
       headline, peak, then fall.
-- [ ] At least three visibly different shapes are present: wide
+- [x] At least three visibly different shapes are present: wide
       ribbons, thin streamers, small discs.
-- [ ] Ribbons and streamers visibly appear to twist / go "edge-on"
+- [x] Ribbons and streamers visibly appear to twist / go "edge-on"
       as they rotate (width shrinks/grows based on rotation angle
       vs travel direction).
-- [ ] Colors read brand-forward: orange and soft-pink dominate;
+- [x] Colors read brand-forward: orange and soft-pink dominate;
       ink and green accent; no black discs.
-- [ ] Total effect duration is ~2.5s from pop to last piece faded;
+- [x] Total effect duration is ~2.5s from pop to last piece faded;
       alpha fades smoothly at end of life (no hard cut-off).
-- [ ] Heavier pieces visibly fall faster than lighter ones
+- [x] Heavier pieces visibly fall faster than lighter ones
       (staggered descent, not a flat wall).
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
-- [ ] `ConfettiViewTest` still covers the determinism + count +
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] `ConfettiViewTest` still covers the determinism + count +
       empty-canvas invariants; adds origin-split test.
 
 ## Task breakdown
