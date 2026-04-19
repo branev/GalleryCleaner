@@ -92,8 +92,21 @@
     <string name="viewer_keep">Keep</string>
     <string name="viewer_delete">Delete</string>
     <string name="viewer_info">Info</string>
-    <string name="viewer_info_coming_soon">Info sheet coming soon</string>
     <string name="viewer_delete_failed">Could not delete item</string>
+
+    <!-- Media info sheet (SDD-20260418-014) -->
+    <string name="info_size">Size</string>
+    <string name="info_duration">Duration</string>
+    <string name="info_resolution">Resolution</string>
+    <string name="info_captured">Captured</string>
+    <string name="info_source">Source</string>
+    <string name="info_path">Path</string>
+    <string name="info_media_type_and_source">%1$s · %2$s</string>
+    <string name="info_photo">Photo</string>
+    <string name="info_video">Video</string>
+    <string name="info_unknown">—</string>
+    <string name="info_copy_path">Copy path</string>
+    <string name="info_path_copied">Path copied</string>
 
     <!-- Continue reviewing -->
     <string name="fab_continue">Continue</string>

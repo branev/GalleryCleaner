@@ -763,6 +763,8 @@ class MainActivity : AppCompatActivity() {
             putExtra(MediaViewerActivity.EXTRA_DATE_ADDED, item.dateAdded)
             putExtra(MediaViewerActivity.EXTRA_SIZE, item.size)
             putExtra(MediaViewerActivity.EXTRA_SOURCE, item.source.ordinal)
+            putExtra(MediaViewerActivity.EXTRA_DURATION, item.duration)
+            putExtra(MediaViewerActivity.EXTRA_PATH, item.relativePathOrData)
         }
         mediaViewerLauncher.launch(intent)
     }

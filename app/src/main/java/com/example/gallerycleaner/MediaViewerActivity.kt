@@ -48,11 +48,20 @@ class MediaViewerActivity : AppCompatActivity() {
         const val EXTRA_DATE_ADDED = "extra_date_added"
         const val EXTRA_SIZE = "extra_size"
         const val EXTRA_SOURCE = "extra_source"
+        const val EXTRA_DURATION = "extra_duration"
+        const val EXTRA_PATH = "extra_path"
 
         const val EXTRA_ACTION = "extra_action"
         const val ACTION_KEPT = "kept"
         const val ACTION_DELETE = "delete"
     }
+
+    private var displayName: String = ""
+    private var dateAdded: Long = 0L
+    private var size: Long = 0L
+    private var sourceOrdinal: Int = -1
+    private var durationMs: Long = 0L
+    private var path: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,10 +95,12 @@ class MediaViewerActivity : AppCompatActivity() {
             intent.getParcelableExtra(EXTRA_URI)
         }
         val mediaTypeOrdinal = intent.getIntExtra(EXTRA_MEDIA_TYPE, 0)
-        val displayName = intent.getStringExtra(EXTRA_DISPLAY_NAME) ?: ""
-        val dateAdded = intent.getLongExtra(EXTRA_DATE_ADDED, 0L)
-        val size = intent.getLongExtra(EXTRA_SIZE, 0L)
-        val sourceOrdinal = intent.getIntExtra(EXTRA_SOURCE, -1)
+        displayName = intent.getStringExtra(EXTRA_DISPLAY_NAME) ?: ""
+        dateAdded = intent.getLongExtra(EXTRA_DATE_ADDED, 0L)
+        size = intent.getLongExtra(EXTRA_SIZE, 0L)
+        sourceOrdinal = intent.getIntExtra(EXTRA_SOURCE, -1)
+        durationMs = intent.getLongExtra(EXTRA_DURATION, 0L)
+        path = intent.getStringExtra(EXTRA_PATH) ?: ""
 
         if (uri == null) {
             finish()
@@ -129,7 +140,20 @@ class MediaViewerActivity : AppCompatActivity() {
 
     private fun setupActionBar(uri: Uri) {
         binding.btnOverlayInfo.setOnClickListener {
-            Snackbar.make(binding.root, R.string.viewer_info_coming_soon, Snackbar.LENGTH_SHORT).show()
+            val mediaType = if (isVideo) MediaType.VIDEO else MediaType.PHOTO
+            val source = if (sourceOrdinal in SourceType.values().indices) {
+                SourceType.values()[sourceOrdinal]
+            } else SourceType.OTHER
+            MediaInfoBottomSheetFragment.newInstance(
+                uri = uri,
+                displayName = displayName,
+                mediaType = mediaType,
+                source = source,
+                size = size,
+                dateAdded = dateAdded,
+                duration = durationMs,
+                path = path,
+            ).show(supportFragmentManager, MediaInfoBottomSheetFragment.TAG)
         }
         binding.btnOverlayKeep.setOnClickListener { view ->
             view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
