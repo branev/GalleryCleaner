@@ -23,6 +23,7 @@
 | 20260418-007 | Continue FAB states | 1/1 | Shorter "Continue" label, hide-when-useless visibility; ghost state deferred |
 | 20260418-008 | Filter sheet & empty state | 2/2 | Pending-state sheet with four sections, mono source counts, light status-bar over scrim, outlined empty-state ring, ink `Reset filters` + text `Edit filters`, filter-combo subtitle. Merges old SDD-009. |
 | 20260418-010 | Delete success | 1/1 | 320dp card on 30% scrim, 56dp accent-soft check badge, mono hero size, 7s progress ring around Undo, 60 falling-confetti pieces with fresh random pattern per delete, Snackbar removed on Android-11+ path. |
+| 20260418-011 | Hint card | 1/1 | Two-line title+detail split, 28dp lightbulb-in-circle, accent `Got it` (kept over the design's × per umbrella Open Decision #1), 16 new hint strings. |
 
 ## Pending (`todo/`)
 
@@ -31,7 +32,6 @@
 | 20260321-005 | Smart filter summary | Medium | None | Dismissible chips for active filters |
 | 20260419-001 | Bump minSdk to 30 | Low | None | Tooling. Drops CustomTypefaceSpan, WindowCompat.getInsetsController, SDK_INT >= 29/R branches |
 | 20260418-001 | Visual redesign (umbrella) | High | None | Vision + cross-ref index for 002–014. Claude Design handoff |
-| 20260418-011 | Hint card | Low | 002 ✓ | Ink bg, two-line format |
 | 20260418-012 | Help sheet | Low | 002 ✓ | Dividers, accent icons, Ko-fi card |
 | 20260418-013 | Media viewer | Medium | 002 ✓ | **New behavior** — Keep action, remove ⋯ |
 | 20260418-014 | Info sheet | Medium | 002, 013 | **New screen** — file metadata bottom sheet |
