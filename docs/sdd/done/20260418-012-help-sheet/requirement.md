@@ -39,7 +39,8 @@ against the dark scrim) and revert on dismiss — same
   - Right: `Reset tips` — text link in accent, 12sp 600, small padding,
     `selectableItemBackgroundBorderless`. Clicking resets all hint
     flags (existing `HintPreferences.resetAllHints()`), shows the
-    existing confirmation snackbar, dismisses the sheet.
+    existing confirmation snackbar, and **leaves the sheet open**
+    so the user stays in context.
 - **Tip rows** (LinearLayout container populated in code):
   - Row: 22dp icon (left, `accent` tint) + 12dp gap + 13sp label
     (`ink2`). Vertical padding 12dp.
@@ -62,7 +63,9 @@ against the dark scrim) and revert on dismiss — same
 - Status bar flip on `onStart` / revert on `onDestroyView` — identical
   code path to `FilterBottomSheetFragment`.
 - `Reset tips` now lives in the header. Click behavior unchanged
-  (`HintPreferences.resetAllHints()` → snackbar → dismiss).
+  (`HintPreferences.resetAllHints()` → snackbar). The sheet no
+  longer auto-dismisses on reset — the snackbar confirms the action
+  and the user can keep reading tips or swipe down when ready.
 - No explicit OK button; swipe-down and tap-outside remain the only
   dismissal paths. (Tested behaviors already supported by
   `BottomSheetDialogFragment` default.)
@@ -132,27 +135,27 @@ Keep the existing 8 `tip_*` tip strings unchanged.
 
 ## Acceptance criteria
 
-- [ ] Opening the Help sheet shows `Tips & shortcuts` (lowercase "s")
+- [x] Opening the Help sheet shows `Tips & shortcuts` (lowercase "s")
       on the left and a small accent `Reset tips` link on the right,
       both in the header row.
-- [ ] Tapping `Reset tips` clears hint preferences, shows the existing
-      snackbar confirmation, and dismisses the sheet.
-- [ ] Each of the 8 tip rows renders with an accent-tinted 22dp icon
+- [x] Tapping `Reset tips` clears hint preferences and shows the
+      existing snackbar confirmation. The sheet stays open.
+- [x] Each of the 8 tip rows renders with an accent-tinted 22dp icon
       and a 13sp `ink2` label. A thin `line`-color 1dp divider sits
       between rows and nowhere else.
-- [ ] The bottom of the sheet shows a **Ko-fi support card**
+- [x] The bottom of the sheet shows a **Ko-fi support card**
       (surface_alt fill, 14dp radius) with an accent-soft 32dp round
       icon, title `Enjoying the app?`, subtitle `One coffee keeps it
       ad-free.`, and a chevron right. Tapping the card opens
       `https://ko-fi.com/branev` in a browser.
-- [ ] No explicit `OK` button is present. Swipe-down and tap-outside
+- [x] No explicit `OK` button is present. Swipe-down and tap-outside
       both dismiss the sheet.
-- [ ] While the sheet is open, status-bar icons render **light**.
+- [x] While the sheet is open, status-bar icons render **light**.
       They revert to dark after dismiss.
-- [ ] `overlay_ok` string is removed from `strings.xml` with no
+- [x] `overlay_ok` string is removed from `strings.xml` with no
       compilation errors (confirm by greping `R.string.overlay_ok`
       + `@string/overlay_ok` — both empty).
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
 
 ## Task breakdown
 
