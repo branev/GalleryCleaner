@@ -44,6 +44,12 @@ A native Android gallery app that helps you clean up your photo library by organ
 - Android 8.0 (API 26) or higher
 - Storage permission for accessing photos and videos
 
+## Privacy
+
+The app does not collect, store, transmit, or share any personal data — all operations happen entirely on your device.
+
+Full policy: https://sites.google.com/view/gallerycleaner-app/
+
 ## Author
 
 Branimir Parashkevov
