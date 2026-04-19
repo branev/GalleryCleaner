@@ -13,7 +13,12 @@ opens. The sheet slides up over a scrim that keeps the underlying
 media visible, so the user doesn't lose their place. It shows a
 thumbnail + filename header, a key/value details list (size,
 duration for videos, resolution, captured date, source, path), and
-a single outlined `Locate in source folder` action at the bottom.
+a small copy-to-clipboard action on the Path row. The "Locate in
+source folder" button from the design handoff was dropped — Android's
+scoped-storage rules reject direct `ACTION_VIEW` on
+`DocumentsContract` URIs with `SecurityException` unless the app has
+a prior SAF grant, which would require an intrusive picker every time.
+Copy-to-clipboard is unambiguous and always works.
 
 This is the final SDD in the Visual Redesign umbrella (SDD-001).
 
@@ -44,11 +49,10 @@ This is the final SDD in the Visual Redesign umbrella (SDD-001).
   | Captured   | `Apr 12, 2026 · 14:22`                  | Inter  |
   | Source     | `Viber`                                 | Inter  |
   | Path       | full path, word-break-all               | Mono   |
-- **Primary action** (20dp horizontal, 16dp top, 16dp bottom):
-  outlined pill, full-width, `Locate in source folder`, leading
-  24dp folder icon in `ink`. Stroke `line_strong`, 1dp, text `ink`,
-  cornerRadius 22dp (matches the rest of the pill buttons in the
-  app).
+- **Path row copy action**: a 32dp touch-target icon button on the
+  right end of the Path row, 20dp visible `ic_copy` glyph in `ink3`.
+  Tapping it writes the path to the clipboard and fires a
+  `Path copied` snackbar. No explicit bottom button.
 - **Status bar while sheet is open**: icons flipped light, same as
   Filters / Help sheets.
 
@@ -64,15 +68,8 @@ This is the final SDD in the Visual Redesign umbrella (SDD-001).
   Until the query returns, shows `—`. Photos almost always return
   valid dimensions; some codecs may not expose them for videos —
   fall through to `—`.
-- **Locate in source folder**: best-effort.
-  - Primary attempt: `Intent.ACTION_VIEW` with the parent folder's
-    `DocumentsContract` tree URI, wrapped in a chooser.
-  - Fallback (most devices post-API-29): `Intent.ACTION_VIEW` on
-    the **media URI itself**, wrapped in a chooser — opens the
-    file in the user's chosen gallery / file manager, not strictly
-    the folder but the closest reliable equivalent.
-  - If both fail (no app handles the intent): snackbar `Can't open
-    folder on this device`.
+- **Copy path action**: `ClipboardManager.setPrimaryClip` with a plain
+  `ClipData`. Confirmation via Snackbar.
 
 ## Open decisions
 
@@ -108,7 +105,7 @@ This is the final SDD in the Visual Redesign umbrella (SDD-001).
    - `onViewCreated`: load thumbnail via Coil into the 48dp
      `ImageView` (`videoFrameMillis(0L)` for videos); show video
      glyph overlay for `MediaType.VIDEO`; populate header text;
-     populate detail rows; wire `Locate in source folder` click.
+     populate detail rows (Path row gets a trailing copy icon).
    - Background thread queries `MediaStore.MediaColumns.WIDTH`,
      `HEIGHT`, `DATE_TAKEN` for the URI; posts back to UI thread
      to update Resolution and Captured rows.
@@ -128,12 +125,12 @@ This is the final SDD in the Visual Redesign umbrella (SDD-001).
 5. **New strings**:
    - `info_size`, `info_duration`, `info_resolution`, `info_captured`,
      `info_source`, `info_path` — key column labels.
-   - `info_locate_folder` = `Locate in source folder`.
+   - `info_copy_path` = `Copy path`.
+   - `info_path_copied` = `Path copied`.
    - `info_media_type_and_source` = `%1$s · %2$s` (e.g. `Video · Viber`).
    - `info_photo`, `info_video` — `Photo` / `Video` for the subtitle
      prefix.
    - `info_unknown` = `—`.
-   - `info_locate_failed` = `Can't open folder on this device`.
 6. **`MediaViewerActivity.kt`**:
    - Replace the snackbar stub in `btnOverlayInfo.setOnClickListener`
      with a call to `MediaInfoBottomSheetFragment.newInstance(...)`
@@ -175,29 +172,29 @@ This is the final SDD in the Visual Redesign umbrella (SDD-001).
 
 ## Acceptance criteria
 
-- [ ] Tapping `Info` in the media viewer opens a bottom sheet; the
+- [x] Tapping `Info` in the media viewer opens a bottom sheet; the
       underlying media stays visible behind a scrim.
-- [ ] Header shows a 48dp rounded thumbnail (with a `▶` overlay for
+- [x] Header shows a 48dp rounded thumbnail (with a `▶` overlay for
       videos), the filename, and a `Video · Source` / `Photo · Source`
       subtitle.
-- [ ] Details list shows Size, Duration (video only), Resolution,
+- [x] Details list shows Size, Duration (video only), Resolution,
       Captured, Source, Path — with a 1dp `line` divider between rows
       and none after the last.
-- [ ] Resolution populates with real dimensions (e.g. `1920 × 1080`)
+- [x] Resolution populates with real dimensions (e.g. `1920 × 1080`)
       after a short load; shows `—` if the MediaStore query returns
       no values.
-- [ ] Captured date uses `DATE_TAKEN` when available, else falls back
+- [x] Captured date uses `DATE_TAKEN` when available, else falls back
       to `dateAdded`.
-- [ ] Path renders in mono font and wraps (no horizontal scroll).
-- [ ] Tapping `Locate in source folder` opens a chooser; on success
-      the user is in a file browser at the folder (or viewing the
-      file). On failure a snackbar explains.
-- [ ] Swipe-down / tap-outside / system back all dismiss the sheet,
+- [x] Path renders in mono font and wraps (no horizontal scroll).
+- [x] Path row shows a small copy icon on the right; tapping it
+      copies the path to the clipboard and confirms via a `Path
+      copied` snackbar.
+- [x] Swipe-down / tap-outside / system back all dismiss the sheet,
       returning to the media viewer in its prior state.
-- [ ] Status-bar icons render light while the sheet is open and
+- [x] Status-bar icons render light while the sheet is open and
       revert to dark on dismiss.
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
-- [ ] No reference to `viewer_info_coming_soon` remains in code
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] No reference to `viewer_info_coming_soon` remains in code
       (string may stay in `strings.xml` if anything else references it;
       otherwise remove).
 
