@@ -115,19 +115,19 @@ makes a single commit the only safe landing.
 
 ## Acceptance criteria
 
-- [ ] No `Thread {` construction in `main/java/**`.
-- [ ] No `runCatching { ... }.getOrNull()` in
+- [x] No `Thread {` construction in `main/java/**`.
+- [x] No `runCatching { ... }.getOrNull()` in
       `MediaViewerActivity.kt` or `MediaInfoBottomSheetFragment.kt`.
-- [ ] No `!!` force-unwrap in `GalleryViewModel.kt` or
+- [x] No `!!` force-unwrap in `GalleryViewModel.kt` or
       `FastScrollHelper.kt`.
-- [ ] `Log.w("MediaViewer", ...)` fires when `MediaMetadataRetriever`
+- [x] `Log.w("MediaViewer", ...)` fires when `MediaMetadataRetriever`
       throws (verified via deliberate fail — e.g. pass a non-media
       URI in a one-off debug build).
-- [ ] Media info sheet Resolution + Captured still populate after
+- [x] Media info sheet Resolution + Captured still populate after
       the short async load.
-- [ ] Media viewer video poster still appears on all videos.
-- [ ] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
-- [ ] On-device: opening the viewer on a video, navigating back
+- [x] Media viewer video poster still appears on all videos.
+- [x] `./gradlew clean assembleDebug testDebugUnitTest lint` succeeds.
+- [x] On-device: opening the viewer on a video, navigating back
       mid-load, and opening a different video does NOT produce any
       "view destroyed" crash or stale bitmap.
 

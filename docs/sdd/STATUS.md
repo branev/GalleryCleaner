@@ -29,6 +29,7 @@
 | 20260418-014 | Info sheet | 1/1 | New `MediaInfoBottomSheetFragment` with thumbnail + filename header, details list (Size, Duration video-only, Resolution, Captured, Source, Path), async MediaStore query for Resolution + `DATE_TAKEN`, path-row copy-to-clipboard icon. "Locate in folder" dropped — Android's scoped-storage rules reject `ACTION_VIEW` on `DocumentsContract` URIs without a prior SAF grant. |
 | 20260419-002 | Confetti physics rework | 1/1 | Two-origin fountain pop (460–680 dp/s up, 18%/82% of card), linear + angular drag + per-piece turbulence, edge-on ribbon illusion via `canvas.scale(widthScale,1f)`, weighted 3-shape (ribbon 55 / streamer 25 / disc 20) and 4-color (32/32/18/18 — discs skip ink) distribution, 2.5s life with ease-in/out alpha, upward whoosh on top-15 fastest + per-piece mass jitter. Claude Design spec. |
 | 20260418-001 | Visual redesign (umbrella) | 12/12 | Direction B shipped end-to-end across all 9 surfaces. Child SDDs 002–008, 010–014 all merged (009 folded into 008). Orphan legacy color tokens (filter_btn_\*, chip_selected_\*, chip_unselected_\*, fab_continue_bg, viewer_toolbar_bg) removed as closing cleanup. |
+| 20260419-003 | Code review follow-ups | 1/1 | Thread→lifecycleScope migration in viewer/info sheet, runCatching→explicit try/catch, days!! + scrollListener!! force-unwraps removed, Log.w re-added on MMR failures. |
 
 ## Pending (`todo/`)
 
