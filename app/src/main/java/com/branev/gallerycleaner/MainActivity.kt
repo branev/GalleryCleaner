@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.format.DateUtils
 import android.text.format.Formatter
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -983,23 +984,17 @@ class MainActivity : AppCompatActivity() {
         if (position !in items.indices) return ""
         val mediaItem = (items[position] as? GridItem.Media)?.item ?: return ""
 
-        val timestamp = mediaItem.dateAdded
-        val itemDate = Date(timestamp * 1000L)
+        val itemMs = mediaItem.dateAdded * 1000L
+        val itemDate = Date(itemMs)
         val now = Calendar.getInstance()
         val itemCal = Calendar.getInstance().apply { time = itemDate }
 
         return when {
-            now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) &&
-            now.get(Calendar.DAY_OF_YEAR) == itemCal.get(Calendar.DAY_OF_YEAR) -> "Today"
-
-            now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) &&
-            now.get(Calendar.DAY_OF_YEAR) - itemCal.get(Calendar.DAY_OF_YEAR) == 1 -> "Yesterday"
-
+            DateUtils.isToday(itemMs) -> getString(R.string.date_label_today)
+            DateUtils.isToday(itemMs + DateUtils.DAY_IN_MILLIS) -> getString(R.string.date_label_yesterday)
             now.get(Calendar.YEAR) == itemCal.get(Calendar.YEAR) ->
                 SimpleDateFormat("MMM d", Locale.getDefault()).format(itemDate)
-
-            else ->
-                SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(itemDate)
+            else -> SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(itemDate)
         }
     }
 
