@@ -19,11 +19,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.request.videoFrameMillis
 import com.branev.gallerycleaner.databinding.BottomSheetMediaInfoBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -220,51 +224,62 @@ class MediaInfoBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadExtraMetadata(uri: Uri, fallbackDate: Long) {
-        Thread {
-            val ctx = context ?: return@Thread
-            val projection = buildList {
-                add(MediaStore.MediaColumns.WIDTH)
-                add(MediaStore.MediaColumns.HEIGHT)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    add(MediaStore.MediaColumns.DATE_TAKEN)
-                }
-            }.toTypedArray()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                queryMediaStore(uri)
+            }
+            val resolutionText = if (result.width > 0 && result.height > 0) {
+                "${result.width} × ${result.height}"
+            } else {
+                getString(R.string.info_unknown)
+            }
+            val capturedSec =
+                if (result.dateTakenMillis > 0) result.dateTakenMillis / 1000L
+                else fallbackDate
+            resolutionValueView?.text = resolutionText
+            capturedValueView?.text = formatDate(capturedSec)
+        }
+    }
 
-            var width = 0
-            var height = 0
-            var dateTakenMillis = 0L
+    private data class ExtraMetadata(
+        val width: Int,
+        val height: Int,
+        val dateTakenMillis: Long,
+    )
 
-            runCatching {
-                ctx.contentResolver.query(uri, projection, null, null, null)?.use { c ->
-                    if (c.moveToFirst()) {
-                        val wIdx = c.getColumnIndex(MediaStore.MediaColumns.WIDTH)
-                        val hIdx = c.getColumnIndex(MediaStore.MediaColumns.HEIGHT)
-                        if (wIdx >= 0 && !c.isNull(wIdx)) width = c.getInt(wIdx)
-                        if (hIdx >= 0 && !c.isNull(hIdx)) height = c.getInt(hIdx)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            val dtIdx = c.getColumnIndex(MediaStore.MediaColumns.DATE_TAKEN)
-                            if (dtIdx >= 0 && !c.isNull(dtIdx)) {
-                                dateTakenMillis = c.getLong(dtIdx)
-                            }
+    private fun queryMediaStore(uri: Uri): ExtraMetadata {
+        val ctx = context ?: return ExtraMetadata(0, 0, 0L)
+        val projection = buildList {
+            add(MediaStore.MediaColumns.WIDTH)
+            add(MediaStore.MediaColumns.HEIGHT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                add(MediaStore.MediaColumns.DATE_TAKEN)
+            }
+        }.toTypedArray()
+
+        var width = 0
+        var height = 0
+        var dateTakenMillis = 0L
+
+        try {
+            ctx.contentResolver.query(uri, projection, null, null, null)?.use { c ->
+                if (c.moveToFirst()) {
+                    val wIdx = c.getColumnIndex(MediaStore.MediaColumns.WIDTH)
+                    val hIdx = c.getColumnIndex(MediaStore.MediaColumns.HEIGHT)
+                    if (wIdx >= 0 && !c.isNull(wIdx)) width = c.getInt(wIdx)
+                    if (hIdx >= 0 && !c.isNull(hIdx)) height = c.getInt(hIdx)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val dtIdx = c.getColumnIndex(MediaStore.MediaColumns.DATE_TAKEN)
+                        if (dtIdx >= 0 && !c.isNull(dtIdx)) {
+                            dateTakenMillis = c.getLong(dtIdx)
                         }
                     }
                 }
             }
-
-            val resolutionText = if (width > 0 && height > 0) {
-                "$width × $height"
-            } else {
-                getString(R.string.info_unknown)
-            }
-            val capturedSec = if (dateTakenMillis > 0) dateTakenMillis / 1000L else fallbackDate
-
-            activity?.runOnUiThread {
-                if (_binding != null) {
-                    resolutionValueView?.text = resolutionText
-                    capturedValueView?.text = formatDate(capturedSec)
-                }
-            }
-        }.start()
+        } catch (_: SecurityException) {
+        } catch (_: IllegalArgumentException) {
+        }
+        return ExtraMetadata(width, height, dateTakenMillis)
     }
 
     private fun formatDate(unixSeconds: Long): String {

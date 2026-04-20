@@ -480,7 +480,10 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
                 Pair(cal.timeInMillis / 1000, now)
             }
             DateRangePreset.ALL_TIME -> Pair(0L, now)
-            else -> Pair(now - (dateRange.preset.days!! * 24 * 60 * 60L), now)
+            else -> {
+                val days = dateRange.preset.days ?: return Pair(0L, now)
+                Pair(now - (days * 24 * 60 * 60L), now)
+            }
         }
     }
 }

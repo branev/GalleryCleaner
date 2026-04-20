@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.format.Formatter
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.SeekBar
@@ -14,11 +15,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import android.media.MediaMetadataRetriever
 import android.util.Size
 import coil.load
 import com.branev.gallerycleaner.databinding.ActivityMediaViewerBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -308,14 +315,11 @@ class MediaViewerActivity : AppCompatActivity() {
     }
 
     private fun loadVideoPoster(uri: Uri) {
-        Thread {
-            val bitmap = extractVideoPoster(uri) ?: return@Thread
-            runOnUiThread {
-                if (!isFinishing && !isDestroyed) {
-                    binding.imageView.setImageBitmap(bitmap)
-                }
-            }
-        }.start()
+        lifecycleScope.launch {
+            val bitmap = withContext(Dispatchers.IO) { extractVideoPoster(uri) }
+                ?: return@launch
+            binding.imageView.setImageBitmap(bitmap)
+        }
     }
 
     private fun extractVideoPoster(uri: Uri): android.graphics.Bitmap? {
@@ -323,9 +327,13 @@ class MediaViewerActivity : AppCompatActivity() {
         // for videos whose thumbnail hasn't been generated yet — then we
         // fall through to the frame retriever.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            runCatching {
-                contentResolver.loadThumbnail(uri, Size(1024, 1024), null)
-            }.getOrNull()?.let { return it }
+            try {
+                return contentResolver.loadThumbnail(uri, Size(1024, 1024), null)
+            } catch (_: IOException) {
+                // Fall through to MMR.
+            } catch (_: SecurityException) {
+                return null
+            }
         }
         // Fallback: platform-picked representative frame. More reliable than
         // asking for t=0 on codecs where the first frame isn't a sync frame.
@@ -335,7 +343,15 @@ class MediaViewerActivity : AppCompatActivity() {
             retriever.setDataSource(this, uri)
             retriever.frameAtTime
                 ?: retriever.getFrameAtTime(1_000_000L, MediaMetadataRetriever.OPTION_CLOSEST)
-        } catch (_: Exception) {
+        } catch (e: IllegalArgumentException) {
+            Log.w("MediaViewer", "poster: MMR rejected URI $uri", e)
+            null
+        } catch (e: RuntimeException) {
+            // MMR can throw undocumented RuntimeExceptions on malformed
+            // media. Re-throw CancellationException so coroutine cancellation
+            // (CancellationException extends RuntimeException) propagates.
+            if (e is CancellationException) throw e
+            Log.w("MediaViewer", "poster: MMR failed for $uri", e)
             null
         } finally {
             try { retriever?.release() } catch (_: Exception) {}

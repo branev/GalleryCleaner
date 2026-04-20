@@ -30,7 +30,7 @@ class FastScrollHelper(
 
     @SuppressLint("ClickableViewAccessibility")
     fun attach() {
-        scrollListener = object : RecyclerView.OnScrollListener() {
+        val listener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
                 if (!isDragging && dy != 0) {
                     updateThumbPosition()
@@ -39,7 +39,8 @@ class FastScrollHelper(
                 }
             }
         }
-        recyclerView.addOnScrollListener(scrollListener!!)
+        recyclerView.addOnScrollListener(listener)
+        scrollListener = listener
 
         thumb.setOnTouchListener { _, event ->
             handleThumbTouch(event)
