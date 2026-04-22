@@ -15,6 +15,25 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = findProperty("GALLERYCLEANER_STORE_FILE") as String?
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = findProperty("GALLERYCLEANER_STORE_PASSWORD") as String?
+                keyAlias = findProperty("GALLERYCLEANER_KEY_ALIAS") as String?
+                keyPassword = findProperty("GALLERYCLEANER_KEY_PASSWORD") as String?
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+        }
+    }
+
     buildFeatures {
         viewBinding = true
     }
